@@ -2,10 +2,9 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <DocumentationFile>$(OutputPath)$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <RepositoryUrl>https://github.com/alexanderkozlenko/jsonrpcnet</RepositoryUrl>
-    <PackageProjectUrl>$(RepositoryUrl)</PackageProjectUrl>
-    <PackageLicenseUrl>$(RepositoryUrl)/LICENSE.md</PackageLicenseUrl>
-    <PackageIconUrl>$(RepositoryUrl)/etc/img/nuget.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/alexanderkozlenko/jsonrpcnet</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/alexanderkozlenko/jsonrpcnet/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/alexanderkozlenko/jsonrpcnet/master/etc/img/nuget.png</PackageIconUrl>
     <Authors><![CDATA[JSON-RPC.NET Team]]></Authors>
     <PackageTags><![CDATA[json rpc]]></PackageTags>
   </PropertyGroup>
