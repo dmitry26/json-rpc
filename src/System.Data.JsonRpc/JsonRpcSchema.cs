@@ -22,22 +22,22 @@ namespace System.Data.JsonRpc
             };
         }
 
-        /// <summary>Gets or sets generic error data type bindings for response.</summary>
+        /// <summary>Gets or sets generic error data type binding for deserializing a response.</summary>
         public Type ErrorDataTypeGeneric { get; set; }
 
-        /// <summary>Gets error data type bindings for response.</summary>
+        /// <summary>Gets error data type bindings for deserializing a response (method name / error object type).</summary>
         public IDictionary<string, Type> ErrorDataTypeBindings { get; private set; } =
             new Dictionary<string, Type>(StringComparer.Ordinal);
 
-        /// <summary>Gets parameter type bindings for request.</summary>
+        /// <summary>Gets parameter type bindings for deserializing a request (method name / parameter object type).</summary>
         public IDictionary<string, Type> ParameterTypeBindings { get; private set; } =
             new Dictionary<string, Type>(StringComparer.Ordinal);
 
-        /// <summary>Gets result type bindings for response.</summary>
+        /// <summary>Gets result type bindings for deserializing a response (method name / result object type).</summary>
         public IDictionary<string, Type> ResultTypeBindings { get; private set; } =
             new Dictionary<string, Type>(StringComparer.Ordinal);
 
-        /// <summary>Gets supported methods for request.</summary>
+        /// <summary>Gets supported methods for deserializing a request.</summary>
         public ICollection<string> SupportedMethods { get; private set; } =
             new HashSet<string>(StringComparer.Ordinal);
     }
