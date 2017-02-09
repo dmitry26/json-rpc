@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
 
+#pragma warning disable IDE0016 // Use 'throw' expression
+
 namespace System.Data.JsonRpc
 {
     /// <summary>Represents RPC request message.</summary>
@@ -117,3 +119,5 @@ namespace System.Data.JsonRpc
         public object Params { get; internal set; }
     }
 }
+
+#pragma warning restore IDE0016 // Use 'throw' expression

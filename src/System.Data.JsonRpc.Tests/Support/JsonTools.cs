@@ -16,7 +16,7 @@ namespace System.Data.JsonRpc.Tests.Support
             JToken.DeepEquals(JToken.Parse(jsonString1), JToken.Parse(jsonString2));
 
         /// <summary>Returns the content of the specified JSON-RPC sample.</summary>
-        /// <param name="name">The name of the JSON-RPC sample to retrieve. </param>
+        /// <param name="name">The name of the JSON-RPC sample to retrieve.</param>
         /// <returns>The content of the JSON-RPC sample.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string GetJsonSample(string name) =>

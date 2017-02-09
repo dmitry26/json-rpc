@@ -674,7 +674,7 @@ namespace System.Data.JsonRpc
                 response.Error = new JsonRpcError();
 
                 if (jsonTokenError.Type != JTokenType.Object)
-                    throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage,"Response has error property with invalid type");
+                    throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "Response has error property with invalid type");
 
                 var jsonObjectError = (JObject)jsonTokenError;
 
