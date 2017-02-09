@@ -100,7 +100,7 @@ namespace System.Data.JsonRpc
             if (@params == null)
                 throw new ArgumentNullException(nameof(@params));
 
-            Method = method;
+            Params = @params;
         }
 
         /// <summary>Gets a value indicating whether the response has parameters.</summary>
