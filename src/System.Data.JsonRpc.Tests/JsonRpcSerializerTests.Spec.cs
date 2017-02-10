@@ -1046,7 +1046,6 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void SpecExample110ResponseSerialize()
         {
-            var jsonRpcBindingsProvider = new JsonRpcBindingsProvider();
             var jsonRpcSerializer = new JsonRpcSerializer();
             var jsonSample = JsonTools.GetJsonSample("spec_11.0_res");
             var jsonRpcResponseArray = new JsonRpcResponse[5];

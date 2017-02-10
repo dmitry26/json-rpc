@@ -337,13 +337,39 @@ namespace System.Data.JsonRpc.Tests
             Assert.Equal(JsonRpcExceptionType.ParseError, exception.Type);
         }
 
+        [Fact]
+        public void DeserializeRequestDataWithArrayPool()
+        {
+            var jsonRpcSchema = new JsonRpcSchema();
+
+            jsonRpcSchema.SupportedMethods.Add("test_method");
+
+            var jsonRpcSettings = new JsonRpcSettings();
+
+            jsonRpcSettings.JsonSerializerArrayPool = new TestJsonArrayPool();
+
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSchema, jsonRpcSettings);
+            var jsonSample = JsonTools.GetJsonSample("jrap_01_req");
+            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeRequestsData(jsonSample);
+
+            Assert.False(jsonRpcDataInfo.IsEmpty);
+            Assert.False(jsonRpcDataInfo.IsBatch);
+
+            var jsonRpcMessageInfo = jsonRpcDataInfo.GetItem();
+
+            Assert.NotNull(jsonRpcMessageInfo);
+            Assert.True(jsonRpcMessageInfo.Success);
+        }
+
         #region Test Types
 
         private sealed class TestJsonArrayPool : IArrayPool<char>
         {
-            public static readonly TestJsonArrayPool Instance = new TestJsonArrayPool();
-            public char[] Rent(int minimumLength) => ArrayPool<char>.Shared.Rent(minimumLength);
-            public void Return(char[] array) => ArrayPool<char>.Shared.Return(array);
+            public char[] Rent(int minimumLength) =>
+                ArrayPool<char>.Shared.Rent(minimumLength);
+
+            public void Return(char[] array) =>
+                ArrayPool<char>.Shared.Return(array);
         }
 
         #endregion
