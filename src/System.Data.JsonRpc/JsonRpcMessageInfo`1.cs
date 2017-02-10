@@ -3,7 +3,7 @@
 namespace System.Data.JsonRpc
 {
     /// <summary>Represents RPC message information.</summary>
-    /// <typeparam name="T">Type of the mesage.</typeparam>
+    /// <typeparam name="T">Type of the message.</typeparam>
     [DebuggerDisplay("Success = {" + nameof(Success) + "}")]
     public struct JsonRpcMessageInfo<T>
         where T : JsonRpcMessage

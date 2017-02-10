@@ -102,7 +102,7 @@ namespace System.Data.JsonRpc
             return _bindingsNumber.TryGetValue(id, out method);
         }
 
-        /// <summary>Gets the number of bindingd contained in the <see cref="IJsonRpcBindingsProvider" />.</summary>
+        /// <summary>Gets the number of bindings contained in the <see cref="IJsonRpcBindingsProvider" />.</summary>
         public int Count => _bindingsNumber.Count + _bindingsString.Count;
     }
 }

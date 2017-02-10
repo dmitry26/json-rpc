@@ -64,7 +64,7 @@ namespace System.Data.JsonRpc
         /// <param name="jsonString">The JSON string to deserialize.</param>
         /// <returns>RPC information about requests.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="jsonString" /> is <see langword="null" />.</exception>
-        /// <exception cref="JsonRpcException">An error occured during message processing.</exception>
+        /// <exception cref="JsonRpcException">An error occurred during message processing.</exception>
         public JsonRpcDataInfo<JsonRpcRequest> DeserializeRequestsData(string jsonString)
         {
             if (jsonString == null)
@@ -172,7 +172,7 @@ namespace System.Data.JsonRpc
         /// <param name="bindingsProvider">Request identifier to method name bindings provider used to map response properties to the corresponding types.</param>
         /// <returns>RPC information about responses.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="jsonString" /> or <paramref name="bindingsProvider" /> is <see langword="null" />.</exception>
-        /// <exception cref="JsonRpcException">An error occured during message processing.</exception>
+        /// <exception cref="JsonRpcException">An error occurred during message processing.</exception>
         public JsonRpcDataInfo<JsonRpcResponse> DeserializeResponsesData(string jsonString, IJsonRpcBindingsProvider bindingsProvider)
         {
             if (jsonString == null)
@@ -286,7 +286,7 @@ namespace System.Data.JsonRpc
         /// <param name="request">The specified request to serialize.</param>
         /// <returns>A JSON string representation of the specified request.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="request" /> is <see langword="null" />.</exception>
-        /// <exception cref="JsonRpcException">An error occured during message processing.</exception>
+        /// <exception cref="JsonRpcException">An error occurred during message processing.</exception>
         public string SerializeRequest(JsonRpcRequest request)
         {
             if (request == null)
@@ -302,7 +302,7 @@ namespace System.Data.JsonRpc
         /// <param name="requests">The specified collection of requests to serialize.</param>
         /// <returns>A JSON string representation of the specified collection of requests.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="requests" /> is <see langword="null" />.</exception>
-        /// <exception cref="JsonRpcException">An error occured during message processing.</exception>
+        /// <exception cref="JsonRpcException">An error occurred during message processing.</exception>
         public string SerializeRequests(IReadOnlyCollection<JsonRpcRequest> requests)
         {
             if (requests == null)
@@ -381,7 +381,7 @@ namespace System.Data.JsonRpc
         /// <param name="response">The specified response to serialize.</param>
         /// <returns>A JSON string representation of the specified response.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="response" /> is <see langword="null" />.</exception>
-        /// <exception cref="JsonRpcException">An error occured during message processing.</exception>
+        /// <exception cref="JsonRpcException">An error occurred during message processing.</exception>
         public string SerializeResponse(JsonRpcResponse response)
         {
             if (response == null)
@@ -397,7 +397,7 @@ namespace System.Data.JsonRpc
         /// <param name="responses">The specified collection of responses to serialize.</param>
         /// <returns>A JSON string representation of the specified collection of responses.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="responses" /> is <see langword="null" />.</exception>
-        /// <exception cref="JsonRpcException">An error occured during message processing.</exception>
+        /// <exception cref="JsonRpcException">An error occurred during message processing.</exception>
         public string SerializeResponses(IReadOnlyCollection<JsonRpcResponse> responses)
         {
             if (responses == null)
