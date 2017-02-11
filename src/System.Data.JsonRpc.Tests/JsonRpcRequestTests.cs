@@ -32,6 +32,22 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
+        public void HasParamsIsFalse()
+        {
+            var jsonRpcRequest = new JsonRpcRequest("test_method");
+
+            Assert.False(jsonRpcRequest.HasParams);
+        }
+
+        [Fact]
+        public void HasParamsIsTrue()
+        {
+            var jsonRpcRequest = new JsonRpcRequest("test_method", new[] { 100L });
+
+            Assert.True(jsonRpcRequest.HasParams);
+        }
+
+        [Fact]
         public void HasParamsIsFalseWhenIdIsNumber()
         {
             var jsonRpcRequest = new JsonRpcRequest("test_method", 100L);
