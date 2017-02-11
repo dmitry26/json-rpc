@@ -366,10 +366,7 @@ namespace System.Data.JsonRpc
                 var i = 0;
 
                 foreach (var request in requests)
-                {
-                    ProcessMessage(request, i);
-                    i++;
-                }
+                    ProcessMessage(request, i++);
             }
 
             var jsonString = ConvertTokenToString(jsonArray);
@@ -461,10 +458,7 @@ namespace System.Data.JsonRpc
                 var i = 0;
 
                 foreach (var response in responses)
-                {
-                    ProcessMessage(response, i);
-                    i++;
-                }
+                    ProcessMessage(response, i++);
             }
 
             var jsonString = ConvertTokenToString(jsonArray);
@@ -498,7 +492,7 @@ namespace System.Data.JsonRpc
             if (!_schema.SupportedMethods.Contains(request.Method))
             {
                 throw new JsonRpcException(JsonRpcExceptionType.InvalidMethod, string.Format(CultureInfo.InvariantCulture,
-                    "Request method \"{0}\" is not supported", request.Method));
+                    "Method \"{0}\" is not supported", request.Method));
             }
 
             if (jsonObject.TryGetValue("id", out var jsonValueId))
