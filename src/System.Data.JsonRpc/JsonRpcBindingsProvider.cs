@@ -31,7 +31,7 @@ namespace System.Data.JsonRpc
             if (id == null)
                 throw new ArgumentNullException(nameof(id));
             if (id.Length == 0)
-                throw new ArgumentException("Value is empty string", nameof(id));
+                throw new ArgumentException("Value is an empty string", nameof(id));
 
             _bindingsString.Remove(id);
         }
@@ -53,11 +53,11 @@ namespace System.Data.JsonRpc
             if (id == null)
                 throw new ArgumentNullException(nameof(id));
             if (id.Length == 0)
-                throw new ArgumentException("Value is empty string", nameof(id));
+                throw new ArgumentException("Value is an empty string", nameof(id));
             if (method == null)
                 throw new ArgumentNullException(nameof(method));
             if (method.Length == 0)
-                throw new ArgumentException("Value is empty string", nameof(method));
+                throw new ArgumentException("Value is an empty string", nameof(method));
 
             _bindingsString[id] = method;
         }
@@ -72,7 +72,7 @@ namespace System.Data.JsonRpc
             if (method == null)
                 throw new ArgumentNullException(nameof(method));
             if (method.Length == 0)
-                throw new ArgumentException("Value is empty string", nameof(method));
+                throw new ArgumentException("Value is an empty string", nameof(method));
 
             _bindingsNumber[id] = method;
         }
@@ -88,7 +88,7 @@ namespace System.Data.JsonRpc
             if (id == null)
                 throw new ArgumentNullException(nameof(id));
             if (id.Length == 0)
-                throw new ArgumentException("Value is empty string", nameof(id));
+                throw new ArgumentException("Value is an empty string", nameof(id));
 
             return _bindingsString.TryGetValue(id, out method);
         }

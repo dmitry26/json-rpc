@@ -98,7 +98,7 @@ namespace System.Data.JsonRpc
                         var jsonArray = (JArray)jsonToken;
 
                         if (jsonArray.Count == 0)
-                            throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "Batch is empty");
+                            throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "The batch is empty");
 
                         var items = new JsonRpcMessageInfo<JsonRpcRequest>[jsonArray.Count];
                         var idsNumber = default(HashSet<long>);
@@ -140,7 +140,7 @@ namespace System.Data.JsonRpc
                                         if ((idsNumber != null) && !idsNumber.Add(request.IdNumber))
                                         {
                                             throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, string.Format(CultureInfo.InvariantCulture,
-                                                "Batch contains messages with the same identifier \"{0}\"", request.IdNumber));
+                                                "The batch contains messages with the same identifier \"{0}\"", request.IdNumber));
                                         }
                                     }
                                     break;
@@ -151,7 +151,7 @@ namespace System.Data.JsonRpc
                                         if ((idsString != null) && !idsString.Add(request.IdString))
                                         {
                                             throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, string.Format(CultureInfo.InvariantCulture,
-                                                "Batch contains messages with the same identifier \"{0}\"", request.IdString));
+                                                "The batch contains messages with the same identifier \"{0}\"", request.IdString));
                                         }
                                     }
                                     break;
@@ -213,7 +213,7 @@ namespace System.Data.JsonRpc
                         var jsonArray = (JArray)jsonToken;
 
                         if (jsonArray.Count == 0)
-                            throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "Batch is empty");
+                            throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "The batch is empty");
 
                         var items = new JsonRpcMessageInfo<JsonRpcResponse>[jsonArray.Count];
                         var idsNumber = default(HashSet<long>);
@@ -255,7 +255,7 @@ namespace System.Data.JsonRpc
                                         if ((idsNumber != null) && !idsNumber.Add(response.IdNumber))
                                         {
                                             throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, string.Format(CultureInfo.InvariantCulture,
-                                                "Batch contains messages with the same identifier \"{0}\"", response.IdNumber));
+                                                "The batch contains messages with the same identifier \"{0}\"", response.IdNumber));
                                         }
                                     }
                                     break;
@@ -266,7 +266,7 @@ namespace System.Data.JsonRpc
                                         if ((idsString != null) && !idsString.Add(response.IdString))
                                         {
                                             throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, string.Format(CultureInfo.InvariantCulture,
-                                                "Batch contains messages with the same identifier \"{0}\"", response.IdString));
+                                                "The batch contains messages with the same identifier \"{0}\"", response.IdString));
                                         }
                                     }
                                     break;
@@ -311,7 +311,7 @@ namespace System.Data.JsonRpc
             // Empty collection is an invalid case.
 
             if (requests.Count == 0)
-                throw new JsonRpcException(JsonRpcExceptionType.GenericError, "Batch is empty");
+                throw new JsonRpcException(JsonRpcExceptionType.GenericError, "The batch is empty");
 
             var jsonArray = new JArray();
             var idsNumber = default(HashSet<long>);
@@ -322,7 +322,7 @@ namespace System.Data.JsonRpc
                 if (request == null)
                 {
                     throw new JsonRpcException(JsonRpcExceptionType.GenericError, string.Format(CultureInfo.InvariantCulture,
-                        "Batch item at position {0} is not a message", index));
+                        "The batch item at position {0} is not a message", index));
                 }
 
                 switch (request.IdType)
@@ -334,7 +334,7 @@ namespace System.Data.JsonRpc
                             if ((idsNumber != null) && !idsNumber.Add(request.IdNumber))
                             {
                                 throw new JsonRpcException(JsonRpcExceptionType.GenericError, string.Format(CultureInfo.InvariantCulture,
-                                    "Batch contains messages with the same identifier \"{0}\"", request.IdNumber));
+                                    "The batch contains messages with the same identifier \"{0}\"", request.IdNumber));
                             }
                         }
                         break;
@@ -345,7 +345,7 @@ namespace System.Data.JsonRpc
                             if ((idsString != null) && !idsString.Add(request.IdString))
                             {
                                 throw new JsonRpcException(JsonRpcExceptionType.GenericError, string.Format(CultureInfo.InvariantCulture,
-                                    "Batch contains messages with the same identifier \"{0}\"", request.IdString));
+                                    "The batch contains messages with the same identifier \"{0}\"", request.IdString));
                             }
                         }
                         break;
@@ -417,7 +417,7 @@ namespace System.Data.JsonRpc
                 if (response == null)
                 {
                     throw new JsonRpcException(JsonRpcExceptionType.GenericError, string.Format(CultureInfo.InvariantCulture,
-                        "Batch item at position {0} is not a message", index));
+                        "The batch item at position {0} is not a message", index));
                 }
 
                 switch (response.IdType)
@@ -429,7 +429,7 @@ namespace System.Data.JsonRpc
                             if ((idsNumber != null) && !idsNumber.Add(response.IdNumber))
                             {
                                 throw new JsonRpcException(JsonRpcExceptionType.GenericError, string.Format(CultureInfo.InvariantCulture,
-                                    "Batch contains messages with the same identifier \"{0}\"", response.IdNumber));
+                                    "The batch contains messages with the same identifier \"{0}\"", response.IdNumber));
                             }
                         }
                         break;
@@ -440,7 +440,7 @@ namespace System.Data.JsonRpc
                             if ((idsString != null) && !idsString.Add(response.IdString))
                             {
                                 throw new JsonRpcException(JsonRpcExceptionType.GenericError, string.Format(CultureInfo.InvariantCulture,
-                                    "Batch contains messages with the same identifier \"{0}\"", response.IdString));
+                                    "The batch contains messages with the same identifier \"{0}\"", response.IdString));
                             }
                         }
                         break;
@@ -475,30 +475,30 @@ namespace System.Data.JsonRpc
         private JsonRpcRequest ConvertTokenToRequest(JObject jsonObject)
         {
             if (_schema == null)
-                throw new JsonRpcException(JsonRpcExceptionType.GenericError, "Type schema is not defined");
+                throw new JsonRpcException(JsonRpcExceptionType.GenericError, "The type schema is not defined");
 
             if (!jsonObject.TryGetValue("jsonrpc", out var jsonTokenProtocol))
-                throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "Request does not have protocol property");
+                throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "The request does not have the protocol property");
             if (jsonTokenProtocol.Type != JTokenType.String)
-                throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "Request has protocol property with invalid type");
+                throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "The request has the protocol property with invalid type");
             if (!object.Equals(jsonTokenProtocol, _protocolVersionToken))
-                throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "Request has invalid protocol version");
+                throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "The request has an invalid protocol version");
 
             var request = new JsonRpcRequest();
 
             if (!jsonObject.TryGetValue("method", out var jsonValueMethod))
-                throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "Request does not have method property");
+                throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "The request does not have the method property");
             if (jsonValueMethod.Type != JTokenType.String)
-                throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "Request has method property with invalid type");
+                throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "The request has the method property with invalid type");
 
             request.Method = (string)jsonValueMethod;
 
             if (request.Method.Length == 0)
-                throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "Request has empty method name");
+                throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "The request has an empty method name");
             if (!_schema.SupportedMethods.Contains(request.Method))
             {
                 throw new JsonRpcException(JsonRpcExceptionType.InvalidMethod, string.Format(CultureInfo.InvariantCulture,
-                    "Request method \"{0}\" is not supported", request.Method));
+                    "The request method \"{0}\" is not supported", request.Method));
             }
 
             if (jsonObject.TryGetValue("id", out var jsonValueId))
@@ -518,7 +518,7 @@ namespace System.Data.JsonRpc
                         }
                         break;
                     default:
-                        throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "Request has identifier property with invalid type");
+                        throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "The request has the identifier property with invalid type");
                 }
             }
 
@@ -527,12 +527,12 @@ namespace System.Data.JsonRpc
                 if (!_schema.ParameterTypeBindings.TryGetValue(request.Method, out var parametersType))
                 {
                     throw new JsonRpcException(JsonRpcExceptionType.GenericError, string.Format(CultureInfo.InvariantCulture,
-                        "There is no type binding for parameters object of \"{0}\" method", request.Method));
+                        "There is no type binding for parameters' object of \"{0}\" method", request.Method));
                 }
                 if (parametersType == null)
                 {
                     throw new JsonRpcException(JsonRpcExceptionType.GenericError, string.Format(CultureInfo.InvariantCulture,
-                        "Invalid type binding for parameters object of \"{0}\" method", request.Method));
+                        "Invalid type binding for parameters' object of \"{0}\" method", request.Method));
                 }
 
                 request.Params = ConvertTokenToObject(jsonValueParams, parametersType);
@@ -556,7 +556,7 @@ namespace System.Data.JsonRpc
                 // Type of "params" can be checked only after conversion of an object to JSON tokens due to possible custom converters.
 
                 if (jsonTokenParams.Type != JTokenType.Object && jsonTokenParams.Type != JTokenType.Array)
-                    throw new JsonRpcException(JsonRpcExceptionType.GenericError, "Request has parameters property with invalid type");
+                    throw new JsonRpcException(JsonRpcExceptionType.GenericError, "The request has the parameters' property with invalid type");
 
                 jsonObject.Add("params", jsonTokenParams);
             }
@@ -577,10 +577,10 @@ namespace System.Data.JsonRpc
         private JsonRpcResponse ConvertTokenToResponse(JObject jsonObject, IJsonRpcBindingsProvider bindingsProvider)
         {
             if (_schema == null)
-                throw new JsonRpcException(JsonRpcExceptionType.GenericError, "Type schema is not defined");
+                throw new JsonRpcException(JsonRpcExceptionType.GenericError, "A type schema is not defined");
 
             if (!jsonObject.TryGetValue("jsonrpc", out var jsonTokenProtocol))
-                throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "Response does not have protocol property");
+                throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "The response does not have protocol property");
             if (jsonTokenProtocol.Type != JTokenType.String)
                 throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "Response has protocol property with invalid type");
             if (!object.Equals(jsonTokenProtocol, _protocolVersionToken))

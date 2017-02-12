@@ -18,7 +18,7 @@
             if (id == null)
                 throw new ArgumentNullException(nameof(id));
             if (id.Length == 0)
-                throw new ArgumentException("Value is empty string", nameof(id));
+                throw new ArgumentException("Value is an empty string", nameof(id));
 
             IdString = id;
             IdType = JsonRpcIdType.String;

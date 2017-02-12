@@ -22,7 +22,7 @@ namespace System.Data.JsonRpc
             if (method == null)
                 throw new ArgumentNullException(nameof(method));
             if (method.Length == 0)
-                throw new ArgumentException("Value is empty string", nameof(method));
+                throw new ArgumentException("Value is an empty string", nameof(method));
 
             Method = method;
         }
@@ -52,7 +52,7 @@ namespace System.Data.JsonRpc
             if (method == null)
                 throw new ArgumentNullException(nameof(method));
             if (method.Length == 0)
-                throw new ArgumentException("Value is empty string", nameof(method));
+                throw new ArgumentException("Value is an empty string", nameof(method));
 
             Method = method;
         }
@@ -83,7 +83,7 @@ namespace System.Data.JsonRpc
             if (method == null)
                 throw new ArgumentNullException(nameof(method));
             if (method.Length == 0)
-                throw new ArgumentException("Value is empty string", nameof(method));
+                throw new ArgumentException("Value is an empty string", nameof(method));
 
             Method = method;
         }
