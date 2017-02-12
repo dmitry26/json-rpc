@@ -571,14 +571,14 @@ namespace System.Data.JsonRpc
         private JsonRpcResponse ConvertTokenToResponse(JObject jsonObject, IJsonRpcBindingsProvider bindingsProvider)
         {
             if (_schema == null)
-                throw new JsonRpcException(JsonRpcExceptionType.GenericError, "A type schema is not defined");
+                throw new JsonRpcException(JsonRpcExceptionType.GenericError, "The type schema is not defined");
 
             if (!jsonObject.TryGetValue("jsonrpc", out var jsonTokenProtocol))
-                throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "The response does not have protocol property");
+                throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "The response does not have the protocol property");
             if (jsonTokenProtocol.Type != JTokenType.String)
-                throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "Response has protocol property with invalid type");
+                throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "The response has the protocol property with invalid type");
             if (!object.Equals(jsonTokenProtocol, _protocolVersionToken))
-                throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "Response has invalid protocol version");
+                throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "The response has an invalid protocol version");
 
             var response = new JsonRpcResponse();
 
@@ -610,9 +610,9 @@ namespace System.Data.JsonRpc
             var jsonTokenError = jsonObject.GetValue("error");
 
             if ((jsonTokenResult == null) && (jsonTokenError == null))
-                throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "Response has neither result nor error properties");
+                throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "The response has neither result nor error properties");
             if ((jsonTokenResult != null) && (jsonTokenError != null))
-                throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "Response has result and error properties simultaneously");
+                throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "The response has the result and error properties simultaneously");
 
             if (jsonTokenResult != null)
             {
@@ -625,12 +625,12 @@ namespace System.Data.JsonRpc
                             if (!bindingsProvider.TryGetBinding(response.IdNumber, out messageMethod))
                             {
                                 throw new JsonRpcException(JsonRpcExceptionType.GenericError, string.Format(CultureInfo.InvariantCulture,
-                                    "There is no method binding for response with identifier \"{0}\"", response.IdNumber));
+                                    "There is no method binding for the response with the identifier \"{0}\"", response.IdNumber));
                             }
                             if (messageMethod == null)
                             {
                                 throw new JsonRpcException(JsonRpcExceptionType.GenericError, string.Format(CultureInfo.InvariantCulture,
-                                    "Invalid method binding for response with identifier \"{0}\"", response.IdNumber));
+                                    "Invalid method binding for the response with the identifier \"{0}\"", response.IdNumber));
                             }
                         }
                         break;
@@ -639,12 +639,12 @@ namespace System.Data.JsonRpc
                             if (!bindingsProvider.TryGetBinding(response.IdString, out messageMethod))
                             {
                                 throw new JsonRpcException(JsonRpcExceptionType.GenericError, string.Format(CultureInfo.InvariantCulture,
-                                    "There is no method binding for response with identifier \"{0}\"", response.IdString));
+                                    "There is no method binding for the response with the identifier \"{0}\"", response.IdString));
                             }
                             if (messageMethod == null)
                             {
                                 throw new JsonRpcException(JsonRpcExceptionType.GenericError, string.Format(CultureInfo.InvariantCulture,
-                                    "Invalid method binding for response with identifier \"{0}\"", response.IdString));
+                                    "Invalid method binding for the response with the identifier \"{0}\"", response.IdString));
                             }
                         }
                         break;
@@ -653,12 +653,12 @@ namespace System.Data.JsonRpc
                 if (!_schema.ResultTypeBindings.TryGetValue(messageMethod, out var resultType))
                 {
                     throw new JsonRpcException(JsonRpcExceptionType.GenericError, string.Format(CultureInfo.InvariantCulture,
-                        "There is no type binding for result object of \"{0}\" method", messageMethod));
+                        "There is no type binding for the result's object of the \"{0}\" method", messageMethod));
                 }
                 if (resultType == null)
                 {
                     throw new JsonRpcException(JsonRpcExceptionType.GenericError, string.Format(CultureInfo.InvariantCulture,
-                        "Invalid type binding for result object of \"{0}\" method", messageMethod));
+                        "Invalid type binding for result's object of the \"{0}\" method", messageMethod));
                 }
 
                 response.Result = ConvertTokenToObject(jsonTokenResult, resultType);
@@ -668,21 +668,21 @@ namespace System.Data.JsonRpc
                 response.Error = new JsonRpcError();
 
                 if (jsonTokenError.Type != JTokenType.Object)
-                    throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "Response has error property with invalid type");
+                    throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "The response has the error property with invalid type");
 
                 var jsonObjectError = (JObject)jsonTokenError;
 
                 if (!jsonObjectError.TryGetValue("code", out var jsonTokenErrorCode))
-                    throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "Response does not have error code property");
+                    throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "The response does not have the error code property");
                 if (jsonTokenErrorCode.Type != JTokenType.Integer)
-                    throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "Response has error code property with invalid type");
+                    throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "The response has the error code property with invalid type");
 
                 response.Error.Code = (long)jsonTokenErrorCode;
 
                 if (!jsonObjectError.TryGetValue("message", out var jsonTokenErrorMessage))
-                    throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "Response does not have error message property");
+                    throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "The response does not have the error message property");
                 if (jsonTokenErrorMessage.Type != JTokenType.String)
-                    throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "Response has error message property with invalid type");
+                    throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "The response has the error message property with invalid type");
 
                 response.Error.Message = (string)jsonTokenErrorMessage;
 
@@ -695,7 +695,7 @@ namespace System.Data.JsonRpc
                         case JsonRpcIdType.Null:
                             {
                                 if (_schema.ErrorDataTypeGeneric == null)
-                                    throw new JsonRpcException(JsonRpcExceptionType.GenericError, "There is no type binding for generic error data object");
+                                    throw new JsonRpcException(JsonRpcExceptionType.GenericError, "There is no type binding for the generic error data object");
 
                                 response.Error.Data = ConvertTokenToObject(jsonTokenErrorData, _schema.ErrorDataTypeGeneric);
                             }
@@ -705,22 +705,22 @@ namespace System.Data.JsonRpc
                                 if (!bindingsProvider.TryGetBinding(response.IdNumber, out messageMethod))
                                 {
                                     throw new JsonRpcException(JsonRpcExceptionType.GenericError, string.Format(CultureInfo.InvariantCulture,
-                                        "There is no method binding for response with identifier \"{0}\"", response.IdNumber));
+                                        "There is no method binding for the response with the identifier \"{0}\"", response.IdNumber));
                                 }
                                 if (messageMethod == null)
                                 {
                                     throw new JsonRpcException(JsonRpcExceptionType.GenericError, string.Format(CultureInfo.InvariantCulture,
-                                        "Invalid method binding for response with identifier \"{0}\"", response.IdNumber));
+                                        "Invalid method binding for the response with the identifier \"{0}\"", response.IdNumber));
                                 }
                                 if (!_schema.ErrorDataTypeBindings.TryGetValue(messageMethod, out var dataType))
                                 {
                                     throw new JsonRpcException(JsonRpcExceptionType.GenericError, string.Format(CultureInfo.InvariantCulture,
-                                        "There is no type binding for error data object of \"{0}\" method", messageMethod));
+                                        "There is no type binding for the error data object of the \"{0}\" method", messageMethod));
                                 }
                                 if (dataType == null)
                                 {
                                     throw new JsonRpcException(JsonRpcExceptionType.GenericError, string.Format(CultureInfo.InvariantCulture,
-                                        "Invalid type binding for error data object of \"{0}\" method", messageMethod));
+                                        "Invalid type binding for the error data object of the \"{0}\" method", messageMethod));
                                 }
 
                                 response.Error.Data = ConvertTokenToObject(jsonTokenErrorData, dataType);
@@ -731,22 +731,22 @@ namespace System.Data.JsonRpc
                                 if (!bindingsProvider.TryGetBinding(response.IdString, out messageMethod))
                                 {
                                     throw new JsonRpcException(JsonRpcExceptionType.GenericError, string.Format(CultureInfo.InvariantCulture,
-                                        "There is no method binding for response with identifier \"{0}\"", response.IdString));
+                                        "There is no method binding for the response with the identifier \"{0}\"", response.IdString));
                                 }
                                 if (messageMethod == null)
                                 {
                                     throw new JsonRpcException(JsonRpcExceptionType.GenericError, string.Format(CultureInfo.InvariantCulture,
-                                        "Invalid method binding for response with identifier \"{0}\"", response.IdString));
+                                        "Invalid method binding for the response with the identifier \"{0}\"", response.IdString));
                                 }
                                 if (!_schema.ErrorDataTypeBindings.TryGetValue(messageMethod, out var dataType))
                                 {
                                     throw new JsonRpcException(JsonRpcExceptionType.GenericError, string.Format(CultureInfo.InvariantCulture,
-                                        "There is no type binding for error data object of \"{0}\" method", messageMethod));
+                                        "There is no type binding for the error data object of the \"{0}\" method", messageMethod));
                                 }
                                 if (dataType == null)
                                 {
                                     throw new JsonRpcException(JsonRpcExceptionType.GenericError, string.Format(CultureInfo.InvariantCulture,
-                                        "Invalid type binding for error data object of \"{0}\" method", messageMethod));
+                                        "Invalid type binding for the error data object of the \"{0}\" method", messageMethod));
                                 }
 
                                 response.Error.Data = ConvertTokenToObject(jsonTokenErrorData, dataType);
