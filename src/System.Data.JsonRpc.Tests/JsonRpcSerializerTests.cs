@@ -238,7 +238,7 @@ namespace System.Data.JsonRpc.Tests
             Assert.False(jsonRpcDataInfo.IsEmpty);
             Assert.False(jsonRpcDataInfo.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetItem();
+            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
             Assert.False(jsonRpcMessageInfo.Success);
 
@@ -258,7 +258,7 @@ namespace System.Data.JsonRpc.Tests
             Assert.False(jsonRpcDataInfo.IsEmpty);
             Assert.False(jsonRpcDataInfo.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetItem();
+            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
             Assert.False(jsonRpcMessageInfo.Success);
 
@@ -278,7 +278,7 @@ namespace System.Data.JsonRpc.Tests
             Assert.False(jsonRpcDataInfo.IsEmpty);
             Assert.False(jsonRpcDataInfo.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetItem();
+            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
             Assert.False(jsonRpcMessageInfo.Success);
 
@@ -355,7 +355,7 @@ namespace System.Data.JsonRpc.Tests
             Assert.False(jsonRpcDataInfo.IsEmpty);
             Assert.False(jsonRpcDataInfo.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetItem();
+            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
             Assert.NotNull(jsonRpcMessageInfo);
             Assert.True(jsonRpcMessageInfo.Success);
@@ -384,12 +384,12 @@ namespace System.Data.JsonRpc.Tests
             Assert.False(jsonRpcDataInfo.IsEmpty);
             Assert.False(jsonRpcDataInfo.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetItem();
+            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
             Assert.NotNull(jsonRpcMessageInfo);
             Assert.True(jsonRpcMessageInfo.Success);
 
-            var jsonRpcRequest = jsonRpcMessageInfo.GetItem();
+            var jsonRpcRequest = jsonRpcMessageInfo.GetMessage();
 
             Assert.IsType<TestParams>(jsonRpcRequest.Params);
 

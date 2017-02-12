@@ -37,7 +37,7 @@ namespace System.Data.JsonRpc
         /// <summary>Gets a message for valid message information.</summary>
         /// <returns>A message.</returns>
         /// <exception cref="JsonRpcException">Converting was not successful.</exception>
-        public T GetItem()
+        public T GetMessage()
         {
             if (!Success)
                 throw new JsonRpcException(JsonRpcExceptionType.GenericError, "Converting was not successful");

@@ -19,7 +19,7 @@ namespace System.Data.JsonRpc
         /// <summary>Gets an <see cref="JsonRpcMessageInfo{T}"/> object for non-batch data.</summary>
         /// <returns>An <see cref="JsonRpcMessageInfo{T}"/> object.</returns>
         /// <exception cref="JsonRpcException">Data is empty or is a batch.</exception>
-        public JsonRpcMessageInfo<T> GetItem()
+        public JsonRpcMessageInfo<T> GetSingleItem()
         {
             if (IsEmpty)
                 throw new JsonRpcException(JsonRpcExceptionType.GenericError, "Data is empty");
@@ -32,7 +32,7 @@ namespace System.Data.JsonRpc
         /// <summary>Gets a collection of <see cref="JsonRpcMessageInfo{T}"/> objects for batch data.</summary>
         /// <returns>A collection of <see cref="JsonRpcMessageInfo{T}"/> objects.</returns>
         /// <exception cref="JsonRpcException">Data is empty or is not a batch.</exception>
-        public IReadOnlyList<JsonRpcMessageInfo<T>> GetItems()
+        public IReadOnlyList<JsonRpcMessageInfo<T>> GetBatchItems()
         {
             if (IsEmpty)
                 throw new JsonRpcException(JsonRpcExceptionType.GenericError, "Data is empty");
