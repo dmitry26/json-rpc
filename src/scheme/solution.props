@@ -1,18 +1,10 @@
 ﻿<Project>
   <PropertyGroup>
-    <Version>1.0.0-beta2</Version>
-  </PropertyGroup>
-  <PropertyGroup>
     <RepositoryPath>$(MSBuildThisFileDirectory)..\..</RepositoryPath>
     <BaseIntermediateOutputPath>$(RepositoryPath)\bin\obj\$(AssemblyName)\</BaseIntermediateOutputPath>
     <OutputPath>$(RepositoryPath)\bin\bin\$(AssemblyName)\$(Configuration)\</OutputPath >
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)open.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>True</SignAssembly>
-    <Copyright><![CDATA[© JSON-RPC.NET Team. All rights reserved.]]></Copyright>
-    <Description><![CDATA[JSON-RPC framework for .NET]]></Description>
-    <Product><![CDATA[JSON-RPC.NET]]></Product>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <DebugType>none</DebugType>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 </Project>
