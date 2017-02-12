@@ -238,7 +238,7 @@ namespace System.Data.JsonRpc.Tests
             Assert.False(jsonRpcDataInfo.IsEmpty);
             Assert.False(jsonRpcDataInfo.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetItem();
+            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
             Assert.False(jsonRpcMessageInfo.Success);
 
@@ -258,7 +258,7 @@ namespace System.Data.JsonRpc.Tests
             Assert.False(jsonRpcDataInfo.IsEmpty);
             Assert.False(jsonRpcDataInfo.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetItem();
+            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
             Assert.False(jsonRpcMessageInfo.Success);
 
@@ -278,7 +278,7 @@ namespace System.Data.JsonRpc.Tests
             Assert.False(jsonRpcDataInfo.IsEmpty);
             Assert.False(jsonRpcDataInfo.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetItem();
+            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
             Assert.False(jsonRpcMessageInfo.Success);
 
@@ -355,10 +355,47 @@ namespace System.Data.JsonRpc.Tests
             Assert.False(jsonRpcDataInfo.IsEmpty);
             Assert.False(jsonRpcDataInfo.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetItem();
+            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
             Assert.NotNull(jsonRpcMessageInfo);
             Assert.True(jsonRpcMessageInfo.Success);
+        }
+
+        [Fact]
+        public void DeserializeRequestDataWithCustomJsonConverter()
+        {
+            var jsonRpcSchema = new JsonRpcSchema();
+
+            jsonRpcSchema.SupportedMethods.Add("test_method");
+            jsonRpcSchema.ParameterTypeBindings["test_method"] = typeof(TestParams);
+
+            var jsonSerializer = JsonSerializer.CreateDefault();
+
+            jsonSerializer.Converters.Add(new TestJsonConverter());
+
+            var jsonRpcSettings = new JsonRpcSettings();
+
+            jsonRpcSettings.JsonSerializer = jsonSerializer;
+
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSchema, jsonRpcSettings);
+            var jsonSample = JsonTools.GetJsonSample("jrcc_01_req");
+            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeRequestsData(jsonSample);
+
+            Assert.False(jsonRpcDataInfo.IsEmpty);
+            Assert.False(jsonRpcDataInfo.IsBatch);
+
+            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
+
+            Assert.NotNull(jsonRpcMessageInfo);
+            Assert.True(jsonRpcMessageInfo.Success);
+
+            var jsonRpcRequest = jsonRpcMessageInfo.GetMessage();
+
+            Assert.IsType<TestParams>(jsonRpcRequest.Params);
+
+            var jsonRpcRequestParams = (TestParams)jsonRpcRequest.Params;
+
+            Assert.Equal("value", jsonRpcRequestParams.Value);
         }
 
         #region Test Types
@@ -370,6 +407,25 @@ namespace System.Data.JsonRpc.Tests
 
             public void Return(char[] array) =>
                 ArrayPool<char>.Shared.Return(array);
+        }
+
+        [JsonObject(MemberSerialization.OptIn)]
+        private sealed class TestParams
+        {
+            [JsonProperty("value")]
+            public string Value { get; set; }
+        }
+
+        private sealed class TestJsonConverter : JsonConverter
+        {
+            public override bool CanConvert(Type objectType) =>
+                objectType == typeof(string);
+
+            public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer) =>
+                (string)reader.Value == "default_value" ? "value" : reader.Value;
+
+            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) =>
+                throw new NotImplementedException();
         }
 
         #endregion

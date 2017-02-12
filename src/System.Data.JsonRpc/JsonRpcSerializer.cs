@@ -366,10 +366,7 @@ namespace System.Data.JsonRpc
                 var i = 0;
 
                 foreach (var request in requests)
-                {
-                    ProcessMessage(request, i);
-                    i++;
-                }
+                    ProcessMessage(request, i++);
             }
 
             var jsonString = ConvertTokenToString(jsonArray);
@@ -461,10 +458,7 @@ namespace System.Data.JsonRpc
                 var i = 0;
 
                 foreach (var response in responses)
-                {
-                    ProcessMessage(response, i);
-                    i++;
-                }
+                    ProcessMessage(response, i++);
             }
 
             var jsonString = ConvertTokenToString(jsonArray);

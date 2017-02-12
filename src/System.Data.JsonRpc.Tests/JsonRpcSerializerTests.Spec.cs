@@ -22,11 +22,11 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.False(jsonRpcDataInfo.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetItem();
+            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
             Assert.True(jsonRpcMessageInfo.Success);
 
-            var jsonRpcRequest = jsonRpcMessageInfo.GetItem();
+            var jsonRpcRequest = jsonRpcMessageInfo.GetMessage();
 
             Assert.Equal(JsonRpcIdType.Number, jsonRpcRequest.IdType);
             Assert.Equal(1L, jsonRpcRequest.GetIdAsNumber());
@@ -64,11 +64,11 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.False(jsonRpcDataInfo.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetItem();
+            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
             Assert.True(jsonRpcMessageInfo.Success);
 
-            var jsonRpcResponse = jsonRpcMessageInfo.GetItem();
+            var jsonRpcResponse = jsonRpcMessageInfo.GetMessage();
 
             Assert.Equal(JsonRpcIdType.Number, jsonRpcResponse.IdType);
             Assert.Equal(1L, jsonRpcResponse.GetIdAsNumber());
@@ -101,11 +101,11 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.False(jsonRpcDataInfo.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetItem();
+            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
             Assert.True(jsonRpcMessageInfo.Success);
 
-            var jsonRpcRequest = jsonRpcMessageInfo.GetItem();
+            var jsonRpcRequest = jsonRpcMessageInfo.GetMessage();
 
             Assert.Equal(JsonRpcIdType.Number, jsonRpcRequest.IdType);
             Assert.Equal(2L, jsonRpcRequest.GetIdAsNumber());
@@ -143,11 +143,11 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.False(jsonRpcDataInfo.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetItem();
+            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
             Assert.True(jsonRpcMessageInfo.Success);
 
-            var jsonRpcResponse = jsonRpcMessageInfo.GetItem();
+            var jsonRpcResponse = jsonRpcMessageInfo.GetMessage();
 
             Assert.Equal(JsonRpcIdType.Number, jsonRpcResponse.IdType);
             Assert.Equal(2L, jsonRpcResponse.GetIdAsNumber());
@@ -184,11 +184,11 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.False(jsonRpcDataInfo.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetItem();
+            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
-            Assert.True(jsonRpcDataInfo.GetItem().Success);
+            Assert.True(jsonRpcMessageInfo.Success);
 
-            var jsonRpcRequest = jsonRpcMessageInfo.GetItem();
+            var jsonRpcRequest = jsonRpcMessageInfo.GetMessage();
 
             Assert.Equal(JsonRpcIdType.Number, jsonRpcRequest.IdType);
             Assert.Equal(3L, jsonRpcRequest.GetIdAsNumber());
@@ -230,11 +230,11 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.False(jsonRpcDataInfo.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetItem();
+            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
             Assert.True(jsonRpcMessageInfo.Success);
 
-            var jsonRpcResponse = jsonRpcMessageInfo.GetItem();
+            var jsonRpcResponse = jsonRpcMessageInfo.GetMessage();
 
             Assert.Equal(JsonRpcIdType.Number, jsonRpcResponse.IdType);
             Assert.Equal(3L, jsonRpcResponse.GetIdAsNumber());
@@ -267,11 +267,11 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.False(jsonRpcDataInfo.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetItem();
+            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
-            Assert.True(jsonRpcDataInfo.GetItem().Success);
+            Assert.True(jsonRpcMessageInfo.Success);
 
-            var jsonRpcRequest = jsonRpcMessageInfo.GetItem();
+            var jsonRpcRequest = jsonRpcMessageInfo.GetMessage();
 
             Assert.Equal(JsonRpcIdType.Number, jsonRpcRequest.IdType);
             Assert.Equal(4L, jsonRpcRequest.GetIdAsNumber());
@@ -313,11 +313,11 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.False(jsonRpcDataInfo.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetItem();
+            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
-            Assert.True(jsonRpcDataInfo.GetItem().Success);
+            Assert.True(jsonRpcMessageInfo.Success);
 
-            var jsonRpcResponse = jsonRpcMessageInfo.GetItem();
+            var jsonRpcResponse = jsonRpcMessageInfo.GetMessage();
 
             Assert.Equal(JsonRpcIdType.Number, jsonRpcResponse.IdType);
             Assert.Equal(4L, jsonRpcResponse.GetIdAsNumber());
@@ -354,11 +354,11 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.False(jsonRpcDataInfo.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetItem();
+            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
-            Assert.True(jsonRpcDataInfo.GetItem().Success);
+            Assert.True(jsonRpcMessageInfo.Success);
 
-            var jsonRpcRequest = jsonRpcMessageInfo.GetItem();
+            var jsonRpcRequest = jsonRpcMessageInfo.GetMessage();
 
             Assert.Equal(JsonRpcIdType.Null, jsonRpcRequest.IdType);
             Assert.Equal("update", jsonRpcRequest.Method);
@@ -391,11 +391,11 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.False(jsonRpcDataInfo.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetItem();
+            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
-            Assert.True(jsonRpcDataInfo.GetItem().Success);
+            Assert.True(jsonRpcMessageInfo.Success);
 
-            var jsonRpcRequest = jsonRpcMessageInfo.GetItem();
+            var jsonRpcRequest = jsonRpcMessageInfo.GetMessage();
 
             Assert.Equal(JsonRpcIdType.Null, jsonRpcRequest.IdType);
             Assert.Equal("foobar", jsonRpcRequest.Method);
@@ -430,11 +430,11 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.False(jsonRpcDataInfo.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetItem();
+            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
-            Assert.True(jsonRpcDataInfo.GetItem().Success);
+            Assert.True(jsonRpcMessageInfo.Success);
 
-            var jsonRpcRequest = jsonRpcMessageInfo.GetItem();
+            var jsonRpcRequest = jsonRpcMessageInfo.GetMessage();
 
             Assert.Equal(JsonRpcIdType.String, jsonRpcRequest.IdType);
             Assert.Equal("1", jsonRpcRequest.GetIdAsString());
@@ -464,11 +464,11 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.False(jsonRpcDataInfo.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetItem();
+            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
-            Assert.True(jsonRpcDataInfo.GetItem().Success);
+            Assert.True(jsonRpcMessageInfo.Success);
 
-            var jsonRpcResponse = jsonRpcMessageInfo.GetItem();
+            var jsonRpcResponse = jsonRpcMessageInfo.GetMessage();
 
             Assert.Equal(JsonRpcIdType.String, jsonRpcResponse.IdType);
             Assert.Equal("1", jsonRpcResponse.GetIdAsString());
@@ -526,11 +526,11 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.False(jsonRpcDataInfo.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetItem();
+            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
-            Assert.True(jsonRpcDataInfo.GetItem().Success);
+            Assert.True(jsonRpcMessageInfo.Success);
 
-            var jsonRpcResponse = jsonRpcMessageInfo.GetItem();
+            var jsonRpcResponse = jsonRpcMessageInfo.GetMessage();
 
             Assert.Equal(JsonRpcIdType.Null, jsonRpcResponse.IdType);
             Assert.False(jsonRpcResponse.Success);
@@ -568,9 +568,9 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.False(jsonRpcDataInfo.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetItem();
+            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
-            Assert.False(jsonRpcDataInfo.GetItem().Success);
+            Assert.False(jsonRpcMessageInfo.Success);
 
             var jsonRpcMessageInfoException = jsonRpcMessageInfo.GetException();
 
@@ -594,11 +594,11 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.False(jsonRpcDataInfo.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetItem();
+            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
-            Assert.True(jsonRpcDataInfo.GetItem().Success);
+            Assert.True(jsonRpcMessageInfo.Success);
 
-            var jsonRpcResponse = jsonRpcMessageInfo.GetItem();
+            var jsonRpcResponse = jsonRpcMessageInfo.GetMessage();
 
             Assert.Equal(JsonRpcIdType.Null, jsonRpcResponse.IdType);
             Assert.False(jsonRpcResponse.Success);
@@ -653,11 +653,11 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.False(jsonRpcDataInfo.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetItem();
+            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
             Assert.True(jsonRpcMessageInfo.Success);
 
-            var jsonRpcResponse = jsonRpcMessageInfo.GetItem();
+            var jsonRpcResponse = jsonRpcMessageInfo.GetMessage();
 
             Assert.Equal(JsonRpcIdType.Null, jsonRpcResponse.IdType);
             Assert.False(jsonRpcResponse.Success);
@@ -712,11 +712,11 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.False(jsonRpcDataInfo.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetItem();
+            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
             Assert.True(jsonRpcMessageInfo.Success);
 
-            var jsonRpcResponse = jsonRpcMessageInfo.GetItem();
+            var jsonRpcResponse = jsonRpcMessageInfo.GetMessage();
 
             Assert.Equal(JsonRpcIdType.Null, jsonRpcResponse.IdType);
             Assert.False(jsonRpcResponse.Success);
@@ -750,9 +750,9 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcDataInfo = jsonRpcSerializer.DeserializeRequestsData(jsonSample);
 
             Assert.True(jsonRpcDataInfo.IsBatch);
-            Assert.Equal(1, jsonRpcDataInfo.GetItems().Count);
+            Assert.Equal(1, jsonRpcDataInfo.GetBatchItems().Count);
 
-            var jsonRpcMessageInfo0 = jsonRpcDataInfo.GetItems()[0];
+            var jsonRpcMessageInfo0 = jsonRpcDataInfo.GetBatchItems()[0];
 
             Assert.False(jsonRpcMessageInfo0.Success);
 
@@ -777,13 +777,13 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcDataInfo = jsonRpcSerializer.DeserializeResponsesData(jsonSample, jsonRpcBindingsProvider);
 
             Assert.True(jsonRpcDataInfo.IsBatch);
-            Assert.Equal(1, jsonRpcDataInfo.GetItems().Count);
+            Assert.Equal(1, jsonRpcDataInfo.GetBatchItems().Count);
 
-            var jsonRpcMessageInfo0 = jsonRpcDataInfo.GetItems()[0];
+            var jsonRpcMessageInfo0 = jsonRpcDataInfo.GetBatchItems()[0];
 
             Assert.True(jsonRpcMessageInfo0.Success);
 
-            var jsonRpcResponse0 = jsonRpcMessageInfo0.GetItem();
+            var jsonRpcResponse0 = jsonRpcMessageInfo0.GetMessage();
 
             Assert.Equal(JsonRpcIdType.Null, jsonRpcResponse0.IdType);
             Assert.False(jsonRpcResponse0.Success);
@@ -817,9 +817,9 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcDataInfo = jsonRpcSerializer.DeserializeRequestsData(jsonSample);
 
             Assert.True(jsonRpcDataInfo.IsBatch);
-            Assert.Equal(3, jsonRpcDataInfo.GetItems().Count);
+            Assert.Equal(3, jsonRpcDataInfo.GetBatchItems().Count);
 
-            foreach (var jsonRpcMessageInfo in jsonRpcDataInfo.GetItems())
+            foreach (var jsonRpcMessageInfo in jsonRpcDataInfo.GetBatchItems())
                 Assert.False(jsonRpcMessageInfo.Success);
         }
 
@@ -839,13 +839,13 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcDataInfo = jsonRpcSerializer.DeserializeResponsesData(jsonSample, jsonRpcBindingsProvider);
 
             Assert.True(jsonRpcDataInfo.IsBatch);
-            Assert.Equal(3, jsonRpcDataInfo.GetItems().Count);
+            Assert.Equal(3, jsonRpcDataInfo.GetBatchItems().Count);
 
-            foreach (var jsonRpcMessageInfo in jsonRpcDataInfo.GetItems())
+            foreach (var jsonRpcMessageInfo in jsonRpcDataInfo.GetBatchItems())
             {
                 Assert.True(jsonRpcMessageInfo.Success);
 
-                var jsonRpcResponse = jsonRpcMessageInfo.GetItem();
+                var jsonRpcResponse = jsonRpcMessageInfo.GetMessage();
 
                 Assert.Equal(JsonRpcIdType.Null, jsonRpcResponse.IdType);
                 Assert.False(jsonRpcResponse.Success);
@@ -893,13 +893,13 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcDataInfo = jsonRpcSerializer.DeserializeRequestsData(jsonSample);
 
             Assert.True(jsonRpcDataInfo.IsBatch);
-            Assert.Equal(6, jsonRpcDataInfo.GetItems().Count);
+            Assert.Equal(6, jsonRpcDataInfo.GetBatchItems().Count);
 
-            var jsonRpcRequestInfo0 = jsonRpcDataInfo.GetItems()[0];
+            var jsonRpcRequestInfo0 = jsonRpcDataInfo.GetBatchItems()[0];
 
             Assert.True(jsonRpcRequestInfo0.Success);
 
-            var jsonRpcRequest0 = jsonRpcRequestInfo0.GetItem();
+            var jsonRpcRequest0 = jsonRpcRequestInfo0.GetMessage();
 
             Assert.Equal(JsonRpcIdType.String, jsonRpcRequest0.IdType);
             Assert.Equal("1", jsonRpcRequest0.GetIdAsString());
@@ -908,11 +908,11 @@ namespace System.Data.JsonRpc.Tests
             Assert.IsType<long[]>(jsonRpcRequest0.Params);
             Assert.Equal(new[] { 1L, 2L, 4L }, jsonRpcRequest0.Params);
 
-            var jsonRpcRequestInfo1 = jsonRpcDataInfo.GetItems()[1];
+            var jsonRpcRequestInfo1 = jsonRpcDataInfo.GetBatchItems()[1];
 
             Assert.True(jsonRpcRequestInfo1.Success);
 
-            var jsonRpcRequest1 = jsonRpcRequestInfo1.GetItem();
+            var jsonRpcRequest1 = jsonRpcRequestInfo1.GetMessage();
 
             Assert.Equal(JsonRpcIdType.Null, jsonRpcRequest1.IdType);
             Assert.Equal("notify_hello", jsonRpcRequest1.Method);
@@ -920,11 +920,11 @@ namespace System.Data.JsonRpc.Tests
             Assert.IsType<long[]>(jsonRpcRequest1.Params);
             Assert.Equal(new[] { 7L }, jsonRpcRequest1.Params);
 
-            var jsonRpcRequestInfo2 = jsonRpcDataInfo.GetItems()[2];
+            var jsonRpcRequestInfo2 = jsonRpcDataInfo.GetBatchItems()[2];
 
             Assert.True(jsonRpcRequestInfo2.Success);
 
-            var jsonRpcRequest2 = jsonRpcRequestInfo2.GetItem();
+            var jsonRpcRequest2 = jsonRpcRequestInfo2.GetMessage();
 
             Assert.Equal(JsonRpcIdType.String, jsonRpcRequest2.IdType);
             Assert.Equal("2", jsonRpcRequest2.GetIdAsString());
@@ -933,19 +933,19 @@ namespace System.Data.JsonRpc.Tests
             Assert.IsType<long[]>(jsonRpcRequest2.Params);
             Assert.Equal(new[] { 42L, 23L }, jsonRpcRequest2.Params);
 
-            var jsonRpcRequestInfo3 = jsonRpcDataInfo.GetItems()[3];
+            var jsonRpcRequestInfo3 = jsonRpcDataInfo.GetBatchItems()[3];
 
             Assert.False(jsonRpcRequestInfo3.Success);
 
-            var jsonRpcRequestInfo4 = jsonRpcDataInfo.GetItems()[4];
+            var jsonRpcRequestInfo4 = jsonRpcDataInfo.GetBatchItems()[4];
 
             Assert.False(jsonRpcRequestInfo4.Success);
 
-            var jsonRpcRequestInfo5 = jsonRpcDataInfo.GetItems()[5];
+            var jsonRpcRequestInfo5 = jsonRpcDataInfo.GetBatchItems()[5];
 
             Assert.True(jsonRpcRequestInfo5.Success);
 
-            var jsonRpcRequest5 = jsonRpcRequestInfo5.GetItem();
+            var jsonRpcRequest5 = jsonRpcRequestInfo5.GetMessage();
 
             Assert.Equal(JsonRpcIdType.String, jsonRpcRequest5.IdType);
             Assert.Equal("9", jsonRpcRequest5.GetIdAsString());
@@ -980,35 +980,35 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcDataInfo = jsonRpcSerializer.DeserializeResponsesData(jsonSample, jsonRpcBindingsProvider);
 
             Assert.True(jsonRpcDataInfo.IsBatch);
-            Assert.Equal(5, jsonRpcDataInfo.GetItems().Count);
+            Assert.Equal(5, jsonRpcDataInfo.GetBatchItems().Count);
 
-            var jsonRpcMessageInfo0 = jsonRpcDataInfo.GetItems()[0];
+            var jsonRpcMessageInfo0 = jsonRpcDataInfo.GetBatchItems()[0];
 
             Assert.True(jsonRpcMessageInfo0.Success);
 
-            var jsonRpcResponse0 = jsonRpcMessageInfo0.GetItem();
+            var jsonRpcResponse0 = jsonRpcMessageInfo0.GetMessage();
 
             Assert.Equal(JsonRpcIdType.String, jsonRpcResponse0.IdType);
             Assert.Equal("1", jsonRpcResponse0.GetIdAsString());
             Assert.IsType<long>(jsonRpcResponse0.Result);
             Assert.Equal(7L, jsonRpcResponse0.Result);
 
-            var jsonRpcMessageInfo1 = jsonRpcDataInfo.GetItems()[1];
+            var jsonRpcMessageInfo1 = jsonRpcDataInfo.GetBatchItems()[1];
 
             Assert.True(jsonRpcMessageInfo1.Success);
 
-            var jsonRpcResponse1 = jsonRpcMessageInfo1.GetItem();
+            var jsonRpcResponse1 = jsonRpcMessageInfo1.GetMessage();
 
             Assert.Equal(JsonRpcIdType.String, jsonRpcResponse1.IdType);
             Assert.Equal("2", jsonRpcResponse1.GetIdAsString());
             Assert.IsType<long>(jsonRpcResponse1.Result);
             Assert.Equal(19L, jsonRpcResponse1.Result);
 
-            var jsonRpcMessageInfo2 = jsonRpcDataInfo.GetItems()[2];
+            var jsonRpcMessageInfo2 = jsonRpcDataInfo.GetBatchItems()[2];
 
             Assert.True(jsonRpcMessageInfo2.Success);
 
-            var jsonRpcResponse2 = jsonRpcMessageInfo2.GetItem();
+            var jsonRpcResponse2 = jsonRpcMessageInfo2.GetMessage();
 
             Assert.Equal(JsonRpcIdType.Null, jsonRpcResponse2.IdType);
             Assert.False(jsonRpcResponse2.Success);
@@ -1017,11 +1017,11 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.Equal(JsonRpcErrorType.InvalidRequest, jsonRpcResponse2Error.Type);
 
-            var jsonRpcMessageInfo3 = jsonRpcDataInfo.GetItems()[3];
+            var jsonRpcMessageInfo3 = jsonRpcDataInfo.GetBatchItems()[3];
 
             Assert.True(jsonRpcMessageInfo3.Success);
 
-            var jsonRpcResponse3 = jsonRpcMessageInfo3.GetItem();
+            var jsonRpcResponse3 = jsonRpcMessageInfo3.GetMessage();
 
             Assert.Equal(JsonRpcIdType.String, jsonRpcResponse3.IdType);
             Assert.Equal("5", jsonRpcResponse3.GetIdAsString());
@@ -1031,11 +1031,11 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.Equal(JsonRpcErrorType.InvalidMethod, jsonRpcResponse3Error.Type);
 
-            var jsonRpcMessageInfo4 = jsonRpcDataInfo.GetItems()[4];
+            var jsonRpcMessageInfo4 = jsonRpcDataInfo.GetBatchItems()[4];
 
             Assert.True(jsonRpcMessageInfo4.Success);
 
-            var jsonRpcResponse4 = jsonRpcMessageInfo4.GetItem();
+            var jsonRpcResponse4 = jsonRpcMessageInfo4.GetMessage();
 
             Assert.Equal(JsonRpcIdType.String, jsonRpcResponse4.IdType);
             Assert.Equal("9", jsonRpcResponse4.GetIdAsString());
@@ -1080,13 +1080,13 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcDataInfo = jsonRpcSerializer.DeserializeRequestsData(jsonSample);
 
             Assert.True(jsonRpcDataInfo.IsBatch);
-            Assert.Equal(2, jsonRpcDataInfo.GetItems().Count);
+            Assert.Equal(2, jsonRpcDataInfo.GetBatchItems().Count);
 
-            var jsonRpcMessageInfo0 = jsonRpcDataInfo.GetItems()[0];
+            var jsonRpcMessageInfo0 = jsonRpcDataInfo.GetBatchItems()[0];
 
             Assert.True(jsonRpcMessageInfo0.Success);
 
-            var jsonRpcRequest0 = jsonRpcMessageInfo0.GetItem();
+            var jsonRpcRequest0 = jsonRpcMessageInfo0.GetMessage();
 
             Assert.Equal(JsonRpcIdType.Null, jsonRpcRequest0.IdType);
             Assert.Equal("notify_sum", jsonRpcRequest0.Method);
@@ -1094,11 +1094,11 @@ namespace System.Data.JsonRpc.Tests
             Assert.IsType<long[]>(jsonRpcRequest0.Params);
             Assert.Equal(new[] { 1L, 2L, 4L }, jsonRpcRequest0.Params);
 
-            var jsonRpcMessageInfo1 = jsonRpcDataInfo.GetItems()[1];
+            var jsonRpcMessageInfo1 = jsonRpcDataInfo.GetBatchItems()[1];
 
             Assert.True(jsonRpcMessageInfo1.Success);
 
-            var jsonRpcRequest1 = jsonRpcMessageInfo1.GetItem();
+            var jsonRpcRequest1 = jsonRpcMessageInfo1.GetMessage();
 
             Assert.Equal(JsonRpcIdType.Null, jsonRpcRequest1.IdType);
             Assert.Equal("notify_hello", jsonRpcRequest1.Method);

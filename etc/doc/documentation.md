@@ -1,4 +1,4 @@
-### Mapping deserialization exception to response error code
+### Mapping exception type to response error type
 
 `JsonRpcExceptionType` | `JsonRpcErrorType`
 --- | ---

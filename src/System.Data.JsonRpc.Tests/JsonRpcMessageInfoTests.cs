@@ -15,10 +15,10 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSchema);
             var jsonSample = JsonTools.GetJsonSample("jrmi_01_req");
             var jsonRpcDataInfo = jsonRpcSerializer.DeserializeRequestsData(jsonSample);
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetItem();
+            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
             Assert.True(jsonRpcMessageInfo.Success);
-            Assert.NotNull(jsonRpcMessageInfo.GetItem());
+            Assert.NotNull(jsonRpcMessageInfo.GetMessage());
 
             var getExceptionException = Assert.Throws<JsonRpcException>(() =>
                 jsonRpcMessageInfo.GetException());
@@ -36,12 +36,12 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSchema);
             var jsonSample = JsonTools.GetJsonSample("jrmi_02_req");
             var jsonRpcDataInfo = jsonRpcSerializer.DeserializeRequestsData(jsonSample);
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetItem();
+            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
             Assert.False(jsonRpcMessageInfo.Success);
 
             var getItemException = Assert.Throws<JsonRpcException>(() =>
-                jsonRpcMessageInfo.GetItem());
+                jsonRpcMessageInfo.GetMessage());
 
             Assert.Equal(JsonRpcExceptionType.GenericError, getItemException.Type);
             Assert.NotNull(jsonRpcMessageInfo.GetException());
