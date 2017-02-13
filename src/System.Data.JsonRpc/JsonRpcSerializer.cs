@@ -140,7 +140,7 @@ namespace System.Data.JsonRpc
                                         if ((idsNumber != null) && !idsNumber.Add(request.IdNumber))
                                         {
                                             throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, string.Format(CultureInfo.InvariantCulture,
-                                                "The batch contains messages with the same identifier \"{0}\"", request.IdNumber));
+                                                "The batch contains messages with the same identifier: \"{0}\"", request.IdNumber));
                                         }
                                     }
                                     break;
@@ -151,7 +151,7 @@ namespace System.Data.JsonRpc
                                         if ((idsString != null) && !idsString.Add(request.IdString))
                                         {
                                             throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, string.Format(CultureInfo.InvariantCulture,
-                                                "The batch contains messages with the same identifier \"{0}\"", request.IdString));
+                                                "The batch contains messages with the same identifier: \"{0}\"", request.IdString));
                                         }
                                     }
                                     break;
@@ -255,7 +255,7 @@ namespace System.Data.JsonRpc
                                         if ((idsNumber != null) && !idsNumber.Add(response.IdNumber))
                                         {
                                             throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, string.Format(CultureInfo.InvariantCulture,
-                                                "The batch contains messages with the same identifier \"{0}\"", response.IdNumber));
+                                                "The batch contains messages with the same identifier: \"{0}\"", response.IdNumber));
                                         }
                                     }
                                     break;
@@ -266,7 +266,7 @@ namespace System.Data.JsonRpc
                                         if ((idsString != null) && !idsString.Add(response.IdString))
                                         {
                                             throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, string.Format(CultureInfo.InvariantCulture,
-                                                "The batch contains messages with the same identifier \"{0}\"", response.IdString));
+                                                "The batch contains messages with the same identifier: \"{0}\"", response.IdString));
                                         }
                                     }
                                     break;
@@ -334,7 +334,7 @@ namespace System.Data.JsonRpc
                             if ((idsNumber != null) && !idsNumber.Add(request.IdNumber))
                             {
                                 throw new JsonRpcException(JsonRpcExceptionType.GenericError, string.Format(CultureInfo.InvariantCulture,
-                                    "The batch contains messages with the same identifier \"{0}\"", request.IdNumber));
+                                    "The batch contains messages with the same identifier: \"{0}\"", request.IdNumber));
                             }
                         }
                         break;
@@ -345,7 +345,7 @@ namespace System.Data.JsonRpc
                             if ((idsString != null) && !idsString.Add(request.IdString))
                             {
                                 throw new JsonRpcException(JsonRpcExceptionType.GenericError, string.Format(CultureInfo.InvariantCulture,
-                                    "The batch contains messages with the same identifier \"{0}\"", request.IdString));
+                                    "The batch contains messages with the same identifier: \"{0}\"", request.IdString));
                             }
                         }
                         break;
@@ -426,7 +426,7 @@ namespace System.Data.JsonRpc
                             if ((idsNumber != null) && !idsNumber.Add(response.IdNumber))
                             {
                                 throw new JsonRpcException(JsonRpcExceptionType.GenericError, string.Format(CultureInfo.InvariantCulture,
-                                    "The batch contains messages with the same identifier \"{0}\"", response.IdNumber));
+                                    "The batch contains messages with the same identifier: \"{0}\"", response.IdNumber));
                             }
                         }
                         break;
@@ -437,7 +437,7 @@ namespace System.Data.JsonRpc
                             if ((idsString != null) && !idsString.Add(response.IdString))
                             {
                                 throw new JsonRpcException(JsonRpcExceptionType.GenericError, string.Format(CultureInfo.InvariantCulture,
-                                    "The batch contains messages with the same identifier \"{0}\"", response.IdString));
+                                    "The batch contains messages with the same identifier: \"{0}\"", response.IdString));
                             }
                         }
                         break;
@@ -521,12 +521,12 @@ namespace System.Data.JsonRpc
                 if (!_schema.ParameterTypeBindings.TryGetValue(request.Method, out var parametersType))
                 {
                     throw new JsonRpcException(JsonRpcExceptionType.GenericError, string.Format(CultureInfo.InvariantCulture,
-                        "There is no type binding for parameters' object of \"{0}\" method", request.Method));
+                        "There is no type binding for parameters' object of the \"{0}\" method", request.Method));
                 }
                 if (parametersType == null)
                 {
                     throw new JsonRpcException(JsonRpcExceptionType.GenericError, string.Format(CultureInfo.InvariantCulture,
-                        "Invalid type binding for parameters' object of \"{0}\" method", request.Method));
+                        "Invalid type binding for parameters' object of the \"{0}\" method", request.Method));
                 }
 
                 request.Params = ConvertTokenToObject(jsonValueParams, parametersType);
@@ -625,12 +625,12 @@ namespace System.Data.JsonRpc
                             if (!bindingsProvider.TryGetBinding(response.IdNumber, out messageMethod))
                             {
                                 throw new JsonRpcException(JsonRpcExceptionType.GenericError, string.Format(CultureInfo.InvariantCulture,
-                                    "There is no method binding for the response with the identifier \"{0}\"", response.IdNumber));
+                                    "There is no method binding for the response with the \"{0}\" identifier", response.IdNumber));
                             }
                             if (messageMethod == null)
                             {
                                 throw new JsonRpcException(JsonRpcExceptionType.GenericError, string.Format(CultureInfo.InvariantCulture,
-                                    "Invalid method binding for the response with the identifier \"{0}\"", response.IdNumber));
+                                    "Invalid method binding for the response with the \"{0}\" identifier", response.IdNumber));
                             }
                         }
                         break;
@@ -639,12 +639,12 @@ namespace System.Data.JsonRpc
                             if (!bindingsProvider.TryGetBinding(response.IdString, out messageMethod))
                             {
                                 throw new JsonRpcException(JsonRpcExceptionType.GenericError, string.Format(CultureInfo.InvariantCulture,
-                                    "There is no method binding for the response with the identifier \"{0}\"", response.IdString));
+                                    "There is no method binding for the response with the \"{0}\" identifier", response.IdString));
                             }
                             if (messageMethod == null)
                             {
                                 throw new JsonRpcException(JsonRpcExceptionType.GenericError, string.Format(CultureInfo.InvariantCulture,
-                                    "Invalid method binding for the response with the identifier \"{0}\"", response.IdString));
+                                    "Invalid method binding for the response with the \"{0}\" identifier", response.IdString));
                             }
                         }
                         break;
@@ -705,12 +705,12 @@ namespace System.Data.JsonRpc
                                 if (!bindingsProvider.TryGetBinding(response.IdNumber, out messageMethod))
                                 {
                                     throw new JsonRpcException(JsonRpcExceptionType.GenericError, string.Format(CultureInfo.InvariantCulture,
-                                        "There is no method binding for the response with the identifier \"{0}\"", response.IdNumber));
+                                        "There is no method binding for the response with the \"{0}\" identifier", response.IdNumber));
                                 }
                                 if (messageMethod == null)
                                 {
                                     throw new JsonRpcException(JsonRpcExceptionType.GenericError, string.Format(CultureInfo.InvariantCulture,
-                                        "Invalid method binding for the response with the identifier \"{0}\"", response.IdNumber));
+                                        "Invalid method binding for the response with the \"{0}\" identifier", response.IdNumber));
                                 }
                                 if (!_schema.ErrorDataTypeBindings.TryGetValue(messageMethod, out var dataType))
                                 {
@@ -731,12 +731,12 @@ namespace System.Data.JsonRpc
                                 if (!bindingsProvider.TryGetBinding(response.IdString, out messageMethod))
                                 {
                                     throw new JsonRpcException(JsonRpcExceptionType.GenericError, string.Format(CultureInfo.InvariantCulture,
-                                        "There is no method binding for the response with the identifier \"{0}\"", response.IdString));
+                                        "There is no method binding for the response with the \"{0}\" identifier", response.IdString));
                                 }
                                 if (messageMethod == null)
                                 {
                                     throw new JsonRpcException(JsonRpcExceptionType.GenericError, string.Format(CultureInfo.InvariantCulture,
-                                        "Invalid method binding for the response with the identifier \"{0}\"", response.IdString));
+                                        "Invalid method binding for the response with the \"{0}\" identifier", response.IdString));
                                 }
                                 if (!_schema.ErrorDataTypeBindings.TryGetValue(messageMethod, out var dataType))
                                 {
@@ -819,7 +819,7 @@ namespace System.Data.JsonRpc
             }
             catch (JsonException e)
             {
-                throw new JsonRpcException(JsonRpcExceptionType.ParseError, "JSON string parse error", e);
+                throw new JsonRpcException(JsonRpcExceptionType.ParseError, "JSON string parsing error", e);
             }
         }
 
@@ -834,7 +834,7 @@ namespace System.Data.JsonRpc
             }
             catch (JsonException e)
             {
-                throw new JsonRpcException(JsonRpcExceptionType.GenericError, "CLR object construct error", e);
+                throw new JsonRpcException(JsonRpcExceptionType.GenericError, "CLR object construction error", e);
             }
         }
 
@@ -849,7 +849,7 @@ namespace System.Data.JsonRpc
             }
             catch (JsonException e)
             {
-                throw new JsonRpcException(JsonRpcExceptionType.GenericError, "CLR object deconstruct error", e);
+                throw new JsonRpcException(JsonRpcExceptionType.GenericError, "CLR object deconstruction error", e);
             }
         }
 
@@ -864,7 +864,7 @@ namespace System.Data.JsonRpc
             }
             catch (JsonException e)
             {
-                throw new JsonRpcException(JsonRpcExceptionType.GenericError, "JSON string compose error", e);
+                throw new JsonRpcException(JsonRpcExceptionType.GenericError, "JSON string composition error", e);
             }
         }
     }
