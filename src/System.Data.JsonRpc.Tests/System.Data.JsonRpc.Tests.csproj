@@ -11,8 +11,8 @@
     <PackageReference Include="FakeItEasy" Version="3.0.0-rc001-build000097" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20170210-02" />
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
-    <PackageReference Include="xunit" Version="2.2.0-rc1-build3507" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0-rc1-build1247" />
+    <PackageReference Include="xunit" Version="2.2.0-rc2-build3523" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0-rc2-build1249" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\System.Data.JsonRpc\System.Data.JsonRpc.csproj" />
