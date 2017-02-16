@@ -22,7 +22,7 @@ namespace System.Data.JsonRpc.Tests
         [InlineData(+00000L, JsonRpcErrorType.CustomError)]
         [InlineData(+00001L, JsonRpcErrorType.CustomError)]
         [Theory]
-        public void ProperType(long code, JsonRpcErrorType type)
+        public void HasProperType(long code, JsonRpcErrorType type)
         {
             var jsonRpcError = new JsonRpcError(code, "test_message");
 
