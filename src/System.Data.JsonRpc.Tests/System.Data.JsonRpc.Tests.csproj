@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\scheme\test.props" />
+  <Import Project="..\scheme\solution.props" />
   <PropertyGroup>
     <OutputType>exe</OutputType>
     <TargetFramework>netcoreapp1.1</TargetFramework>
