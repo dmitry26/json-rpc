@@ -2,7 +2,7 @@
   <Import Project="..\scheme\test.props" />
   <PropertyGroup>
     <OutputType>exe</OutputType>
-    <TargetFramework>netcoreapp1.0</TargetFramework>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include=".\Assets\*.txt" />
@@ -11,8 +11,8 @@
     <PackageReference Include="FakeItEasy" Version="3.0.0-rc001-build000097" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20170210-02" />
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
-    <PackageReference Include="xunit" Version="2.2.0-rc2-build3523" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0-rc2-build1249" />
+    <PackageReference Include="xunit" Version="2.2.0-rc3-build3528" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0-rc3-build1252" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\System.Data.JsonRpc\System.Data.JsonRpc.csproj" />
