@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Runtime.CompilerServices;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -802,7 +801,6 @@ namespace System.Data.JsonRpc
             return jsonObject;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private JToken ConvertStringToToken(string jsonString)
         {
             try
@@ -823,7 +821,6 @@ namespace System.Data.JsonRpc
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private object ConvertTokenToObject(JToken jsonToken, Type objectType)
         {
             try
@@ -838,7 +835,6 @@ namespace System.Data.JsonRpc
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private JToken ConvertObjectToToken(object messageObject)
         {
             try
@@ -853,7 +849,6 @@ namespace System.Data.JsonRpc
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private string ConvertTokenToString(JToken jsonToken)
         {
             try
