@@ -2,7 +2,7 @@
   <Import Project=".\solution.props" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <VersionPrefix>1.0.0</VersionPrefix>
-    <VersionSuffix>beta3</VersionSuffix>
+    <VersionSuffix>beta4</VersionSuffix>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <DebugType>none</DebugType>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
