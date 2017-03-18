@@ -48,23 +48,26 @@ var jrBindingsProvider = new JsonRpcBindingsProvider();
 
 var jrRequestParams = new GenerateIntegersParams()
 {
-    APIKey = Guid.Empty.ToString(),
+    APIKey = "00000000-0000-0000-0000-000000000000",
     Count = 5,
     MinimumValue = 0,
     MaximumValue = 100
 };
 
 var jrRequest = new JsonRpcRequest("generateIntegers", Guid.NewGuid().ToString(), jrRequestParams);
-var jrRequestContent = new StringContent(jrSerializer.SerializeRequest(jrRequest), Encoding.UTF8, "application/json-rpc");
 
 jrBindingsProvider.SetBinding(jrRequest.GetIdAsString(), "generateIntegers");
 
-var httpResponse = await new HttpClient().PostAsync("https://api.random.org/json-rpc/1/invoke", jrRequestContent);
-var httpResponseContent = await httpResponse.Content.ReadAsStringAsync();
-var jrResponsesData = jrSerializer.DeserializeResponsesData(httpResponseContent, jrBindingsProvider);
+var httpRequestString = jrSerializer.SerializeRequest(jrRequest);
+var httpRequestContent = new StringContent(httpRequestString, Encoding.UTF8, "application/json-rpc");
+var httpRequestUri = new Uri("https://api.random.org/json-rpc/1/invoke");
+var httpResponse = await new HttpClient().PostAsync(httpRequestUri, httpRequestContent);
+var httpResponseString = await httpResponse.Content.ReadAsStringAsync();
+
+var jrResponsesData = jrSerializer.DeserializeResponsesData(httpResponseString, jrBindingsProvider);
 var jrResponseResult = (GenerateIntegersResult)jrResponsesData.GetSingleItem().GetMessage().Result;
 
-Console.WriteLine($"Random Numbers: {string.Join(", ", jrResponseResult.RandomData.Data)}"); 
+Console.WriteLine($"Random Numbers: {string.Join(", ", jrResponseResult.RandomData.Data)}");
 ```
 
 ### Mapping exception type to response error type
