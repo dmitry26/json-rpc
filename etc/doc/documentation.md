@@ -72,9 +72,19 @@ Console.WriteLine($"Random Numbers: {string.Join(", ", jrResponseResult.RandomDa
 
 ### Mapping exception type to response error type
 
+Value of the `Type` property from the `JsonRpcException` exception throwed by `JsonRpcSerializer.DeserializeRequestsData` method can be successfully mapped to a `JsonRpcErrorType` value for an error to be sent back to a client:
+
 `JsonRpcExceptionType` | `JsonRpcErrorType`
 --- | ---
 `ParseError` | `ParseError`
 `GenericError` | `InternalError`
 `InvalidMethod` | `InvalidMethod`
 `InvalidMessage` | `InvalidRequest`
+
+For example:
+
+```cs
+var jrError = new JsonRpcError((long)JsonRpcErrorType.ParseError, "...");
+```
+
+Standard messages for each response error can be found in the official specifications for the JSON-RPC.
