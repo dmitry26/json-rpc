@@ -1,7 +1,11 @@
 ﻿<Project>
   <Import Project=".\solution.props" />
+  <PropertyGroup>
+    <BaseIntermediateOutputPath>$(RepositoryPath)\bin\obj\$(AssemblyName)\</BaseIntermediateOutputPath>
+    <OutputPath>$(RepositoryPath)\bin\bin\$(AssemblyName)\$(Configuration)\</OutputPath >
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <VersionPrefix>1.0.0</VersionPrefix>
+    <VersionPrefix>1.0.1</VersionPrefix>
     <VersionSuffix></VersionSuffix>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <DebugType>none</DebugType>
