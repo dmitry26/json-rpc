@@ -2,7 +2,7 @@
 
 Generating a few random numbers using [RANDOM.ORG](https://random.org) service.
 
-1. Define types for request parameters ans result objects:
+1. Define types for request parameters and result objects:
 
 ```cs
 [JsonObject(MemberSerialization.OptIn)]
@@ -56,7 +56,7 @@ var jrRequestParams = new GenerateIntegersParams()
 
 var jrRequest = new JsonRpcRequest("generateIntegers", Guid.NewGuid().ToString(), jrRequestParams);
 
-jrBindingsProvider.SetBinding(jrRequest.GetIdAsString(), "generateIntegers");
+jrBindingsProvider.SetBinding(jrRequest.GetIdAsString(), jrRequest.Method);
 
 var httpRequestString = jrSerializer.SerializeRequest(jrRequest);
 var httpRequestContent = new StringContent(httpRequestString, Encoding.UTF8, "application/json-rpc");
@@ -72,7 +72,7 @@ Console.WriteLine($"Random Numbers: {string.Join(", ", jrResponseResult.RandomDa
 
 ### Mapping exception type to response error type
 
-Value of the `Type` property from the `JsonRpcException` exception throwed by `JsonRpcSerializer.DeserializeRequestsData` method can be successfully mapped to a `JsonRpcErrorType` value for an error to be sent back to a client:
+`JsonRpcException` exception throwed by `JsonRpcSerializer.DeserializeRequestsData` method can be successfully mapped to an error code, which will be sent back to a client, using value of the `Type` property:
 
 `JsonRpcExceptionType` | `JsonRpcErrorType`
 --- | ---
@@ -87,4 +87,4 @@ For example:
 var jrError = new JsonRpcError((long)JsonRpcErrorType.ParseError, "...");
 ```
 
-Standard messages for each response error can be found in the official specifications for the JSON-RPC.
+Standard messages for response errors can be found in the official specification for the JSON-RPC.
