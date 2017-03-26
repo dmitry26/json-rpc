@@ -23,7 +23,7 @@ namespace System.Data.JsonRpc
         }
 
         /// <summary>Initializes a new instance of the <see cref="JsonRpcResponse" /> class.</summary>
-        /// <param name="error">The <see cref="JsonRpcError"/> object with information.</param>
+        /// <param name="error">The <see cref="JsonRpcError" /> object with information.</param>
         /// <exception cref="ArgumentNullException"><paramref name="error" /> is <see langword="null" />.</exception>
         public JsonRpcResponse(JsonRpcError error)
         {
@@ -48,7 +48,7 @@ namespace System.Data.JsonRpc
 
         /// <summary>Initializes a new instance of the <see cref="JsonRpcResponse" /> class.</summary>
         /// <param name="id">The identifier, which must be the same as the value in the request object.</param>
-        /// <param name="error">The <see cref="JsonRpcError"/> object with information.</param>
+        /// <param name="error">The <see cref="JsonRpcError" /> object with information.</param>
         /// <exception cref="ArgumentNullException"><paramref name="error" /> is <see langword="null" />.</exception>
         public JsonRpcResponse(long id, JsonRpcError error)
             : base(id)
@@ -75,7 +75,7 @@ namespace System.Data.JsonRpc
 
         /// <summary>Initializes a new instance of the <see cref="JsonRpcResponse" /> class.</summary>
         /// <param name="id">The identifier, which must be the same as the value in the request object.</param>
-        /// <param name="error">The <see cref="JsonRpcError"/> object with information.</param>
+        /// <param name="error">The <see cref="JsonRpcError" /> object with information.</param>
         /// <exception cref="ArgumentNullException"><paramref name="id" /> or <paramref name="error" /> is <see langword="null" />.</exception>
         /// <exception cref="ArgumentException"><paramref name="id" /> is empty string.</exception>
         public JsonRpcResponse(string id, JsonRpcError error)

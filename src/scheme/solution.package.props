@@ -2,9 +2,9 @@
   <Import Project=".\solution.props" />
   <PropertyGroup>
     <BaseIntermediateOutputPath>$(RepositoryPath)\bin\obj\$(AssemblyName)\</BaseIntermediateOutputPath>
-    <OutputPath>$(RepositoryPath)\bin\bin\$(AssemblyName)\$(Configuration)\</OutputPath >
+    <OutputPath>$(RepositoryPath)\bin\bin\$(AssemblyName)\$(Configuration)\</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <VersionPrefix>1.0.1</VersionPrefix>
     <VersionSuffix></VersionSuffix>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
@@ -16,7 +16,7 @@
     <Authors><![CDATA[JSON-RPC.NET Team]]></Authors>
     <Copyright><![CDATA[© JSON-RPC.NET Team. All rights reserved.]]></Copyright>
     <PackageTags><![CDATA[json json-rpc rpc]]></PackageTags>
-    <RepositoryPath><![CDATA[alexanderkozlenko/jsonrpcnet]]></RepositoryPath>
+    <RepositoryPath>alexanderkozlenko/jsonrpcnet</RepositoryPath>
     <PackageProjectUrl>https://github.com/$(RepositoryPath)</PackageProjectUrl>
     <PackageLicenseUrl>https://raw.github.com/$(RepositoryPath)/master/LICENSE</PackageLicenseUrl>
     <PackageIconUrl>https://raw.github.com/$(RepositoryPath)/master/etc/img/nuget.png</PackageIconUrl>

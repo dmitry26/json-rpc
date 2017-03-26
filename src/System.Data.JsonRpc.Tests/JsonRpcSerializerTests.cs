@@ -344,9 +344,10 @@ namespace System.Data.JsonRpc.Tests
 
             jsonRpcSchema.SupportedMethods.Add("test_method");
 
-            var jsonRpcSettings = new JsonRpcSettings();
-
-            jsonRpcSettings.JsonSerializerArrayPool = new TestJsonArrayPool();
+            var jsonRpcSettings = new JsonRpcSettings
+            {
+                JsonSerializerArrayPool = new TestJsonArrayPool()
+            };
 
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSchema, jsonRpcSettings);
             var jsonSample = JsonTools.GetJsonSample("jrap_01_req");
@@ -369,13 +370,12 @@ namespace System.Data.JsonRpc.Tests
             jsonRpcSchema.SupportedMethods.Add("test_method");
             jsonRpcSchema.ParameterTypeBindings["test_method"] = typeof(TestParams);
 
-            var jsonSerializer = JsonSerializer.CreateDefault();
+            var jsonRpcSettings = new JsonRpcSettings
+            {
+                JsonSerializer = JsonSerializer.CreateDefault()
+            };
 
-            jsonSerializer.Converters.Add(new TestJsonConverter());
-
-            var jsonRpcSettings = new JsonRpcSettings();
-
-            jsonRpcSettings.JsonSerializer = jsonSerializer;
+            jsonRpcSettings.JsonSerializer.Converters.Add(new TestJsonConverter());
 
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSchema, jsonRpcSettings);
             var jsonSample = JsonTools.GetJsonSample("jrcc_01_req");
