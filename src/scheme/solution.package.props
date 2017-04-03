@@ -1,24 +1,15 @@
 ﻿<Project>
-  <Import Project=".\solution.props" />
   <PropertyGroup>
-    <BaseIntermediateOutputPath>$(RepositoryPath)\bin\obj\$(AssemblyName)\</BaseIntermediateOutputPath>
-    <OutputPath>$(RepositoryPath)\bin\bin\$(AssemblyName)\$(Configuration)\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)'=='Release'">
-    <VersionPrefix>1.0.1</VersionPrefix>
+    <VersionPrefix>1.0.2</VersionPrefix>
     <VersionSuffix></VersionSuffix>
-    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
-    <DebugType>none</DebugType>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Product><![CDATA[JSON-RPC.NET]]></Product>
     <Description><![CDATA[JSON-RPC framework for .NET]]></Description>
     <Authors><![CDATA[JSON-RPC.NET Team]]></Authors>
     <Copyright><![CDATA[© JSON-RPC.NET Team. All rights reserved.]]></Copyright>
     <PackageTags><![CDATA[json json-rpc rpc]]></PackageTags>
-    <RepositoryPath>alexanderkozlenko/jsonrpcnet</RepositoryPath>
-    <PackageProjectUrl>https://github.com/$(RepositoryPath)</PackageProjectUrl>
-    <PackageLicenseUrl>https://raw.github.com/$(RepositoryPath)/master/LICENSE</PackageLicenseUrl>
-    <PackageIconUrl>https://raw.github.com/$(RepositoryPath)/master/etc/img/nuget.png</PackageIconUrl>
+    <PackageRepositoryPath>alexanderkozlenko/jsonrpcnet</PackageRepositoryPath>
+    <PackageProjectUrl>https://github.com/$(PackageRepositoryPath)</PackageProjectUrl>
+    <PackageLicenseUrl>https://raw.github.com/$(PackageRepositoryPath)/master/LICENSE</PackageLicenseUrl>
+    <PackageIconUrl>https://raw.github.com/$(PackageRepositoryPath)/master/etc/img/nuget.png</PackageIconUrl>
   </PropertyGroup>
 </Project>
