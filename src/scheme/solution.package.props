@@ -6,7 +6,7 @@
     <Description><![CDATA[JSON-RPC framework for .NET]]></Description>
     <Authors><![CDATA[JSON-RPC.NET Team]]></Authors>
     <Copyright><![CDATA[© JSON-RPC.NET Team. All rights reserved.]]></Copyright>
-    <PackageTags><![CDATA[json json-rpc rpc]]></PackageTags>
+    <PackageTags><![CDATA[json rpc json-rpc serializer]]></PackageTags>
     <PackageRepositoryPath>alexanderkozlenko/jsonrpcnet</PackageRepositoryPath>
     <PackageProjectUrl>https://github.com/$(PackageRepositoryPath)</PackageProjectUrl>
     <PackageLicenseUrl>https://raw.github.com/$(PackageRepositoryPath)/master/LICENSE</PackageLicenseUrl>
