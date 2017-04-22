@@ -13,7 +13,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcScheme = new JsonRpcSerializerScheme();
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString($"Assets.jrdi_01_res.txt");
-            var jsonRpcBindings = A.Fake<IReadOnlyDictionary<JsonRpcId, string>>();
+            var jsonRpcBindings = A.Fake<IReadOnlyDictionary<JsonRpcId, string>>(x => x.Strict());
             var jsonRpcDataInfo = jsonRpcSerializer.DeserializeResponsesData(jsonSample, jsonRpcBindings);
 
             Assert.True(jsonRpcDataInfo.IsEmpty);
