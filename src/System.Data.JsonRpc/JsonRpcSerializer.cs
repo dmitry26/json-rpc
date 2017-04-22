@@ -723,8 +723,6 @@ namespace System.Data.JsonRpc
 
                 if (jsonObjectError.TryGetValue("data", out var jsonTokenErrorData) && (jsonTokenErrorData.Type != JTokenType.Null))
                 {
-                    var messageMethod = default(string);
-
                     if (response.Id.Type == JsonRpcIdType.None)
                     {
                         if (_scheme.GenericErrorDataType == null)
@@ -743,7 +741,7 @@ namespace System.Data.JsonRpc
                     }
                     else
                     {
-                        if (!bindings.TryGetValue(response.Id, out messageMethod))
+                        if (!bindings.TryGetValue(response.Id, out var messageMethod))
                         {
                             throw new JsonRpcException(JsonRpcExceptionType.GenericError, $"There is no method binding for the response with the \"{response.Id}\" identifier", response.Id);
                         }

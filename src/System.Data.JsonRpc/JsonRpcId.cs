@@ -111,7 +111,7 @@ namespace System.Data.JsonRpc
                     }
                 case JsonRpcIdType.String:
                     {
-                        return _valueString.ToString();
+                        return _valueString;
                     }
                 default:
                     {

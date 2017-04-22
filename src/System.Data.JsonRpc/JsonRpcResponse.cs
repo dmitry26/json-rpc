@@ -7,7 +7,6 @@ namespace System.Data.JsonRpc
     public sealed class JsonRpcResponse : JsonRpcMessage
     {
         internal JsonRpcResponse()
-            : base()
         {
         }
 

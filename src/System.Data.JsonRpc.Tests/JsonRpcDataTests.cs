@@ -12,7 +12,7 @@ namespace System.Data.JsonRpc.Tests
         {
             var jsonRpcScheme = new JsonRpcSerializerScheme();
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
-            var jsonSample = EmbeddedResourceManager.GetString($"Assets.jrdi_01_res.txt");
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.jrdi_01_res.txt");
             var jsonRpcBindings = A.Fake<IReadOnlyDictionary<JsonRpcId, string>>(x => x.Strict());
             var jsonRpcDataInfo = jsonRpcSerializer.DeserializeResponsesData(jsonSample, jsonRpcBindings);
 
@@ -35,7 +35,7 @@ namespace System.Data.JsonRpc.Tests
         {
             var jsonRpcScheme = new JsonRpcSerializerScheme();
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
-            var jsonSample = EmbeddedResourceManager.GetString($"Assets.jrdi_02_req.txt");
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.jrdi_02_req.txt");
             var jsonRpcDataInfo = jsonRpcSerializer.DeserializeRequestsData(jsonSample);
 
             Assert.False(jsonRpcDataInfo.IsEmpty);
@@ -53,7 +53,7 @@ namespace System.Data.JsonRpc.Tests
         {
             var jsonRpcScheme = new JsonRpcSerializerScheme();
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
-            var jsonSample = EmbeddedResourceManager.GetString($"Assets.jrdi_03_req.txt");
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.jrdi_03_req.txt");
             var jsonRpcDataInfo = jsonRpcSerializer.DeserializeRequestsData(jsonSample);
 
             Assert.False(jsonRpcDataInfo.IsEmpty);
