@@ -115,7 +115,7 @@ namespace System.Data.JsonRpc
                     }
                 default:
                     {
-                        return Type.ToString();
+                        return "(none)";
                     }
             }
         }
