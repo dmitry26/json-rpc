@@ -17,7 +17,9 @@ namespace System.Data.JsonRpc
         public JsonRpcError(long code, string message)
         {
             if (message == null)
+            {
                 throw new ArgumentNullException(nameof(message));
+            }
 
             Code = code;
             Message = message;
@@ -32,7 +34,9 @@ namespace System.Data.JsonRpc
             : this(code, message)
         {
             if (data == null)
+            {
                 throw new ArgumentNullException(nameof(data));
+            }
 
             Data = data;
         }
@@ -57,23 +61,37 @@ namespace System.Data.JsonRpc
                 switch (Code)
                 {
                     case -32700L:
-                        return JsonRpcErrorType.ParseError;
+                        {
+                            return JsonRpcErrorType.ParseError;
+                        }
                     case -32603L:
-                        return JsonRpcErrorType.InternalError;
+                        {
+                            return JsonRpcErrorType.InternalError;
+                        }
                     case -32602L:
-                        return JsonRpcErrorType.InvalidParams;
+                        {
+                            return JsonRpcErrorType.InvalidParams;
+                        }
                     case -32601L:
-                        return JsonRpcErrorType.InvalidMethod;
+                        {
+                            return JsonRpcErrorType.InvalidMethod;
+                        }
                     case -32600L:
-                        return JsonRpcErrorType.InvalidRequest;
+                        {
+                            return JsonRpcErrorType.InvalidRequest;
+                        }
                     default:
                         {
                             if (Code <= -32000L)
                             {
                                 if (Code >= -32099L)
+                                {
                                     return JsonRpcErrorType.ServerError;
+                                }
                                 if (Code >= -32768L)
+                                {
                                     return JsonRpcErrorType.SystemError;
+                                }
                             }
 
                             return JsonRpcErrorType.CustomError;

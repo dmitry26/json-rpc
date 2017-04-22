@@ -3,8 +3,8 @@
     /// <summary>Represents RPC message identifier type.</summary>
     public enum JsonRpcIdType
     {
-        /// <summary>Identifier is null or not set.</summary>
-        Null,
+        /// <summary>Identifier is not specified.</summary>
+        None,
 
         /// <summary>Identifier is a number.</summary>
         Number,

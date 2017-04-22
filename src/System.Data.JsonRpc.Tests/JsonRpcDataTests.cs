@@ -1,19 +1,20 @@
-﻿using System.Data.JsonRpc.Tests.Support;
+﻿using System.Collections.Generic;
+using System.Data.JsonRpc.Tests.Resources;
+using FakeItEasy;
 using Xunit;
-using Fake = FakeItEasy.A;
 
 namespace System.Data.JsonRpc.Tests
 {
-    public sealed class JsonRpcDataInfoTests
+    public sealed class JsonRpcDataTests
     {
         [Fact]
         public void GetItemAndItemsWhenIsEmpty()
         {
-            var jsonRpcSchema = new JsonRpcSchema();
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSchema);
-            var jsonSample = JsonTools.GetJsonSample("jrdi_01_res");
-            var jsonRpcBindingsProvider = Fake.Fake<IJsonRpcBindingsProvider>();
-            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeResponsesData(jsonSample, jsonRpcBindingsProvider);
+            var jsonRpcScheme = new JsonRpcSerializerScheme();
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
+            var jsonSample = EmbeddedResourceManager.GetString($"Assets.jrdi_01_res.txt");
+            var jsonRpcBindings = A.Fake<IReadOnlyDictionary<JsonRpcId, string>>();
+            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeResponsesData(jsonSample, jsonRpcBindings);
 
             Assert.True(jsonRpcDataInfo.IsEmpty);
             Assert.False(jsonRpcDataInfo.IsBatch);
@@ -32,9 +33,9 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void GetItemAndItemsWhenIsNotEmptyAndIsNotBatch()
         {
-            var jsonRpcSchema = new JsonRpcSchema();
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSchema);
-            var jsonSample = JsonTools.GetJsonSample("jrdi_02_req");
+            var jsonRpcScheme = new JsonRpcSerializerScheme();
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
+            var jsonSample = EmbeddedResourceManager.GetString($"Assets.jrdi_02_req.txt");
             var jsonRpcDataInfo = jsonRpcSerializer.DeserializeRequestsData(jsonSample);
 
             Assert.False(jsonRpcDataInfo.IsEmpty);
@@ -50,9 +51,9 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void GetItemAndItemsWhenIsNotEmptyAndIsBatch()
         {
-            var jsonRpcSchema = new JsonRpcSchema();
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSchema);
-            var jsonSample = JsonTools.GetJsonSample("jrdi_03_req");
+            var jsonRpcScheme = new JsonRpcSerializerScheme();
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
+            var jsonSample = EmbeddedResourceManager.GetString($"Assets.jrdi_03_req.txt");
             var jsonRpcDataInfo = jsonRpcSerializer.DeserializeRequestsData(jsonSample);
 
             Assert.False(jsonRpcDataInfo.IsEmpty);

@@ -1,33 +1,33 @@
 ﻿using System.Buffers;
 using System.Collections.Generic;
-using System.Data.JsonRpc.Tests.Support;
+using System.Data.JsonRpc.Tests.Resources;
+using FakeItEasy;
 using Newtonsoft.Json;
 using Xunit;
-using Fake = FakeItEasy.A;
 
 namespace System.Data.JsonRpc.Tests
 {
     public sealed partial class JsonRpcSerializerTests
     {
         [Fact]
-        public void ConstructorWithSchemaWhenSchemaIsNull()
+        public void ConstructorWithSchemeWhenSchemeIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new JsonRpcSerializer(default(JsonRpcSchema)));
+                new JsonRpcSerializer(default(JsonRpcSerializerScheme)));
         }
 
         [Fact]
-        public void ConstructorWithSchemaAndSettingsWhenSchemaIsNull()
+        public void ConstructorWithSchemeAndSettingsWhenSchemeIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new JsonRpcSerializer(default(JsonRpcSchema), new JsonRpcSettings()));
+                new JsonRpcSerializer(default(JsonRpcSerializerScheme), new JsonRpcSerializerSettings()));
         }
 
         [Fact]
-        public void ConstructorWithSchemaAndSettingsWhenSettingsIsNull()
+        public void ConstructorWithSchemeAndSettingsWhenSettingsIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new JsonRpcSerializer(new JsonRpcSchema(), default(JsonRpcSettings)));
+                new JsonRpcSerializer(new JsonRpcSerializerScheme(), default(JsonRpcSerializerSettings)));
         }
 
         [Fact]
@@ -48,7 +48,7 @@ namespace System.Data.JsonRpc.Tests
             var exception = Assert.Throws<JsonRpcException>(() =>
                 jsonRpcSerializer.SerializeRequest(jsonRpcRequest));
 
-            Assert.Equal(JsonRpcExceptionType.GenericError, exception.Type);
+            Assert.Equal(JsonRpcExceptionType.InvalidMessage, exception.Type);
         }
 
         [Fact]
@@ -68,7 +68,7 @@ namespace System.Data.JsonRpc.Tests
             var exception = Assert.Throws<JsonRpcException>(() =>
                 jsonRpcSerializer.SerializeRequests(new JsonRpcRequest[] { }));
 
-            Assert.Equal(JsonRpcExceptionType.GenericError, exception.Type);
+            Assert.Equal(JsonRpcExceptionType.InvalidMessage, exception.Type);
         }
 
         [Fact]
@@ -79,7 +79,7 @@ namespace System.Data.JsonRpc.Tests
             var exception = Assert.Throws<JsonRpcException>(() =>
                 jsonRpcSerializer.SerializeRequests(new[] { default(JsonRpcRequest) }));
 
-            Assert.Equal(JsonRpcExceptionType.GenericError, exception.Type);
+            Assert.Equal(JsonRpcExceptionType.InvalidMessage, exception.Type);
         }
 
         [Fact]
@@ -94,7 +94,7 @@ namespace System.Data.JsonRpc.Tests
             var exception = Assert.Throws<JsonRpcException>(() =>
                 jsonRpcSerializer.SerializeRequests(jsonRpcRequestArray));
 
-            Assert.Equal(JsonRpcExceptionType.GenericError, exception.Type);
+            Assert.Equal(JsonRpcExceptionType.InvalidMessage, exception.Type);
         }
 
         [Fact]
@@ -109,7 +109,7 @@ namespace System.Data.JsonRpc.Tests
             var exception = Assert.Throws<JsonRpcException>(() =>
                 jsonRpcSerializer.SerializeRequests(jsonRpcRequestArray));
 
-            Assert.Equal(JsonRpcExceptionType.GenericError, exception.Type);
+            Assert.Equal(JsonRpcExceptionType.InvalidMessage, exception.Type);
         }
 
         [Fact]
@@ -147,7 +147,7 @@ namespace System.Data.JsonRpc.Tests
             var exception = Assert.Throws<JsonRpcException>(() =>
                 jsonRpcSerializer.SerializeResponses(new[] { default(JsonRpcResponse) }));
 
-            Assert.Equal(JsonRpcExceptionType.GenericError, exception.Type);
+            Assert.Equal(JsonRpcExceptionType.InvalidMessage, exception.Type);
         }
 
         [Fact]
@@ -156,13 +156,13 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcSerializer = new JsonRpcSerializer();
             var jsonRpcResponsesArray = new JsonRpcResponse[2];
 
-            jsonRpcResponsesArray[0] = new JsonRpcResponse(100L, new[] { 200L });
-            jsonRpcResponsesArray[1] = new JsonRpcResponse(100L, new[] { 300L });
+            jsonRpcResponsesArray[0] = new JsonRpcResponse(new[] { 200L }, 100L);
+            jsonRpcResponsesArray[1] = new JsonRpcResponse(new[] { 300L }, 100L);
 
             var exception = Assert.Throws<JsonRpcException>(() =>
                 jsonRpcSerializer.SerializeResponses(jsonRpcResponsesArray));
 
-            Assert.Equal(JsonRpcExceptionType.GenericError, exception.Type);
+            Assert.Equal(JsonRpcExceptionType.InvalidMessage, exception.Type);
         }
 
         [Fact]
@@ -171,20 +171,20 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcSerializer = new JsonRpcSerializer();
             var jsonRpcResponsesArray = new JsonRpcResponse[2];
 
-            jsonRpcResponsesArray[0] = new JsonRpcResponse("100", new[] { 200L });
-            jsonRpcResponsesArray[1] = new JsonRpcResponse("100", new[] { 300L });
+            jsonRpcResponsesArray[0] = new JsonRpcResponse(new[] { 200L }, "100");
+            jsonRpcResponsesArray[1] = new JsonRpcResponse(new[] { 300L }, "100");
 
             var exception = Assert.Throws<JsonRpcException>(() =>
                 jsonRpcSerializer.SerializeResponses(jsonRpcResponsesArray));
 
-            Assert.Equal(JsonRpcExceptionType.GenericError, exception.Type);
+            Assert.Equal(JsonRpcExceptionType.InvalidMessage, exception.Type);
         }
 
         [Fact]
         public void DeserializeRequestsDataWhenJsonStringIsNull()
         {
-            var jsonRpcSchema = new JsonRpcSchema();
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSchema);
+            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
 
             Assert.Throws<ArgumentNullException>(() =>
                 jsonRpcSerializer.DeserializeRequestsData(default(string)));
@@ -193,8 +193,8 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void DeserializeRequestsDataWhenJsonStringIsEmptyString()
         {
-            var jsonRpcSchema = new JsonRpcSchema();
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSchema);
+            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
 
             var exception = Assert.Throws<JsonRpcException>(() =>
                 jsonRpcSerializer.DeserializeRequestsData(string.Empty));
@@ -203,10 +203,10 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void DeserializeRequestsDataWhenSchemaIsNotDefined()
+        public void DeserializeRequestsDataWhenSchemeIsNotDefined()
         {
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonSample = JsonTools.GetJsonSample("jrs_01_req");
+            var jsonSample = EmbeddedResourceManager.GetString($"Assets.jrs_01_req.txt");
 
             var exception = Assert.Throws<JsonRpcException>(() =>
                 jsonRpcSerializer.DeserializeRequestsData(jsonSample));
@@ -217,9 +217,9 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void DeserializeRequestsDataWhenJsonIsInvalid()
         {
-            var jsonRpcSchema = new JsonRpcSchema();
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSchema);
-            var jsonSample = JsonTools.GetJsonSample("jrs_02_req");
+            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
+            var jsonSample = EmbeddedResourceManager.GetString($"Assets.jrs_02_req.txt");
 
             var exception = Assert.Throws<JsonRpcException>(() =>
                 jsonRpcSerializer.DeserializeRequestsData(jsonSample));
@@ -230,9 +230,9 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void DeserializeRequestsDataWhenJsonProtocolIsAbsent()
         {
-            var jsonRpcSchema = new JsonRpcSchema();
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSchema);
-            var jsonSample = JsonTools.GetJsonSample("jrs_03_req");
+            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
+            var jsonSample = EmbeddedResourceManager.GetString($"Assets.jrs_03_req.txt");
             var jsonRpcDataInfo = jsonRpcSerializer.DeserializeRequestsData(jsonSample);
 
             Assert.False(jsonRpcDataInfo.IsEmpty);
@@ -240,7 +240,7 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
-            Assert.False(jsonRpcMessageInfo.Success);
+            Assert.False(jsonRpcMessageInfo.IsValid);
 
             var jsonRpcException = jsonRpcMessageInfo.GetException();
 
@@ -250,9 +250,9 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void DeserializeRequestsDataWhenJsonProtocolHasInvalidType()
         {
-            var jsonRpcSchema = new JsonRpcSchema();
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSchema);
-            var jsonSample = JsonTools.GetJsonSample("jrs_04_req");
+            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
+            var jsonSample = EmbeddedResourceManager.GetString($"Assets.jrs_04_req.txt");
             var jsonRpcDataInfo = jsonRpcSerializer.DeserializeRequestsData(jsonSample);
 
             Assert.False(jsonRpcDataInfo.IsEmpty);
@@ -260,7 +260,7 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
-            Assert.False(jsonRpcMessageInfo.Success);
+            Assert.False(jsonRpcMessageInfo.IsValid);
 
             var jsonRpcException = jsonRpcMessageInfo.GetException();
 
@@ -270,9 +270,9 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void DeserializeRequestsDataWhenJsonProtocolHasInvalidValue()
         {
-            var jsonRpcSchema = new JsonRpcSchema();
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSchema);
-            var jsonSample = JsonTools.GetJsonSample("jrs_05_req");
+            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
+            var jsonSample = EmbeddedResourceManager.GetString($"Assets.jrs_05_req.txt");
             var jsonRpcDataInfo = jsonRpcSerializer.DeserializeRequestsData(jsonSample);
 
             Assert.False(jsonRpcDataInfo.IsEmpty);
@@ -280,7 +280,7 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
-            Assert.False(jsonRpcMessageInfo.Success);
+            Assert.False(jsonRpcMessageInfo.IsValid);
 
             var jsonRpcException = jsonRpcMessageInfo.GetException();
 
@@ -290,35 +290,35 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void DeserializeResponsesDataWhenJsonStringIsNull()
         {
-            var jsonRpcSchema = new JsonRpcSchema();
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSchema);
-            var jsonRpcBindingsProvider = Fake.Fake<IJsonRpcBindingsProvider>();
+            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
+            var jsonRpcBindings = A.Fake<IReadOnlyDictionary<JsonRpcId, string>>(x => x.Strict());
 
             Assert.Throws<ArgumentNullException>(() =>
-                jsonRpcSerializer.DeserializeResponsesData(default(string), jsonRpcBindingsProvider));
+                jsonRpcSerializer.DeserializeResponsesData(default(string), jsonRpcBindings));
         }
 
         [Fact]
         public void DeserializeResponsesDataWhenJsonStringIsEmptyString()
         {
-            var jsonRpcSchema = new JsonRpcSchema();
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSchema);
-            var jsonRpcBindingsProvider = Fake.Fake<IJsonRpcBindingsProvider>();
-            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeResponsesData(string.Empty, jsonRpcBindingsProvider);
+            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
+            var jsonRpcBindings = A.Fake<IReadOnlyDictionary<JsonRpcId, string>>(x => x.Strict());
+            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeResponsesData(string.Empty, jsonRpcBindings);
 
             Assert.NotNull(jsonRpcDataInfo);
             Assert.True(jsonRpcDataInfo.IsEmpty);
         }
 
         [Fact]
-        public void DeserializeResponsesDataWhenSchemaIsNotDefined()
+        public void DeserializeResponsesDataWhenSchemeIsNotDefined()
         {
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonSample = JsonTools.GetJsonSample("jrs_01_res");
-            var jsonRpcBindingsProvider = Fake.Fake<IJsonRpcBindingsProvider>();
+            var jsonSample = EmbeddedResourceManager.GetString($"Assets.jrs_01_res.txt");
+            var jsonRpcBindings = A.Fake<IReadOnlyDictionary<JsonRpcId, string>>(x => x.Strict());
 
             var exception = Assert.Throws<JsonRpcException>(() =>
-                jsonRpcSerializer.DeserializeResponsesData(jsonSample, jsonRpcBindingsProvider));
+                jsonRpcSerializer.DeserializeResponsesData(jsonSample, jsonRpcBindings));
 
             Assert.Equal(JsonRpcExceptionType.GenericError, exception.Type);
         }
@@ -326,13 +326,13 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void DeserializeResponsesDataWhenJsonIsInvalid()
         {
-            var jsonRpcSchema = new JsonRpcSchema();
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSchema);
-            var jsonSample = JsonTools.GetJsonSample("jrs_02_res");
-            var jsonRpcBindingsProvider = Fake.Fake<IJsonRpcBindingsProvider>();
+            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
+            var jsonSample = EmbeddedResourceManager.GetString($"Assets.jrs_02_res.txt");
+            var jsonRpcBindings = A.Fake<IReadOnlyDictionary<JsonRpcId, string>>(x => x.Strict());
 
             var exception = Assert.Throws<JsonRpcException>(() =>
-                jsonRpcSerializer.DeserializeResponsesData(jsonSample, jsonRpcBindingsProvider));
+                jsonRpcSerializer.DeserializeResponsesData(jsonSample, jsonRpcBindings));
 
             Assert.Equal(JsonRpcExceptionType.ParseError, exception.Type);
         }
@@ -340,17 +340,17 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void DeserializeRequestDataWithArrayPool()
         {
-            var jsonRpcSchema = new JsonRpcSchema();
+            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
 
-            jsonRpcSchema.SupportedMethods.Add("test_method");
+            jsonRpcSerializerScheme.Methods["test_method"] = JsonRpcMethodScheme.Empty;
 
-            var jsonRpcSettings = new JsonRpcSettings
+            var jsonRpcSettings = new JsonRpcSerializerSettings
             {
                 JsonSerializerArrayPool = new TestJsonArrayPool()
             };
 
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSchema, jsonRpcSettings);
-            var jsonSample = JsonTools.GetJsonSample("jrap_01_req");
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme, jsonRpcSettings);
+            var jsonSample = EmbeddedResourceManager.GetString($"Assets.jrap_01_req.txt");
             var jsonRpcDataInfo = jsonRpcSerializer.DeserializeRequestsData(jsonSample);
 
             Assert.False(jsonRpcDataInfo.IsEmpty);
@@ -359,26 +359,25 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
             Assert.NotNull(jsonRpcMessageInfo);
-            Assert.True(jsonRpcMessageInfo.Success);
+            Assert.True(jsonRpcMessageInfo.IsValid);
         }
 
         [Fact]
         public void DeserializeRequestDataWithCustomJsonConverter()
         {
-            var jsonRpcSchema = new JsonRpcSchema();
+            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
 
-            jsonRpcSchema.SupportedMethods.Add("test_method");
-            jsonRpcSchema.ParameterTypeBindings["test_method"] = typeof(TestParams);
+            jsonRpcSerializerScheme.Methods["test_method"] = new JsonRpcMethodScheme(typeof(TestParams));
 
-            var jsonRpcSettings = new JsonRpcSettings
+            var jsonRpcSettings = new JsonRpcSerializerSettings
             {
                 JsonSerializer = JsonSerializer.CreateDefault()
             };
 
             jsonRpcSettings.JsonSerializer.Converters.Add(new TestJsonConverter());
 
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSchema, jsonRpcSettings);
-            var jsonSample = JsonTools.GetJsonSample("jrcc_01_req");
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme, jsonRpcSettings);
+            var jsonSample = EmbeddedResourceManager.GetString($"Assets.jrcc_01_req.txt");
             var jsonRpcDataInfo = jsonRpcSerializer.DeserializeRequestsData(jsonSample);
 
             Assert.False(jsonRpcDataInfo.IsEmpty);
@@ -387,7 +386,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
             Assert.NotNull(jsonRpcMessageInfo);
-            Assert.True(jsonRpcMessageInfo.Success);
+            Assert.True(jsonRpcMessageInfo.IsValid);
 
             var jsonRpcRequest = jsonRpcMessageInfo.GetMessage();
 

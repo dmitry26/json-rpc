@@ -5,36 +5,36 @@ namespace System.Data.JsonRpc.Tests
     public sealed class JsonRpcResponseTests
     {
         [Fact]
-        public void IdTypeIsNull()
+        public void IdTypeIsNone()
         {
-            var jsonRpcResponse = new JsonRpcResponse(new[] { 100L });
+            var jsonRpcResponse = new JsonRpcResponse(new[] { 100L }, JsonRpcId.None);
 
-            Assert.Equal(JsonRpcIdType.Null, jsonRpcResponse.IdType);
+            Assert.Equal(JsonRpcId.None, jsonRpcResponse.Id);
             Assert.False(jsonRpcResponse.HasId);
         }
 
         [Fact]
         public void IdTypeIsNumber()
         {
-            var jsonRpcResponse = new JsonRpcResponse(100L, new[] { 100L });
+            var jsonRpcResponse = new JsonRpcResponse(new[] { 100L }, 100L);
 
-            Assert.Equal(JsonRpcIdType.Number, jsonRpcResponse.IdType);
+            Assert.Equal(100L, jsonRpcResponse.Id);
             Assert.True(jsonRpcResponse.HasId);
         }
 
         [Fact]
         public void IdTypeIsString()
         {
-            var jsonRpcResponse = new JsonRpcResponse("100", new[] { 100L });
+            var jsonRpcResponse = new JsonRpcResponse(new[] { 100L }, "100");
 
-            Assert.Equal(JsonRpcIdType.String, jsonRpcResponse.IdType);
+            Assert.Equal("100", jsonRpcResponse.Id);
             Assert.True(jsonRpcResponse.HasId);
         }
 
         [Fact]
         public void SuccessIsFalse()
         {
-            var jsonRpcResponse = new JsonRpcResponse(100L, new JsonRpcError(200L, "test_message"));
+            var jsonRpcResponse = new JsonRpcResponse(new JsonRpcError(200L, "test_message"), 100L);
 
             Assert.False(jsonRpcResponse.Success);
             Assert.NotNull(jsonRpcResponse.Error);
@@ -44,7 +44,7 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void SuccessIsTrue()
         {
-            var jsonRpcResponse = new JsonRpcResponse(100L, new[] { 100L });
+            var jsonRpcResponse = new JsonRpcResponse(new[] { 100L }, 100L);
 
             Assert.True(jsonRpcResponse.Success);
             Assert.Null(jsonRpcResponse.Error);
@@ -55,70 +55,70 @@ namespace System.Data.JsonRpc.Tests
         public void ConstructorWithResultWhenResultIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new JsonRpcResponse(default(object)));
+                new JsonRpcResponse(default(object), JsonRpcId.None));
         }
 
         [Fact]
         public void ConstructorWithErrorWhenErrorIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new JsonRpcResponse(default(JsonRpcError)));
+                new JsonRpcResponse(default(JsonRpcError), JsonRpcId.None));
         }
 
         [Fact]
         public void ConstructorWithIdAndResultWhenIdIsNumberAndResultIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new JsonRpcResponse(100L, default(object)));
+                new JsonRpcResponse(default(object), 100L));
         }
 
         [Fact]
         public void ConstructorWithIdAndErrorWhenIdIsNumberAndErrorIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new JsonRpcResponse(100L, default(JsonRpcError)));
+                new JsonRpcResponse(default(JsonRpcError), 100L));
         }
 
         [Fact]
         public void ConstructorWithIdAndResultWhenIdIsStringAndIdIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new JsonRpcResponse(default(string), new[] { 100L }));
+                new JsonRpcResponse(new[] { 100L }, default(string)));
         }
 
         [Fact]
         public void ConstructorWithIdAndResultWhenIdIsStringAndIdIsEmptyString()
         {
             Assert.Throws<ArgumentException>(() =>
-                new JsonRpcResponse(string.Empty, new[] { 100L }));
+                new JsonRpcResponse(new[] { 100L }, string.Empty));
         }
 
         [Fact]
         public void ConstructorWithIdAndResultWhenIdIsStringAndResultIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new JsonRpcResponse("100", default(object)));
+                new JsonRpcResponse(default(object), "100"));
         }
 
         [Fact]
         public void ConstructorWithIdAndErrorWhenIdIsStringAndIdIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new JsonRpcResponse(default(string), new JsonRpcError(100L, "test_message")));
+                new JsonRpcResponse(new JsonRpcError(100L, "test_message"), default(string)));
         }
 
         [Fact]
         public void ConstructorWithIdAndErrorWhenIdIsStringAndIdIsEmptyString()
         {
             Assert.Throws<ArgumentException>(() =>
-                new JsonRpcResponse(string.Empty, new JsonRpcError(100L, "test_message")));
+                new JsonRpcResponse(new JsonRpcError(100L, "test_message"), string.Empty));
         }
 
         [Fact]
         public void ConstructorWithIdAndErrorWhenIdIsStringAndErrorIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new JsonRpcResponse("100", default(JsonRpcError)));
+                new JsonRpcResponse(default(JsonRpcError), "100"));
         }
     }
 }

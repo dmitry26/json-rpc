@@ -1,6 +1,6 @@
 ﻿namespace System.Data.JsonRpc
 {
-    /// <summary>Represents JSON-RPC exception type.</summary>
+    /// <summary>Represents RPC exception type.</summary>
     public enum JsonRpcExceptionType
     {
         /// <summary>An error occurred while parsing the JSON text.</summary>

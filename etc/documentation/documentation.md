@@ -39,12 +39,12 @@ class GenerateIntegersResult
 2. Send a request to the server:
 
 ```cs
-var jrSchema = new JsonRpcSchema();
+var jrSchema = new JsonRpcSerializerScheme();
 
-jrSchema.ResultTypeBindings["generateIntegers"] = typeof(GenerateIntegersResult);
+jrSchema.Methods["generateIntegers"] = new JsonRpcMethodScheme(typeof(GenerateIntegersResult), typeof(object[]));
 
 var jrSerializer = new JsonRpcSerializer(jrSchema);
-var jrBindingsProvider = new JsonRpcBindingsProvider();
+var jrBindings = new Dictionary<JsonRpcId, string>();
 
 var jrRequestParams = new GenerateIntegersParams()
 {
@@ -56,7 +56,7 @@ var jrRequestParams = new GenerateIntegersParams()
 
 var jrRequest = new JsonRpcRequest("generateIntegers", Guid.NewGuid().ToString(), jrRequestParams);
 
-jrBindingsProvider.SetBinding(jrRequest.GetIdAsString(), jrRequest.Method);
+jrBindings[jrRequest.Id] = jrRequest.Method;
 
 var httpRequestString = jrSerializer.SerializeRequest(jrRequest);
 var httpRequestContent = new StringContent(httpRequestString, Encoding.UTF8, "application/json-rpc");
@@ -64,27 +64,8 @@ var httpRequestUri = new Uri("https://api.random.org/json-rpc/1/invoke");
 var httpResponse = await new HttpClient().PostAsync(httpRequestUri, httpRequestContent);
 var httpResponseString = await httpResponse.Content.ReadAsStringAsync();
 
-var jrResponsesData = jrSerializer.DeserializeResponsesData(httpResponseString, jrBindingsProvider);
+var jrResponsesData = jrSerializer.DeserializeResponsesData(httpResponseString, jrBindings);
 var jrResponseResult = (GenerateIntegersResult)jrResponsesData.GetSingleItem().GetMessage().Result;
 
 Console.WriteLine($"Random Numbers: {string.Join(", ", jrResponseResult.RandomData.Data)}");
 ```
-
-### Mapping exception type to response error type
-
-`JsonRpcException` exception throwed by `JsonRpcSerializer.DeserializeRequestsData` method can be successfully mapped to an error code, which will be sent back to a client, using value of the `Type` property:
-
-`JsonRpcExceptionType` | `JsonRpcErrorType`
---- | ---
-`ParseError` | `ParseError`
-`GenericError` | `InternalError`
-`InvalidMethod` | `InvalidMethod`
-`InvalidMessage` | `InvalidRequest`
-
-For example:
-
-```cs
-var jrError = new JsonRpcError((long)JsonRpcErrorType.ParseError, "...");
-```
-
-Standard messages for response errors can be found in the official specification for the JSON-RPC.

@@ -1,15 +1,13 @@
 ﻿<Project>
   <PropertyGroup>
-    <VersionPrefix>1.0.2</VersionPrefix>
+    <VersionPrefix>1.1.0</VersionPrefix>
     <VersionSuffix></VersionSuffix>
-    <Product><![CDATA[JSON-RPC.NET]]></Product>
-    <Description><![CDATA[JSON-RPC framework for .NET]]></Description>
-    <Authors><![CDATA[JSON-RPC.NET Team]]></Authors>
-    <Copyright><![CDATA[© JSON-RPC.NET Team. All rights reserved.]]></Copyright>
-    <PackageTags><![CDATA[json rpc json-rpc serializer]]></PackageTags>
-    <PackageRepositoryPath>alexanderkozlenko/jsonrpcnet</PackageRepositoryPath>
-    <PackageProjectUrl>https://github.com/$(PackageRepositoryPath)</PackageProjectUrl>
-    <PackageLicenseUrl>https://raw.github.com/$(PackageRepositoryPath)/master/LICENSE</PackageLicenseUrl>
-    <PackageIconUrl>https://raw.github.com/$(PackageRepositoryPath)/master/etc/img/nuget.png</PackageIconUrl>
+    <Product><![CDATA[System.Data.JsonRpc]]></Product>
+    <Description><![CDATA[Provides support for serialization and deserialization of JSON-RPC messages]]></Description>
+    <Authors><![CDATA[Alexander Kozlenko]]></Authors>
+    <Copyright><![CDATA[© Alexander Kozlenko. All rights reserved.]]></Copyright>
+    <PackageTags><![CDATA[json-rpc]]></PackageTags>
+    <PackageProjectUrl>https://github.com/alexanderkozlenko/json-rpc</PackageProjectUrl>
+    <PackageLicenseUrl>https://raw.github.com/alexanderkozlenko/json-rpc/master/LICENSE</PackageLicenseUrl>
   </PropertyGroup>
 </Project>

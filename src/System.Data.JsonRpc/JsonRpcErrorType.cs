@@ -18,7 +18,7 @@
         /// <summary>The JSON sent is not a valid request object.</summary>
         InvalidRequest,
 
-        /// <summary>Implementation-defined server-error.</summary>
+        /// <summary>Implementation-defined server error.</summary>
         ServerError,
 
         /// <summary>System error.</summary>

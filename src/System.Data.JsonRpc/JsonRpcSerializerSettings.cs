@@ -3,10 +3,10 @@
 namespace System.Data.JsonRpc
 {
     /// <summary>Specifies the settings for a <see cref="JsonRpcSerializer" /> object.</summary>
-    public sealed class JsonRpcSettings
+    public sealed class JsonRpcSerializerSettings
     {
-        /// <summary>Initializes a new instance of the <see cref="JsonRpcSettings" /> class.</summary>
-        public JsonRpcSettings()
+        /// <summary>Initializes a new instance of the <see cref="JsonRpcSerializerSettings" /> class.</summary>
+        public JsonRpcSerializerSettings()
         {
         }
 

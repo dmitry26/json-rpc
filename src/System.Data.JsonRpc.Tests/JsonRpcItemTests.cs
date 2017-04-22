@@ -1,23 +1,23 @@
-﻿using System.Data.JsonRpc.Tests.Support;
+﻿using System.Data.JsonRpc.Tests.Resources;
 using Xunit;
 
 namespace System.Data.JsonRpc.Tests
 {
-    public sealed class JsonRpcMessageInfoTests
+    public sealed class JsonRpcItemTests
     {
         [Fact]
-        public void SuccessIsTrue()
+        public void IsValidIsTrue()
         {
-            var jsonRpcSchema = new JsonRpcSchema();
+            var jsonRpcScheme = new JsonRpcSerializerScheme();
 
-            jsonRpcSchema.SupportedMethods.Add("test_method");
+            jsonRpcScheme.Methods["test_method"] = JsonRpcMethodScheme.Empty;
 
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSchema);
-            var jsonSample = JsonTools.GetJsonSample("jrmi_01_req");
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
+            var jsonSample = EmbeddedResourceManager.GetString($"Assets.jrmi_01_req.txt");
             var jsonRpcDataInfo = jsonRpcSerializer.DeserializeRequestsData(jsonSample);
             var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
-            Assert.True(jsonRpcMessageInfo.Success);
+            Assert.True(jsonRpcMessageInfo.IsValid);
             Assert.NotNull(jsonRpcMessageInfo.GetMessage());
 
             var getExceptionException = Assert.Throws<JsonRpcException>(() =>
@@ -27,18 +27,18 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SuccessIsFalse()
+        public void IsValidIsFalse()
         {
-            var jsonRpcSchema = new JsonRpcSchema();
+            var jsonRpcScheme = new JsonRpcSerializerScheme();
 
-            jsonRpcSchema.SupportedMethods.Add("test_method");
+            jsonRpcScheme.Methods["test_method"] = JsonRpcMethodScheme.Empty;
 
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSchema);
-            var jsonSample = JsonTools.GetJsonSample("jrmi_02_req");
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
+            var jsonSample = EmbeddedResourceManager.GetString($"Assets.jrmi_02_req.txt");
             var jsonRpcDataInfo = jsonRpcSerializer.DeserializeRequestsData(jsonSample);
             var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
-            Assert.False(jsonRpcMessageInfo.Success);
+            Assert.False(jsonRpcMessageInfo.IsValid);
 
             var getItemException = Assert.Throws<JsonRpcException>(() =>
                 jsonRpcMessageInfo.GetMessage());
