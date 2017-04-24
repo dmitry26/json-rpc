@@ -33,7 +33,6 @@ class GenerateUUIDsResult
 var jrScheme = new JsonRpcSerializerScheme();
 
 jrScheme.GenericErrorDataType = typeof(object[]);
-
 jrScheme.Methods["generateUUIDs"] = new JsonRpcMethodScheme(typeof(GenerateUUIDsResult), typeof(object[]));
 
 var jrSerializer = new JsonRpcSerializer(jrScheme);
@@ -41,8 +40,7 @@ var jrBindings = new Dictionary<JsonRpcId, string>();
 
 var jrRequestParams = new GenerateUUIDsParams
 {
-    APIKey = "00000000-0000-0000-0000-000000000000",
-    Count = 1
+    APIKey = "00000000-0000-0000-0000-000000000000", Count = 1
 };
 
 var jrRequest = new JsonRpcRequest("generateUUIDs", Guid.NewGuid().ToString(), jrRequestParams);
