@@ -40,7 +40,6 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.False(jsonRpcDataInfo.IsEmpty);
             Assert.False(jsonRpcDataInfo.IsBatch);
-            Assert.NotNull(jsonRpcDataInfo.GetSingleItem());
 
             var getItemsException = Assert.Throws<JsonRpcException>(() =>
                 jsonRpcDataInfo.GetBatchItems());

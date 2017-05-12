@@ -358,7 +358,6 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
-            Assert.NotNull(jsonRpcMessageInfo);
             Assert.True(jsonRpcMessageInfo.IsValid);
         }
 
@@ -385,7 +384,6 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
 
-            Assert.NotNull(jsonRpcMessageInfo);
             Assert.True(jsonRpcMessageInfo.IsValid);
 
             var jsonRpcRequest = jsonRpcMessageInfo.GetMessage();

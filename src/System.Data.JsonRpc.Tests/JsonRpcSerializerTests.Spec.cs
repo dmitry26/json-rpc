@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Data.JsonRpc.Tests
 {
-    partial class JsonRpcSerializerTests
+    public partial class JsonRpcSerializerTests
     {
         #region Example #01: RPC call with positional parameters
 
