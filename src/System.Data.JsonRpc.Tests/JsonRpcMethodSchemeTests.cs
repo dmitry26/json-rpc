@@ -5,13 +5,6 @@ namespace System.Data.JsonRpc.Tests
     public sealed class JsonRpcMethodSchemeTests
     {
         [Fact]
-        public void ConstructorWhenParametersTypeIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                new JsonRpcMethodScheme(default(Type)));
-        }
-
-        [Fact]
         public void ConstructorWhenResultTypeIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>

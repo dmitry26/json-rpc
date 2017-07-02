@@ -57,12 +57,5 @@ namespace System.Data.JsonRpc.Tests
         {
             new JsonRpcError(100L, string.Empty);
         }
-
-        [Fact]
-        public void ConstructorWhenDataIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                new JsonRpcError(100L, "test_message", default(object)));
-        }
     }
 }

@@ -535,22 +535,24 @@ namespace System.Data.JsonRpc
             {
                 throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "The request has an empty method name", request.Id);
             }
-            if (!_scheme.Methods.ContainsKey(request.Method))
+            if (!_scheme.Methods.TryGetValue(request.Method, out var methodScheme))
             {
                 throw new JsonRpcException(JsonRpcExceptionType.InvalidMethod, $"The request method \"{request.Method}\" is not supported", request.Id);
             }
-
-            if (jsonObject.TryGetValue("params", out var jsonValueParams) && (jsonValueParams.Type != JTokenType.Null))
+            if (methodScheme == null)
             {
-                if (!_scheme.Methods.TryGetValue(request.Method, out var methodScheme))
-                {
-                    throw new JsonRpcException(JsonRpcExceptionType.GenericError, $"There is no type binding for parameters' object of the \"{request.Method}\" method", request.Id);
-                }
-                if (methodScheme == null)
-                {
-                    throw new JsonRpcException(JsonRpcExceptionType.GenericError, $"Invalid type binding for parameters' object of the \"{request.Method}\" method", request.Id);
-                }
-
+                throw new JsonRpcException(JsonRpcExceptionType.GenericError, $"Invalid type binding for parameters' object of the \"{request.Method}\" method", request.Id);
+            }
+            if (methodScheme.IsNotification && !request.IsNotification)
+            {
+                throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, $"The request is not a notification", request.Id);
+            }
+            if (!methodScheme.IsNotification && request.IsNotification)
+            {
+                throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, $"The request is a notification", request.Id);
+            }
+            if ((methodScheme.ParametersType != null) && jsonObject.TryGetValue("params", out var jsonValueParams) && (jsonValueParams.Type != JTokenType.Null))
+            {
                 try
                 {
                     request.Params = jsonValueParams.ToObject(methodScheme.ParametersType, _jsonSerializer);

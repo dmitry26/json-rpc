@@ -15,7 +15,7 @@ namespace System.Data.JsonRpc.Tests
         {
             var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
 
-            jsonRpcSerializerScheme.Methods["subtract"] = new JsonRpcMethodScheme(typeof(long[]));
+            jsonRpcSerializerScheme.Methods["subtract"] = new JsonRpcMethodScheme(false, typeof(long[]));
 
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_01.0_req.txt");
@@ -92,7 +92,7 @@ namespace System.Data.JsonRpc.Tests
         {
             var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
 
-            jsonRpcSerializerScheme.Methods["subtract"] = new JsonRpcMethodScheme(typeof(long[]));
+            jsonRpcSerializerScheme.Methods["subtract"] = new JsonRpcMethodScheme(false, typeof(long[]));
 
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_01.1_req.txt");
@@ -173,7 +173,7 @@ namespace System.Data.JsonRpc.Tests
         {
             var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
 
-            jsonRpcSerializerScheme.Methods["subtract"] = new JsonRpcMethodScheme(typeof(SpecExample020Params));
+            jsonRpcSerializerScheme.Methods["subtract"] = new JsonRpcMethodScheme(false, typeof(SpecExample020Params));
 
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_02.0_req.txt");
@@ -254,7 +254,7 @@ namespace System.Data.JsonRpc.Tests
         {
             var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
 
-            jsonRpcSerializerScheme.Methods["subtract"] = new JsonRpcMethodScheme(typeof(SpecExample020Params));
+            jsonRpcSerializerScheme.Methods["subtract"] = new JsonRpcMethodScheme(false, typeof(SpecExample020Params));
 
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_02.1_req.txt");
@@ -339,7 +339,7 @@ namespace System.Data.JsonRpc.Tests
         {
             var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
 
-            jsonRpcSerializerScheme.Methods["update"] = new JsonRpcMethodScheme(typeof(long[]));
+            jsonRpcSerializerScheme.Methods["update"] = new JsonRpcMethodScheme(true, typeof(long[]));
 
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_03.0_req.txt");
@@ -376,7 +376,7 @@ namespace System.Data.JsonRpc.Tests
         {
             var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
 
-            jsonRpcSerializerScheme.Methods["foobar"] = JsonRpcMethodScheme.Empty;
+            jsonRpcSerializerScheme.Methods["foobar"] = new JsonRpcMethodScheme(true);
 
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_03.1_req.txt");
@@ -415,7 +415,7 @@ namespace System.Data.JsonRpc.Tests
         {
             var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
 
-            jsonRpcSerializerScheme.Methods["foobar"] = JsonRpcMethodScheme.Empty;
+            jsonRpcSerializerScheme.Methods["foobar"] = new JsonRpcMethodScheme(false);
 
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_04.0_req.txt");
@@ -551,7 +551,7 @@ namespace System.Data.JsonRpc.Tests
         {
             var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
 
-            jsonRpcSerializerScheme.Methods["subtract"] = JsonRpcMethodScheme.Empty;
+            jsonRpcSerializerScheme.Methods["subtract"] = new JsonRpcMethodScheme(true);
 
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_06.0_req.txt");
@@ -871,10 +871,10 @@ namespace System.Data.JsonRpc.Tests
         {
             var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
 
-            jsonRpcSerializerScheme.Methods["sum"] = new JsonRpcMethodScheme(typeof(long[]));
-            jsonRpcSerializerScheme.Methods["notify_hello"] = new JsonRpcMethodScheme(typeof(long[]));
-            jsonRpcSerializerScheme.Methods["subtract"] = new JsonRpcMethodScheme(typeof(long[]));
-            jsonRpcSerializerScheme.Methods["get_data"] = JsonRpcMethodScheme.Empty;
+            jsonRpcSerializerScheme.Methods["sum"] = new JsonRpcMethodScheme(false, typeof(long[]));
+            jsonRpcSerializerScheme.Methods["notify_hello"] = new JsonRpcMethodScheme(true, typeof(long[]));
+            jsonRpcSerializerScheme.Methods["subtract"] = new JsonRpcMethodScheme(false, typeof(long[]));
+            jsonRpcSerializerScheme.Methods["get_data"] = new JsonRpcMethodScheme(false);
 
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_11.0_req.txt");
@@ -1052,8 +1052,8 @@ namespace System.Data.JsonRpc.Tests
         {
             var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
 
-            jsonRpcSerializerScheme.Methods["notify_sum"] = new JsonRpcMethodScheme(typeof(long[]));
-            jsonRpcSerializerScheme.Methods["notify_hello"] = new JsonRpcMethodScheme(typeof(long[]));
+            jsonRpcSerializerScheme.Methods["notify_sum"] = new JsonRpcMethodScheme(true, typeof(long[]));
+            jsonRpcSerializerScheme.Methods["notify_hello"] = new JsonRpcMethodScheme(true, typeof(long[]));
 
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_12.0_req.txt");

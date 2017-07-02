@@ -10,7 +10,7 @@ namespace System.Data.JsonRpc.Tests
         {
             var jsonRpcScheme = new JsonRpcSerializerScheme();
 
-            jsonRpcScheme.Methods["test_method"] = JsonRpcMethodScheme.Empty;
+            jsonRpcScheme.Methods["test_method"] = new JsonRpcMethodScheme(true);
 
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.jrmi_01_req.txt");
@@ -31,7 +31,7 @@ namespace System.Data.JsonRpc.Tests
         {
             var jsonRpcScheme = new JsonRpcSerializerScheme();
 
-            jsonRpcScheme.Methods["test_method"] = JsonRpcMethodScheme.Empty;
+            jsonRpcScheme.Methods["test_method"] = new JsonRpcMethodScheme(true);
 
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.jrmi_02_req.txt");

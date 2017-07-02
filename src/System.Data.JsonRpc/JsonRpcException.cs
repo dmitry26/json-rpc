@@ -1,8 +1,16 @@
 ﻿namespace System.Data.JsonRpc
 {
     /// <summary>Represents errors that occur during RPC message processing.</summary>
-    public sealed class JsonRpcException : Exception
+    public class JsonRpcException : Exception
     {
+        /// <summary>Initializes a new instance of the <see cref="JsonRpcException" /> class.</summary>
+        /// <param name="message">The message that describes the error.</param>
+        public JsonRpcException(string message)
+            : base(message)
+        {
+            Type = JsonRpcExceptionType.GenericError;
+        }
+
         internal JsonRpcException(JsonRpcExceptionType type, string message)
             : base(message)
         {

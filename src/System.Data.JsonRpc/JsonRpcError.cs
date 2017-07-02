@@ -29,15 +29,9 @@ namespace System.Data.JsonRpc
         /// <param name="code">The number that indicates the error type that occurred.</param>
         /// <param name="message">The string providing a short description of the error. The message should be limited to a single concise sentence.</param>
         /// <param name="data">The primitive or structured value that contains additional information about the error.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="message" /> or <paramref name="data" /> is <see langword="null" />.</exception>
         public JsonRpcError(long code, string message, object data)
             : this(code, message)
         {
-            if (data == null)
-            {
-                throw new ArgumentNullException(nameof(data));
-            }
-
             Data = data;
         }
 

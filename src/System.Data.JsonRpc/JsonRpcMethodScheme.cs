@@ -3,23 +3,12 @@
     /// <summary>Specifies type scheme for an RPC method.</summary>
     public sealed class JsonRpcMethodScheme
     {
-        /// <summary>Specifies method scheme without parameters for deserializing requests.</summary>
-        public static readonly JsonRpcMethodScheme Empty = new JsonRpcMethodScheme();
-
-        private JsonRpcMethodScheme()
-        {
-        }
-
         /// <summary>Initializes a new instance of the <see cref="JsonRpcMethodScheme" /> class.</summary>
+        /// <param name="isNotification">The value indicating whether the method is a notification.</param>
         /// <param name="parametersType">The parameters type.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="parametersType" /> is <see langword="null" />.</exception>
-        public JsonRpcMethodScheme(Type parametersType)
+        public JsonRpcMethodScheme(bool isNotification, Type parametersType = null)
         {
-            if (parametersType == null)
-            {
-                throw new ArgumentNullException(nameof(parametersType));
-            }
-
+            IsNotification = isNotification;
             ParametersType = parametersType;
         }
 
@@ -44,6 +33,9 @@
 
         /// <summary>Gets an error data type.</summary>
         public Type ErrorDataType { get; }
+
+        /// <summary>Gets a value indicating whether the method is a notification.</summary>
+        public bool IsNotification { get; }
 
         /// <summary>Gets a parameters type.</summary>
         public Type ParametersType { get; }
