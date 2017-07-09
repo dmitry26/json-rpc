@@ -13,8 +13,8 @@ namespace System.Data.JsonRpc
         /// <summary>Initializes a new instance of the <see cref="JsonRpcError" /> class.</summary>
         /// <param name="code">The number that indicates the error type that occurred.</param>
         /// <param name="message">The string providing a short description of the error. The message should be limited to a single concise sentence.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="message" /> is <see langword="null" />.</exception>
-        public JsonRpcError(long code, string message)
+        /// <param name="data">The primitive or structured value that contains additional information about the error.</param>
+        public JsonRpcError(long code, string message, object data = null)
         {
             if (message == null)
             {
@@ -23,15 +23,6 @@ namespace System.Data.JsonRpc
 
             Code = code;
             Message = message;
-        }
-
-        /// <summary>Initializes a new instance of the <see cref="JsonRpcError" /> class.</summary>
-        /// <param name="code">The number that indicates the error type that occurred.</param>
-        /// <param name="message">The string providing a short description of the error. The message should be limited to a single concise sentence.</param>
-        /// <param name="data">The primitive or structured value that contains additional information about the error.</param>
-        public JsonRpcError(long code, string message, object data)
-            : this(code, message)
-        {
             Data = data;
         }
 

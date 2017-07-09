@@ -20,10 +20,8 @@ namespace System.Data.JsonRpc.Tests
             Assert.True(jsonRpcMessageInfo.IsValid);
             Assert.NotNull(jsonRpcMessageInfo.GetMessage());
 
-            var getExceptionException = Assert.Throws<JsonRpcException>(() =>
+            Assert.Throws<InvalidOperationException>(() =>
                 jsonRpcMessageInfo.GetException());
-
-            Assert.Equal(JsonRpcExceptionType.GenericError, getExceptionException.Type);
         }
 
         [Fact]
@@ -40,10 +38,9 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.False(jsonRpcMessageInfo.IsValid);
 
-            var getItemException = Assert.Throws<JsonRpcException>(() =>
+            Assert.Throws<InvalidOperationException>(() =>
                 jsonRpcMessageInfo.GetMessage());
 
-            Assert.Equal(JsonRpcExceptionType.GenericError, getItemException.Type);
             Assert.NotNull(jsonRpcMessageInfo.GetException());
 
             var jsonRpcMessageInfoException = jsonRpcMessageInfo.GetException();

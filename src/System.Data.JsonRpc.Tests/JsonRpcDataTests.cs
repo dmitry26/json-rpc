@@ -19,15 +19,11 @@ namespace System.Data.JsonRpc.Tests
             Assert.True(jsonRpcDataInfo.IsEmpty);
             Assert.False(jsonRpcDataInfo.IsBatch);
 
-            var getItemException = Assert.Throws<JsonRpcException>(() =>
+            Assert.Throws<InvalidOperationException>(() =>
                 jsonRpcDataInfo.GetSingleItem());
 
-            Assert.Equal(JsonRpcExceptionType.GenericError, getItemException.Type);
-
-            var getItemsException = Assert.Throws<JsonRpcException>(() =>
+            Assert.Throws<InvalidOperationException>(() =>
                 jsonRpcDataInfo.GetBatchItems());
-
-            Assert.Equal(JsonRpcExceptionType.GenericError, getItemsException.Type);
         }
 
         [Fact]
@@ -41,10 +37,8 @@ namespace System.Data.JsonRpc.Tests
             Assert.False(jsonRpcDataInfo.IsEmpty);
             Assert.False(jsonRpcDataInfo.IsBatch);
 
-            var getItemsException = Assert.Throws<JsonRpcException>(() =>
+            Assert.Throws<InvalidOperationException>(() =>
                 jsonRpcDataInfo.GetBatchItems());
-
-            Assert.Equal(JsonRpcExceptionType.GenericError, getItemsException.Type);
         }
 
         [Fact]
@@ -58,10 +52,9 @@ namespace System.Data.JsonRpc.Tests
             Assert.False(jsonRpcDataInfo.IsEmpty);
             Assert.True(jsonRpcDataInfo.IsBatch);
 
-            var getItemException = Assert.Throws<JsonRpcException>(() =>
+            Assert.Throws<InvalidOperationException>(() =>
                 jsonRpcDataInfo.GetSingleItem());
 
-            Assert.Equal(JsonRpcExceptionType.GenericError, getItemException.Type);
             Assert.NotNull(jsonRpcDataInfo.GetBatchItems());
         }
     }

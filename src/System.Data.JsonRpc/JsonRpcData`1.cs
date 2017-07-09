@@ -28,16 +28,16 @@ namespace System.Data.JsonRpc
 
         /// <summary>Gets an item for non-batch data.</summary>
         /// <returns>An <see cref="JsonRpcItem{T}" /> object.</returns>
-        /// <exception cref="JsonRpcException">The data is empty or is a batch.</exception>
+        /// <exception cref="InvalidOperationException">The data is empty or is a batch.</exception>
         public JsonRpcItem<T> GetSingleItem()
         {
             if (IsEmpty)
             {
-                throw new JsonRpcException(JsonRpcExceptionType.GenericError, "The data is empty");
+                throw new InvalidOperationException("The data is empty");
             }
             if (IsBatch)
             {
-                throw new JsonRpcException(JsonRpcExceptionType.GenericError, "The data is a batch");
+                throw new InvalidOperationException("The data is a batch");
             }
 
             return _item;
@@ -45,16 +45,16 @@ namespace System.Data.JsonRpc
 
         /// <summary>Gets a collection of items for batch data.</summary>
         /// <returns>A collection of <see cref="JsonRpcItem{T}" /> objects.</returns>
-        /// <exception cref="JsonRpcException">The data is empty or is not a batch.</exception>
+        /// <exception cref="InvalidOperationException">The data is empty or is not a batch.</exception>
         public IReadOnlyList<JsonRpcItem<T>> GetBatchItems()
         {
             if (IsEmpty)
             {
-                throw new JsonRpcException(JsonRpcExceptionType.GenericError, "The data is empty");
+                throw new InvalidOperationException("The data is empty");
             }
             if (!IsBatch)
             {
-                throw new JsonRpcException(JsonRpcExceptionType.GenericError, "The data is not a batch");
+                throw new InvalidOperationException("The data is not a batch");
             }
 
             return _items;
