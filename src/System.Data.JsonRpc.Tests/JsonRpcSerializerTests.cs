@@ -457,6 +457,33 @@ namespace System.Data.JsonRpc.Tests
             Assert.Equal(JsonRpcExceptionType.InvalidMessage, jsonRpcException.Type);
         }
 
+        [Fact]
+        public void DeserializeResponseDataWhenMethodSchemeBindingIsDynamic()
+        {
+            var jsonRpcSerializer = new JsonRpcSerializer();
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.jrds_01_res.txt");
+
+            var bindings = new Dictionary<JsonRpcId, JsonRpcMethodScheme>
+            {
+                [1] = new JsonRpcMethodScheme(typeof(int), typeof(object))
+            };
+
+            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeResponsesData(jsonSample, bindings);
+
+            Assert.False(jsonRpcDataInfo.IsEmpty);
+            Assert.False(jsonRpcDataInfo.IsBatch);
+
+            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
+
+            Assert.True(jsonRpcMessageInfo.IsValid);
+
+            var jsonRpcMessage = jsonRpcMessageInfo.GetMessage();
+
+            Assert.Equal(1, jsonRpcMessage.Id);
+            Assert.True(jsonRpcMessage.Success);
+            Assert.Equal(42, jsonRpcMessage.Result);
+        }
+
         #region Test Types
 
         private sealed class TestJsonArrayPool : IArrayPool<char>

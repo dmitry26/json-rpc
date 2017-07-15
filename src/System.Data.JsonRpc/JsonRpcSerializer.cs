@@ -194,6 +194,31 @@ namespace System.Data.JsonRpc
                 throw new ArgumentNullException(nameof(bindings));
             }
 
+            return DeserializeResponsesData(jsonString, bindings, null);
+        }
+
+        /// <summary>Deserializes the JSON string to the response data.</summary>
+        /// <param name="jsonString">The JSON string to deserialize.</param>
+        /// <param name="bindings">Request identifier to method scheme bindings used to map response properties to the corresponding types.</param>
+        /// <returns>RPC information about responses.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="jsonString" /> or <paramref name="bindings" /> is <see langword="null" />.</exception>
+        /// <exception cref="JsonRpcException">An error occurred during message processing.</exception>
+        public JsonRpcData<JsonRpcResponse> DeserializeResponsesData(string jsonString, IReadOnlyDictionary<JsonRpcId, JsonRpcMethodScheme> bindings)
+        {
+            if (jsonString == null)
+            {
+                throw new ArgumentNullException(nameof(jsonString));
+            }
+            if (bindings == null)
+            {
+                throw new ArgumentNullException(nameof(bindings));
+            }
+
+            return DeserializeResponsesData(jsonString, null, bindings);
+        }
+
+        private JsonRpcData<JsonRpcResponse> DeserializeResponsesData(string jsonString, IReadOnlyDictionary<JsonRpcId, string> methodNameBindings, IReadOnlyDictionary<JsonRpcId, JsonRpcMethodScheme> methodSchemeBindings)
+        {
             if (jsonString.Length == 0)
             {
                 return _emptyResponseData;
@@ -227,7 +252,7 @@ namespace System.Data.JsonRpc
 
                         try
                         {
-                            item = new JsonRpcItem<JsonRpcResponse>(ConvertTokenToResponse(jsonObject, bindings));
+                            item = new JsonRpcItem<JsonRpcResponse>(ConvertTokenToResponse(jsonObject, methodNameBindings, methodSchemeBindings));
                         }
                         catch (JsonRpcException e)
                             when (e.Type != JsonRpcExceptionType.GenericError)
@@ -266,7 +291,7 @@ namespace System.Data.JsonRpc
 
                             try
                             {
-                                response = ConvertTokenToResponse((JObject)jsonObject, bindings);
+                                response = ConvertTokenToResponse((JObject)jsonObject, methodNameBindings, methodSchemeBindings);
                             }
                             catch (JsonRpcException e)
                                 when (e.Type != JsonRpcExceptionType.GenericError)
@@ -519,7 +544,7 @@ namespace System.Data.JsonRpc
                         }
                 }
             }
-            
+
             if (!jsonObject.TryGetValue("method", out var jsonValueMethod))
             {
                 throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "The request does not have the method property", request.Id);
@@ -545,11 +570,11 @@ namespace System.Data.JsonRpc
             }
             if (methodScheme.IsNotification && !request.IsNotification)
             {
-                throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, $"The request is not a notification", request.Id);
+                throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "The request is not a notification", request.Id);
             }
             if (!methodScheme.IsNotification && request.IsNotification)
             {
-                throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, $"The request is a notification", request.Id);
+                throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "The request is a notification", request.Id);
             }
             if ((methodScheme.ParametersType != null) && jsonObject.TryGetValue("params", out var jsonValueParams) && (jsonValueParams.Type != JTokenType.Null))
             {
@@ -612,12 +637,8 @@ namespace System.Data.JsonRpc
             return jsonObject;
         }
 
-        private JsonRpcResponse ConvertTokenToResponse(JObject jsonObject, IReadOnlyDictionary<JsonRpcId, string> bindings)
+        private JsonRpcResponse ConvertTokenToResponse(JObject jsonObject, IReadOnlyDictionary<JsonRpcId, string> methodNameBindings, IReadOnlyDictionary<JsonRpcId, JsonRpcMethodScheme> methodSchemeBindings)
         {
-            if (_scheme == null)
-            {
-                throw new JsonRpcException(JsonRpcExceptionType.GenericError, "The type scheme is not defined");
-            }
             if (!jsonObject.TryGetValue("jsonrpc", out var jsonTokenProtocol))
             {
                 throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "The response does not have the protocol property");
@@ -664,22 +685,7 @@ namespace System.Data.JsonRpc
 
             if (jsonTokenResult != null)
             {
-                if (!bindings.TryGetValue(response.Id, out var messageMethod))
-                {
-                    throw new JsonRpcException(JsonRpcExceptionType.GenericError, $"There is no method binding for the response with the \"{response.Id}\" identifier", response.Id);
-                }
-                if (messageMethod == null)
-                {
-                    throw new JsonRpcException(JsonRpcExceptionType.GenericError, $"Invalid method binding for the response with the \"{response.Id}\" identifier", response.Id);
-                }
-                if (!_scheme.Methods.TryGetValue(messageMethod, out var methodScheme))
-                {
-                    throw new JsonRpcException(JsonRpcExceptionType.GenericError, $"There is no type binding for the result's object of the \"{messageMethod}\" method", response.Id);
-                }
-                if (methodScheme == null)
-                {
-                    throw new JsonRpcException(JsonRpcExceptionType.GenericError, $"Invalid type binding for result's object of the \"{messageMethod}\" method", response.Id);
-                }
+                var methodScheme = FindMethodScheme(response.Id, methodNameBindings, methodSchemeBindings);
 
                 try
                 {
@@ -727,6 +733,10 @@ namespace System.Data.JsonRpc
                 {
                     if (response.Id.Type == JsonRpcIdType.None)
                     {
+                        if (_scheme == null)
+                        {
+                            throw new JsonRpcException(JsonRpcExceptionType.GenericError, "The type scheme is not defined");
+                        }
                         if (_scheme.GenericErrorDataType == null)
                         {
                             throw new JsonRpcException(JsonRpcExceptionType.GenericError, "There is no type binding for the generic error data object", response.Id);
@@ -743,22 +753,7 @@ namespace System.Data.JsonRpc
                     }
                     else
                     {
-                        if (!bindings.TryGetValue(response.Id, out var messageMethod))
-                        {
-                            throw new JsonRpcException(JsonRpcExceptionType.GenericError, $"There is no method binding for the response with the \"{response.Id}\" identifier", response.Id);
-                        }
-                        if (messageMethod == null)
-                        {
-                            throw new JsonRpcException(JsonRpcExceptionType.GenericError, $"Invalid method binding for the response with the \"{response.Id}\" identifier", response.Id);
-                        }
-                        if (!_scheme.Methods.TryGetValue(messageMethod, out var methodScheme))
-                        {
-                            throw new JsonRpcException(JsonRpcExceptionType.GenericError, $"There is no type binding for the error data object of the \"{messageMethod}\" method", response.Id);
-                        }
-                        if (methodScheme == null)
-                        {
-                            throw new JsonRpcException(JsonRpcExceptionType.GenericError, $"Invalid type binding for the error data object of the \"{messageMethod}\" method", response.Id);
-                        }
+                        var methodScheme = FindMethodScheme(response.Id, methodNameBindings, methodSchemeBindings);
 
                         try
                         {
@@ -773,6 +768,40 @@ namespace System.Data.JsonRpc
             }
 
             return response;
+        }
+
+        private JsonRpcMethodScheme FindMethodScheme(JsonRpcId identifier, IReadOnlyDictionary<JsonRpcId, string> methodNameBindings, IReadOnlyDictionary<JsonRpcId, JsonRpcMethodScheme> methodSchemeBindings)
+        {
+            var methodScheme = default(JsonRpcMethodScheme);
+
+            if (methodSchemeBindings != null)
+            {
+                if (!methodSchemeBindings.TryGetValue(identifier, out methodScheme))
+                {
+                    throw new JsonRpcException(JsonRpcExceptionType.GenericError, "There is no type binding for the result's object", identifier);
+                }
+            }
+            else
+            {
+                if (_scheme == null)
+                {
+                    throw new JsonRpcException(JsonRpcExceptionType.GenericError, "The type scheme is not defined");
+                }
+                if (!methodNameBindings.TryGetValue(identifier, out var messageMethod))
+                {
+                    throw new JsonRpcException(JsonRpcExceptionType.GenericError, $"There is no method binding for the response with the \"{identifier}\" identifier", identifier);
+                }
+                if (messageMethod == null)
+                {
+                    throw new JsonRpcException(JsonRpcExceptionType.GenericError, $"Invalid method binding for the response with the \"{identifier}\" identifier", identifier);
+                }
+                if (!_scheme.Methods.TryGetValue(messageMethod, out methodScheme))
+                {
+                    throw new JsonRpcException(JsonRpcExceptionType.GenericError, $"There is no type binding for the result's object of the \"{messageMethod}\" method", identifier);
+                }
+            }
+
+            return methodScheme;
         }
 
         private JObject ConvertResponseToToken(JsonRpcResponse response)
