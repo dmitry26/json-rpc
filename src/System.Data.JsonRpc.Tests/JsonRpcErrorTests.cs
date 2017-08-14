@@ -49,7 +49,7 @@ namespace System.Data.JsonRpc.Tests
         public void ConstructorWhenMessageIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new JsonRpcError(100L, default(string)));
+                new JsonRpcError(100L, default));
         }
 
         [Fact]

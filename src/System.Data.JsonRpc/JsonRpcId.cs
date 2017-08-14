@@ -6,7 +6,7 @@ namespace System.Data.JsonRpc
     public struct JsonRpcId
     {
         /// <summary>Represents not specified identifier.</summary>
-        public static readonly JsonRpcId None = default(JsonRpcId);
+        public static readonly JsonRpcId None = default;
 
         private readonly long _valueNumber;
         private readonly string _valueString;
@@ -34,7 +34,7 @@ namespace System.Data.JsonRpc
                 throw new ArgumentException("Value is an empty string", nameof(value));
             }
 
-            _valueNumber = default(long);
+            _valueNumber = default;
             _valueString = value;
 
             Type = JsonRpcIdType.String;
