@@ -64,6 +64,6 @@ namespace System.Data.JsonRpc
         public bool IsBatch => _items != null;
 
         /// <summary>Gets a value indicating whether the data is empty.</summary>
-        public bool IsEmpty => object.Equals(_item, default(JsonRpcItem<T>)) && _items == null;
+        public bool IsEmpty => object.Equals(_item, default(JsonRpcItem<T>)) && (_items == null);
     }
 }

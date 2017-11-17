@@ -18,6 +18,10 @@ namespace System.Data.JsonRpc.Tests
             Assert.False(result != default);
             Assert.True(result != new JsonRpcId(100L));
             Assert.True(result != new JsonRpcId("100"));
+            Assert.False(result == 100L);
+            Assert.False(result == "100");
+            Assert.True(result != 100L);
+            Assert.True(result != "100");
         }
 
         [Fact]
@@ -34,6 +38,10 @@ namespace System.Data.JsonRpc.Tests
             Assert.True(result != default);
             Assert.False(result != new JsonRpcId(100L));
             Assert.True(result != new JsonRpcId("100"));
+            Assert.True(result == 100L);
+            Assert.False(result == "100");
+            Assert.False(result != 100L);
+            Assert.True(result != "100");
         }
 
         [Fact]
@@ -50,6 +58,10 @@ namespace System.Data.JsonRpc.Tests
             Assert.True(result != default);
             Assert.True(result != new JsonRpcId(100L));
             Assert.False(result != new JsonRpcId("100"));
+            Assert.False(result == 100L);
+            Assert.True(result == "100");
+            Assert.True(result != 100L);
+            Assert.False(result != "100");
         }
     }
 }
