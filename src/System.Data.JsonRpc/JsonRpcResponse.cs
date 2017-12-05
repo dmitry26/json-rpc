@@ -14,7 +14,7 @@ namespace System.Data.JsonRpc
         /// <param name="result">The value, which is determined by the method invoked on the server.</param>
         /// <param name="id">The identifier, which must be the same as the value in the request object.</param>
         /// <exception cref="ArgumentNullException"><paramref name="result" /> is <see langword="null" />.</exception>
-        public JsonRpcResponse(object result, JsonRpcId id)
+        public JsonRpcResponse(object result, in JsonRpcId id)
         {
             if (result == null)
             {
@@ -29,7 +29,7 @@ namespace System.Data.JsonRpc
         /// <param name="error">The <see cref="JsonRpcError" /> object with information.</param>
         /// <param name="id">The identifier, which must be the same as the value in the request object.</param>
         /// <exception cref="ArgumentNullException"><paramref name="error" /> is <see langword="null" />.</exception>
-        public JsonRpcResponse(JsonRpcError error, JsonRpcId id)
+        public JsonRpcResponse(JsonRpcError error, in JsonRpcId id)
         {
             if (error == null)
             {

@@ -16,7 +16,7 @@ namespace System.Data.JsonRpc
         /// <param name="params">The structured value that holds the parameter values to be used during the invocation of the method.</param>
         /// <exception cref="ArgumentNullException"><paramref name="method" /> is <see langword="null" />.</exception>
         /// <exception cref="ArgumentException"><paramref name="method" /> is empty string.</exception>
-        public JsonRpcRequest(string method, JsonRpcId id, object @params = null)
+        public JsonRpcRequest(string method, in JsonRpcId id, object @params = null)
         {
             if (method == null)
             {

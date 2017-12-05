@@ -1,7 +1,7 @@
 ﻿namespace System.Data.JsonRpc
 {
     /// <summary>Represents RPC identifier.</summary>
-    public struct JsonRpcId
+    public readonly struct JsonRpcId
     {
         /// <summary>Represents not specified identifier.</summary>
         public static readonly JsonRpcId None = default;

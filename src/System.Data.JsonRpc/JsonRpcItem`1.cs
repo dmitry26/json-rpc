@@ -5,7 +5,7 @@ namespace System.Data.JsonRpc
     /// <summary>Represents information about an RPC message.</summary>
     /// <typeparam name="T">Type of the message.</typeparam>
     [DebuggerDisplay("Is Valid = {" + nameof(IsValid) + "}")]
-    public struct JsonRpcItem<T>
+    public sealed class JsonRpcItem<T>
         where T : JsonRpcMessage
     {
         private readonly JsonRpcException _exception;
@@ -13,14 +13,12 @@ namespace System.Data.JsonRpc
 
         internal JsonRpcItem(T message)
         {
-            _exception = null;
             _message = message;
         }
 
         internal JsonRpcItem(JsonRpcException exception)
         {
             _exception = exception;
-            _message = null;
         }
 
         /// <summary>Gets an exception for the invalid item.</summary>
