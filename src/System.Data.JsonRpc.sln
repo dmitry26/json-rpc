@@ -1,17 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Data.JsonRpc", "System.Data.JsonRpc\System.Data.JsonRpc.csproj", "{C34519EE-157D-406A-B903-AD56B52AB4CA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Data.JsonRpc.Tests", "System.Data.JsonRpc.Tests\System.Data.JsonRpc.Tests.csproj", "{CFACA0EB-4B90-4E7F-AD89-E3F2CAD2FA38}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scheme", "scheme", "{AF90B8CA-1B63-4143-AC26-75408E7C4363}"
-	ProjectSection(SolutionItems) = preProject
-		scheme\solution.package.props = scheme\solution.package.props
-		scheme\solution.props = scheme\solution.props
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,5 +24,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EC960C09-4829-46FE-A03D-B1DF7E95F5FA}
 	EndGlobalSection
 EndGlobal
