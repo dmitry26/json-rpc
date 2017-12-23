@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <VersionPrefix>1.3.1</VersionPrefix>
+    <VersionPrefix>1.3.2</VersionPrefix>
     <VersionSuffix></VersionSuffix>
     <Product><![CDATA[System.Data.JsonRpc]]></Product>
     <Description><![CDATA[Provides support for serialization and deserialization of JSON-RPC messages]]></Description>

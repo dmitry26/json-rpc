@@ -576,11 +576,16 @@ namespace System.Data.JsonRpc
             {
                 throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "The request is a notification", request.Id);
             }
-            if ((methodScheme.ParametersType != null) && jsonObject.TryGetValue("params", out var jsonValueParams) && (jsonValueParams.Type != JTokenType.Null))
+            if ((methodScheme.ParametersType != null) && jsonObject.TryGetValue("params", out var jsonTokenParams) && (jsonTokenParams.Type != JTokenType.Null))
             {
+                if ((jsonTokenParams.Type != JTokenType.Object) && (jsonTokenParams.Type != JTokenType.Array))
+                {
+                    throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "The request has the parameters' property with invalid type", request.Id);
+                }
+
                 try
                 {
-                    request.Params = jsonValueParams.ToObject(methodScheme.ParametersType, _jsonSerializer);
+                    request.Params = jsonTokenParams.ToObject(methodScheme.ParametersType, _jsonSerializer);
                 }
                 catch (JsonException e)
                 {
@@ -612,7 +617,7 @@ namespace System.Data.JsonRpc
                     throw new JsonRpcException(JsonRpcExceptionType.GenericError, "JSON serialization error", request.Id, e);
                 }
 
-                if (jsonTokenParams.Type != JTokenType.Object && jsonTokenParams.Type != JTokenType.Array)
+                if ((jsonTokenParams.Type != JTokenType.Object) && (jsonTokenParams.Type != JTokenType.Array))
                 {
                     throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, "The request has the parameters' property with invalid type", request.Id);
                 }

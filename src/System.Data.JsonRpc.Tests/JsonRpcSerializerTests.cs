@@ -288,6 +288,29 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
+        public void DeserializeRequestsDataWhenParamsHasInvalidValue()
+        {
+            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
+
+            jsonRpcSerializerScheme.Methods["test_method"] = new JsonRpcMethodScheme(true, typeof(object[]));
+
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.jrs_06_req.txt");
+            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeRequestsData(jsonSample);
+
+            Assert.False(jsonRpcDataInfo.IsEmpty);
+            Assert.False(jsonRpcDataInfo.IsBatch);
+
+            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
+
+            Assert.False(jsonRpcMessageInfo.IsValid);
+
+            var jsonRpcException = jsonRpcMessageInfo.GetException();
+
+            Assert.Equal(JsonRpcExceptionType.InvalidMessage, jsonRpcException.Type);
+        }
+
+        [Fact]
         public void DeserializeResponsesDataWhenJsonStringIsNull()
         {
             var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
