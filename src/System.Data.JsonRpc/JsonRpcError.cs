@@ -3,13 +3,9 @@
 namespace System.Data.JsonRpc
 {
     /// <summary>Represents RPC error information.</summary>
-    [DebuggerDisplay("Code = {" + nameof(Code) + "}, Message = {" + nameof(Message) + "}, Has Data = {" + nameof(HasData) + "}")]
+    [DebuggerDisplay("Code = {Code}, Message = {Message}")]
     public sealed class JsonRpcError
     {
-        internal JsonRpcError()
-        {
-        }
-
         /// <summary>Initializes a new instance of the <see cref="JsonRpcError" /> class.</summary>
         /// <param name="code">The number that indicates the error type that occurred.</param>
         /// <param name="message">The string providing a short description of the error. The message should be limited to a single concise sentence.</param>
@@ -27,16 +23,22 @@ namespace System.Data.JsonRpc
         }
 
         /// <summary>Gets a number that indicates the error type that occurred.</summary>
-        public long Code { get; internal set; }
-
-        /// <summary>Gets an optional primitive or structured value that contains additional information about the error.</summary>
-        public object Data { get; internal set; }
-
-        /// <summary>Gets a value indicating whether the response has additional information about the error.</summary>
-        public bool HasData => Data != null;
+        public long Code
+        {
+            get;
+        }
 
         /// <summary>Gets a string providing a short description of the error.</summary>
-        public string Message { get; internal set; }
+        public string Message
+        {
+            get;
+        }
+
+        /// <summary>Gets an optional primitive or structured value that contains additional information about the error.</summary>
+        public object Data
+        {
+            get;
+        }
 
         /// <summary>Gets an error type.</summary>
         public JsonRpcErrorType Type
@@ -47,11 +49,11 @@ namespace System.Data.JsonRpc
                 {
                     case -32700L:
                         {
-                            return JsonRpcErrorType.ParseError;
+                            return JsonRpcErrorType.Parsing;
                         }
                     case -32603L:
                         {
-                            return JsonRpcErrorType.InternalError;
+                            return JsonRpcErrorType.Internal;
                         }
                     case -32602L:
                         {
@@ -71,15 +73,15 @@ namespace System.Data.JsonRpc
                             {
                                 if (Code >= -32099L)
                                 {
-                                    return JsonRpcErrorType.ServerError;
+                                    return JsonRpcErrorType.Server;
                                 }
                                 if (Code >= -32768L)
                                 {
-                                    return JsonRpcErrorType.SystemError;
+                                    return JsonRpcErrorType.System;
                                 }
                             }
 
-                            return JsonRpcErrorType.CustomError;
+                            return JsonRpcErrorType.Undefined;
                         }
                 }
             }

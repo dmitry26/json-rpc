@@ -1,4 +1,6 @@
-﻿namespace System.Data.JsonRpc
+﻿using System.Data.JsonRpc.Resources;
+
+namespace System.Data.JsonRpc
 {
     /// <summary>Represents RPC identifier.</summary>
     public readonly struct JsonRpcId
@@ -33,6 +35,12 @@
             _valueString = value;
 
             Type = JsonRpcIdType.String;
+        }
+
+        /// <summary>Gets the identifier type.</summary>
+        public JsonRpcIdType Type
+        {
+            get;
         }
 
         /// <summary>Returns the hash code for this instance.</summary>
@@ -117,7 +125,7 @@
                     }
                 default:
                     {
-                        return "(none)";
+                        return string.Empty;
                     }
             }
         }
@@ -126,37 +134,46 @@
         /// <param name="obj1">The left <see cref="JsonRpcId" /> operand.</param>
         /// <param name="obj2">The right <see cref="JsonRpcId" /> operand.</param>
         /// <returns>The result of == operation.</returns>
-        public static bool operator ==(JsonRpcId obj1, JsonRpcId obj2) =>
-            object.Equals(obj1, obj2);
+        public static bool operator ==(JsonRpcId obj1, JsonRpcId obj2)
+        {
+            return object.Equals(obj1, obj2);
+        }
 
         /// <summary>Overloads != operator.</summary>
         /// <param name="obj1">The left <see cref="JsonRpcId" /> operand.</param>
         /// <param name="obj2">The right <see cref="JsonRpcId" /> operand.</param>
         /// <returns>The result of != operation.</returns>
-        public static bool operator !=(JsonRpcId obj1, JsonRpcId obj2) =>
-            !(obj1 == obj2);
+        public static bool operator !=(JsonRpcId obj1, JsonRpcId obj2)
+        {
+            return !(obj1 == obj2);
+        }
 
         /// <summary>Performs an implicit conversion from <see cref="ulong" /> to <see cref="JsonRpcId" />.</summary>
         /// <param name="value">The value to create a <see cref="JsonRpcId" />.</param>
-        public static implicit operator JsonRpcId(long value) =>
-            new JsonRpcId(value);
+        public static implicit operator JsonRpcId(long value)
+        {
+            return new JsonRpcId(value);
+        }
 
         /// <summary>Performs an implicit conversion from <see cref="string" /> to <see cref="JsonRpcId" />.</summary>
         /// <param name="value">The value to create a <see cref="JsonRpcId" />.</param>
-        public static implicit operator JsonRpcId(string value) =>
-            new JsonRpcId(value);
+        public static implicit operator JsonRpcId(string value)
+        {
+            return new JsonRpcId(value);
+        }
 
         /// <summary>Performs an implicit conversion from <see cref="JsonRpcId" /> to <see cref="long" />.</summary>
         /// <param name="value">The value to create a <see cref="long" />.</param>
-        public static explicit operator long(JsonRpcId value) =>
-            value.Type == JsonRpcIdType.Number ? value._valueNumber : throw new InvalidOperationException("Value is not a number");
+        public static explicit operator long(JsonRpcId value)
+        {
+            return value.Type == JsonRpcIdType.Number ? value._valueNumber : throw new InvalidOperationException(Strings.GetString("id.cast.number.invalid_type"));
+        }
 
         /// <summary>Performs an implicit conversion from <see cref="JsonRpcId" /> to <see cref="string" />.</summary>
         /// <param name="value">The value to create a <see cref="string" />.</param>
-        public static explicit operator string(JsonRpcId value) =>
-            value.Type == JsonRpcIdType.String ? value._valueString : throw new InvalidOperationException("Value is not a string");
-
-        /// <summary>Gets the identifier type.</summary>
-        public JsonRpcIdType Type { get; }
+        public static explicit operator string(JsonRpcId value)
+        {
+            return value.Type == JsonRpcIdType.String ? value._valueString : throw new InvalidOperationException(Strings.GetString("id.cast.string.invalid_type"));
+        }
     }
 }

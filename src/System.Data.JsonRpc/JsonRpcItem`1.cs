@@ -4,50 +4,36 @@ namespace System.Data.JsonRpc
 {
     /// <summary>Represents information about an RPC message.</summary>
     /// <typeparam name="T">Type of the message.</typeparam>
-    [DebuggerDisplay("Is Valid = {" + nameof(IsValid) + "}")]
+    [DebuggerDisplay("IsValid = {IsValid}")]
     public sealed class JsonRpcItem<T>
         where T : JsonRpcMessage
     {
-        private readonly JsonRpcException _exception;
-        private readonly T _message;
-
         internal JsonRpcItem(T message)
         {
-            _message = message;
+            Message = message;
         }
 
         internal JsonRpcItem(JsonRpcException exception)
         {
-            _exception = exception;
-        }
-
-        /// <summary>Gets an exception for the invalid item.</summary>
-        /// <returns>An exception.</returns>
-        /// <exception cref="InvalidOperationException">Converting was successful.</exception>
-        public JsonRpcException GetException()
-        {
-            if (IsValid)
-            {
-                throw new InvalidOperationException("The item is a valid message");
-            }
-
-            return _exception;
+            Exception = exception;
         }
 
         /// <summary>Gets a message for the valid item.</summary>
-        /// <returns>A message.</returns>
-        /// <exception cref="InvalidOperationException">Converting was not successful.</exception>
-        public T GetMessage()
+        public T Message
         {
-            if (!IsValid)
-            {
-                throw new InvalidOperationException("The item is an invalid message");
-            }
+            get;
+        }
 
-            return _message;
+        /// <summary>Gets an exception for the invalid item.</summary>
+        public JsonRpcException Exception
+        {
+            get;
         }
 
         /// <summary>Gets a value indicating whether the item represents valid.</summary>
-        public bool IsValid => _message != null;
+        public bool IsValid
+        {
+            get => Message != null;
+        }
     }
 }

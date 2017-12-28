@@ -3,11 +3,15 @@
     /// <summary>Represents an RPC message.</summary>
     public abstract class JsonRpcMessage
     {
-        internal JsonRpcMessage()
+        internal JsonRpcMessage(in JsonRpcId id)
         {
+            Id = id;
         }
 
         /// <summary>Gets an identifier.</summary>
-        public JsonRpcId Id { get; internal set; }
+        public JsonRpcId Id
+        {
+            get;
+        }
     }
 }

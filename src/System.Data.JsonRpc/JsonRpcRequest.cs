@@ -1,50 +1,121 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace System.Data.JsonRpc
 {
     /// <summary>Represents an RPC request message.</summary>
-    [DebuggerDisplay("Id = {" + nameof(Id) + "}, Method = {" + nameof(Method) + "}, Has Params = {" + nameof(HasParams) + "}")]
+    [DebuggerDisplay("Method = {Method}, Id = {Id}, ParamsType = {ParamsType}")]
     public sealed class JsonRpcRequest : JsonRpcMessage
     {
-        internal JsonRpcRequest()
+        /// <summary>Initializes a new instance of the <see cref="JsonRpcRequest" /> class.</summary>
+        /// <param name="method">The string containing the name of the method to be invoked.</param>
+        /// <param name="id">The identifier established by the client.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="method" /> is <see langword="null" />.</exception>
+        public JsonRpcRequest(string method, in JsonRpcId id)
+            : base(in id)
+        {
+            if (method == null)
+            {
+                throw new ArgumentNullException(nameof(method));
+            }
+
+            Method = method;
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="JsonRpcRequest" /> class.</summary>
+        /// <param name="method">The string containing the name of the method to be invoked.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="method" /> is <see langword="null" />.</exception>
+        public JsonRpcRequest(string method)
+            : this(method, in JsonRpcId.None)
         {
         }
 
         /// <summary>Initializes a new instance of the <see cref="JsonRpcRequest" /> class.</summary>
         /// <param name="method">The string containing the name of the method to be invoked.</param>
         /// <param name="id">The identifier established by the client.</param>
-        /// <param name="params">The structured value that holds the parameter values to be used during the invocation of the method.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="method" /> is <see langword="null" />.</exception>
-        /// <exception cref="ArgumentException"><paramref name="method" /> is empty string.</exception>
-        public JsonRpcRequest(string method, in JsonRpcId id, object @params = null)
+        /// <param name="params">The parameters to be used during the invocation of the method, provided by position.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="method" /> or <paramref name="params" /> is <see langword="null" />.</exception>
+        public JsonRpcRequest(string method, in JsonRpcId id, IReadOnlyList<object> @params)
+            : this(method, in id)
         {
-            if (method == null)
+            if (@params == null)
             {
-                throw new ArgumentNullException(nameof(method));
-            }
-            if (method.Length == 0)
-            {
-                throw new ArgumentException("Value is an empty string", nameof(method));
+                throw new ArgumentNullException(nameof(@params));
             }
 
-            Method = method;
-            Id = id;
-            Params = @params;
+            ParamsByPosition = @params;
+            ParamsType = JsonRpcParamsType.ByPosition;
         }
 
-        /// <summary>Gets a value indicating whether the response has parameters.</summary>
-        public bool HasParams => Params != null;
+        /// <summary>Initializes a new instance of the <see cref="JsonRpcRequest" /> class.</summary>
+        /// <param name="method">The string containing the name of the method to be invoked.</param>
+        /// <param name="params">The parameters to be used during the invocation of the method, provided by position.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="method" /> or <paramref name="params" /> is <see langword="null" />.</exception>
+        public JsonRpcRequest(string method, IReadOnlyList<object> @params)
+            : this(method, in JsonRpcId.None, @params)
+        {
+        }
 
-        /// <summary>Gets a value indicating whether the message is a notification message.</summary>
-        public bool IsNotification => Id.Type == JsonRpcIdType.None;
+        /// <summary>Initializes a new instance of the <see cref="JsonRpcRequest" /> class.</summary>
+        /// <param name="method">The string containing the name of the method to be invoked.</param>
+        /// <param name="id">The identifier established by the client.</param>
+        /// <param name="params">The parameters to be used during the invocation of the method, provided by name.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="method" /> or <paramref name="params" /> is <see langword="null" />.</exception>
+        public JsonRpcRequest(string method, in JsonRpcId id, IReadOnlyDictionary<string, object> @params)
+            : this(method, in id)
+        {
+            if (@params == null)
+            {
+                throw new ArgumentNullException(nameof(@params));
+            }
 
-        /// <summary>Gets a value indicating whether the message is a system message.</summary>
-        public bool IsSystem => Method.StartsWith("rpc.", StringComparison.Ordinal);
+            ParamsByName = @params;
+            ParamsType = JsonRpcParamsType.ByName;
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="JsonRpcRequest" /> class.</summary>
+        /// <param name="method">The string containing the name of the method to be invoked.</param>
+        /// <param name="params">The parameters to be used during the invocation of the method, provided by name.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="method" /> or <paramref name="params" /> is <see langword="null" />.</exception>
+        public JsonRpcRequest(string method, IReadOnlyDictionary<string, object> @params)
+            : this(method, in JsonRpcId.None, @params)
+        {
+        }
 
         /// <summary>Gets a string containing the name of the method to be invoked.</summary>
-        public string Method { get; internal set; }
+        public string Method
+        {
+            get;
+        }
 
-        /// <summary>Gets a structured value that holds the parameter values to be used during the invocation of the method.</summary>
-        public object Params { get; internal set; }
+        /// <summary>Gets parameters type.</summary>
+        public JsonRpcParamsType ParamsType
+        {
+            get;
+        }
+
+        /// <summary>Gets parameters, provided by position.</summary>
+        public IReadOnlyList<object> ParamsByPosition
+        {
+            get;
+        }
+
+        /// <summary>Gets parameters, provided by name.</summary>
+        public IReadOnlyDictionary<string, object> ParamsByName
+        {
+            get;
+        }
+
+        /// <summary>Gets a value indicating whether the message is a notification message.</summary>
+        public bool IsNotification
+        {
+            get => Id.Type == JsonRpcIdType.None;
+        }
+
+        /// <summary>Gets a value indicating whether the message is a system message.</summary>
+        public bool IsSystem
+        {
+            get => Method.StartsWith("rpc.", StringComparison.Ordinal);
+        }
     }
 }

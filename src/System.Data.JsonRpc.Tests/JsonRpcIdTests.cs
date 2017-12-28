@@ -13,55 +13,70 @@ namespace System.Data.JsonRpc.Tests
             Assert.Throws<InvalidOperationException>(() => (long)result);
             Assert.Throws<InvalidOperationException>(() => (string)result);
             Assert.True(result == default);
-            Assert.False(result == new JsonRpcId(100L));
-            Assert.False(result == new JsonRpcId("100"));
+            Assert.False(result == new JsonRpcId(1L));
+            Assert.False(result == new JsonRpcId("1"));
             Assert.False(result != default);
-            Assert.True(result != new JsonRpcId(100L));
-            Assert.True(result != new JsonRpcId("100"));
-            Assert.False(result == 100L);
-            Assert.False(result == "100");
-            Assert.True(result != 100L);
-            Assert.True(result != "100");
+            Assert.True(result != new JsonRpcId(1L));
+            Assert.True(result != new JsonRpcId("1"));
+            Assert.False(result == 1L);
+            Assert.False(result == "1");
+            Assert.True(result != 1L);
+            Assert.True(result != "1");
         }
 
         [Fact]
         public void TypeIsNumber()
         {
-            var result = new JsonRpcId(100L);
+            var result = new JsonRpcId(1L);
 
             Assert.Equal(JsonRpcIdType.Number, result.Type);
-            Assert.Equal(100L, (long)result);
+            Assert.Equal(1L, (long)result);
             Assert.Throws<InvalidOperationException>(() => (string)result);
             Assert.False(result == default);
-            Assert.True(result == new JsonRpcId(100L));
-            Assert.False(result == new JsonRpcId("100"));
+            Assert.True(result == new JsonRpcId(1L));
+            Assert.False(result == new JsonRpcId("1"));
             Assert.True(result != default);
-            Assert.False(result != new JsonRpcId(100L));
-            Assert.True(result != new JsonRpcId("100"));
-            Assert.True(result == 100L);
-            Assert.False(result == "100");
-            Assert.False(result != 100L);
-            Assert.True(result != "100");
+            Assert.False(result != new JsonRpcId(1L));
+            Assert.True(result != new JsonRpcId("1"));
+            Assert.True(result == 1L);
+            Assert.False(result == "1");
+            Assert.False(result != 1L);
+            Assert.True(result != "1");
         }
 
         [Fact]
         public void TypeIsString()
         {
-            var result = new JsonRpcId("100");
+            var result = new JsonRpcId("1");
 
             Assert.Equal(JsonRpcIdType.String, result.Type);
             Assert.Throws<InvalidOperationException>(() => (long)result);
-            Assert.Equal("100", (string)result);
+            Assert.Equal("1", (string)result);
             Assert.False(result == default);
-            Assert.False(result == new JsonRpcId(100L));
-            Assert.True(result == new JsonRpcId("100"));
+            Assert.False(result == new JsonRpcId(1L));
+            Assert.True(result == new JsonRpcId("1"));
             Assert.True(result != default);
-            Assert.True(result != new JsonRpcId(100L));
-            Assert.False(result != new JsonRpcId("100"));
-            Assert.False(result == 100L);
-            Assert.True(result == "100");
-            Assert.True(result != 100L);
-            Assert.False(result != "100");
+            Assert.True(result != new JsonRpcId(1L));
+            Assert.False(result != new JsonRpcId("1"));
+            Assert.False(result == 1L);
+            Assert.True(result == "1");
+            Assert.True(result != 1L);
+            Assert.False(result != "1");
+        }
+
+        [Fact]
+        public void ConstructorWhenTypeIsStringAndEqualsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                new JsonRpcId(null));
+        }
+
+        [Fact]
+        public void ConstructorWhenTypeIsStringAndEqualsEmptyString()
+        {
+            var result = new JsonRpcId("");
+
+            Assert.Equal(JsonRpcIdType.String, result.Type);
         }
     }
 }

@@ -12,50 +12,45 @@ namespace System.Data.JsonRpc.Tests
         {
             var jsonRpcScheme = new JsonRpcSerializerScheme();
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.jrdi_01_res.txt");
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.data_empty.txt");
             var jsonRpcBindings = A.Fake<IReadOnlyDictionary<JsonRpcId, string>>(x => x.Strict());
-            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeResponsesData(jsonSample, jsonRpcBindings);
+            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample, jsonRpcBindings);
 
-            Assert.True(jsonRpcDataInfo.IsEmpty);
-            Assert.False(jsonRpcDataInfo.IsBatch);
-
-            Assert.Throws<InvalidOperationException>(() =>
-                jsonRpcDataInfo.GetSingleItem());
-
-            Assert.Throws<InvalidOperationException>(() =>
-                jsonRpcDataInfo.GetBatchItems());
+            Assert.True(jsonRpcData.IsEmpty);
+            Assert.False(jsonRpcData.IsSingle);
+            Assert.False(jsonRpcData.IsBatch);
+            Assert.Null(jsonRpcData.SingleItem);
+            Assert.Null(jsonRpcData.BatchItems);
         }
 
         [Fact]
-        public void GetItemAndItemsWhenIsNotEmptyAndIsNotBatch()
+        public void GetItemAndItemsWhenIsSingle()
         {
             var jsonRpcScheme = new JsonRpcSerializerScheme();
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.jrdi_02_req.txt");
-            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeRequestsData(jsonSample);
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.data_single.txt");
+            var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
 
-            Assert.False(jsonRpcDataInfo.IsEmpty);
-            Assert.False(jsonRpcDataInfo.IsBatch);
-
-            Assert.Throws<InvalidOperationException>(() =>
-                jsonRpcDataInfo.GetBatchItems());
+            Assert.False(jsonRpcData.IsEmpty);
+            Assert.True(jsonRpcData.IsSingle);
+            Assert.False(jsonRpcData.IsBatch);
+            Assert.NotNull(jsonRpcData.SingleItem);
+            Assert.Null(jsonRpcData.BatchItems);
         }
 
         [Fact]
-        public void GetItemAndItemsWhenIsNotEmptyAndIsBatch()
+        public void GetItemAndItemsWhenIsBatch()
         {
             var jsonRpcScheme = new JsonRpcSerializerScheme();
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.jrdi_03_req.txt");
-            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeRequestsData(jsonSample);
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.data_batch.txt");
+            var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
 
-            Assert.False(jsonRpcDataInfo.IsEmpty);
-            Assert.True(jsonRpcDataInfo.IsBatch);
-
-            Assert.Throws<InvalidOperationException>(() =>
-                jsonRpcDataInfo.GetSingleItem());
-
-            Assert.NotNull(jsonRpcDataInfo.GetBatchItems());
+            Assert.False(jsonRpcData.IsEmpty);
+            Assert.False(jsonRpcData.IsSingle);
+            Assert.True(jsonRpcData.IsBatch);
+            Assert.Null(jsonRpcData.SingleItem);
+            Assert.NotNull(jsonRpcData.BatchItems);
         }
     }
 }

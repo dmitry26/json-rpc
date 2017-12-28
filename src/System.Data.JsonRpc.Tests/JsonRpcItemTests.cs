@@ -10,18 +10,16 @@ namespace System.Data.JsonRpc.Tests
         {
             var jsonRpcScheme = new JsonRpcSerializerScheme();
 
-            jsonRpcScheme.Methods["test_method"] = new JsonRpcMethodScheme(true);
+            jsonRpcScheme.Methods["m"] = new JsonRpcMethodScheme();
 
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.jrmi_01_req.txt");
-            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeRequestsData(jsonSample);
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.item_valid_true.txt");
+            var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
+            var jsonRpcItem = jsonRpcData.SingleItem;
 
-            Assert.True(jsonRpcMessageInfo.IsValid);
-            Assert.NotNull(jsonRpcMessageInfo.GetMessage());
-
-            Assert.Throws<InvalidOperationException>(() =>
-                jsonRpcMessageInfo.GetException());
+            Assert.True(jsonRpcItem.IsValid);
+            Assert.NotNull(jsonRpcItem.Message);
+            Assert.Null(jsonRpcItem.Exception);
         }
 
         [Fact]
@@ -29,23 +27,20 @@ namespace System.Data.JsonRpc.Tests
         {
             var jsonRpcScheme = new JsonRpcSerializerScheme();
 
-            jsonRpcScheme.Methods["test_method"] = new JsonRpcMethodScheme(true);
+            jsonRpcScheme.Methods["m"] = new JsonRpcMethodScheme();
 
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.jrmi_02_req.txt");
-            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeRequestsData(jsonSample);
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.item_valid_false.txt");
+            var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
+            var jsonRpcItem = jsonRpcData.SingleItem;
 
-            Assert.False(jsonRpcMessageInfo.IsValid);
+            Assert.False(jsonRpcItem.IsValid);
+            Assert.Null(jsonRpcItem.Message);
+            Assert.NotNull(jsonRpcItem.Exception);
 
-            Assert.Throws<InvalidOperationException>(() =>
-                jsonRpcMessageInfo.GetMessage());
+            var jsonRpcException = jsonRpcItem.Exception;
 
-            Assert.NotNull(jsonRpcMessageInfo.GetException());
-
-            var jsonRpcMessageInfoException = jsonRpcMessageInfo.GetException();
-
-            Assert.Equal(JsonRpcExceptionType.InvalidMessage, jsonRpcMessageInfoException.Type);
+            Assert.Equal(JsonRpcExceptionType.InvalidMessage, jsonRpcException.Type);
         }
     }
 }

@@ -6,56 +6,43 @@ Provides support for serialization and deserialization of [JSON-RPC 2.0](http://
 
 ### Sample of communication with a server via JSON-RPC 2.0
 
-Generating a few random numbers using RANDOM.ORG service.
+Generating a random UUID using RANDOM.ORG service.
 
 1. Define types for request parameters and result objects:
 
 ```cs
-class GenerateUuidsParams
-{
-    [JsonProperty("apiKey")]
-    public string ApiKey { get; set; }
-
-    [JsonProperty("n")]
-    public int Count { get; set; }
-}
-
-class GenerateUuidsRandom
+class UuidsRandom
 {
     [JsonProperty("data")]
     public Guid[] Data { get; set; }
 }
-
-class GenerateUuidsResult
+class UuidsResult
 {
     [JsonProperty("random")]
-    public GenerateUuidsRandom Random { get; set; }
+    public UuidsRandom Random { get; set; }
 }
 ```
 
 2. Send a request to the server:
 
 ```cs
-var jrRequestParams = new GenerateUuidsParams
+var jrParams = new Dictionary<string, object>
 {
-    ApiKey = "00000000-0000-0000-0000-000000000000", Count = 1
+    ["apiKey"] = "00000000-0000-0000-0000-000000000000", ["n"] = 1L
 };
-
-var jrRequest = new JsonRpcRequest("generateUUIDs", Guid.NewGuid().ToString(), jrRequestParams);
-
+var jrRequest = new JsonRpcRequest("generateUUIDs", 0L, jrParams);
 var jrBindings = new Dictionary<JsonRpcId, JsonRpcMethodScheme>
 {
-    [jrRequest.Id] = new JsonRpcMethodScheme(typeof(GenerateUuidsResult), typeof(object[]))
+    [0L] = new JsonRpcMethodScheme(typeof(UuidsResult), null)
 };
-
 var jrSerializer = new JsonRpcSerializer();
 var httpRequestString = jrSerializer.SerializeRequest(jrRequest);
 var httpRequestContent = new StringContent(httpRequestString, Encoding.UTF8, "application/json");
 var httpRequestUri = new Uri("https://api.random.org/json-rpc/1/invoke");
 var httpResponse = await new HttpClient().PostAsync(httpRequestUri, httpRequestContent);
 var httpResponseString = await httpResponse.Content.ReadAsStringAsync();
-var jrResponsesData = jrSerializer.DeserializeResponsesData(httpResponseString, jrBindings);
-var jrResponseResult = (GenerateUuidsResult)jrResponsesData.GetSingleItem().GetMessage().Result;
+var jrData = jrSerializer.DeserializeResponseData(httpResponseString, jrBindings);
+var jrResult = (UuidsResult)jrData.SingleItem.Message.Result;
 
-Console.WriteLine($"Random UUID: {jrResponseResult.Random.Data[0]}");
+Console.Write("Random UUID: " + jrResult.Random.Data[0]);
 ```

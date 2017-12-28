@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Data.JsonRpc.Tests.Resources;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xunit;
 
@@ -13,35 +12,34 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void SpecExample010RequestDeserialize()
         {
-            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
+            var jsonRpcScheme = new JsonRpcSerializerScheme();
 
-            jsonRpcSerializerScheme.Methods["subtract"] = new JsonRpcMethodScheme(false, typeof(long[]));
+            jsonRpcScheme.Methods["subtract"] = new JsonRpcMethodScheme(new[] { typeof(long), typeof(long) });
 
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_01.0_req.txt");
-            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeRequestsData(jsonSample);
+            var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
 
-            Assert.False(jsonRpcDataInfo.IsBatch);
+            Assert.False(jsonRpcData.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
+            var jsonRpcItem = jsonRpcData.SingleItem;
 
-            Assert.True(jsonRpcMessageInfo.IsValid);
+            Assert.True(jsonRpcItem.IsValid);
 
-            var jsonRpcRequest = jsonRpcMessageInfo.GetMessage();
+            var jsonRpcMessage = jsonRpcItem.Message;
 
-            Assert.Equal(1L, jsonRpcRequest.Id);
-            Assert.Equal("subtract", jsonRpcRequest.Method);
-            Assert.True(jsonRpcRequest.HasParams);
-            Assert.IsType<long[]>(jsonRpcRequest.Params);
-            Assert.Equal(new[] { 42L, 23L }, jsonRpcRequest.Params);
+            Assert.Equal(1L, jsonRpcMessage.Id);
+            Assert.Equal("subtract", jsonRpcMessage.Method);
+            Assert.Equal(JsonRpcParamsType.ByPosition, jsonRpcMessage.ParamsType);
+            Assert.Equal(new object[] { 42L, 23L }, jsonRpcMessage.ParamsByPosition);
         }
 
         [Fact]
         public void SpecExample010RequestSerialize()
         {
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcRequest = new JsonRpcRequest("subtract", 1L, new[] { 42L, 23L });
-            var jsonResult = jsonRpcSerializer.SerializeRequest(jsonRpcRequest);
+            var jsonRpcMessage = new JsonRpcRequest("subtract", 1L, new object[] { 42L, 23L });
+            var jsonResult = jsonRpcSerializer.SerializeRequest(jsonRpcMessage);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_01.0_req.txt");
 
             Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
@@ -50,38 +48,38 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void SpecExample010ResponseDeserialize()
         {
-            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
+            var jsonRpcScheme = new JsonRpcSerializerScheme();
 
-            jsonRpcSerializerScheme.Methods["subtract"] = new JsonRpcMethodScheme(typeof(long), typeof(object));
+            jsonRpcScheme.Methods["subtract"] = new JsonRpcMethodScheme(typeof(long), null);
 
             var jsonRpcBindings = new Dictionary<JsonRpcId, string>
             {
                 [1L] = "subtract"
             };
 
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_01.0_res.txt");
-            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeResponsesData(jsonSample, jsonRpcBindings);
+            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample, jsonRpcBindings);
 
-            Assert.False(jsonRpcDataInfo.IsBatch);
+            Assert.False(jsonRpcData.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
+            var jsonRpcItem = jsonRpcData.SingleItem;
 
-            Assert.True(jsonRpcMessageInfo.IsValid);
+            Assert.True(jsonRpcItem.IsValid);
 
-            var jsonRpcResponse = jsonRpcMessageInfo.GetMessage();
+            var jsonRpcMessage = jsonRpcItem.Message;
 
-            Assert.Equal(1L, jsonRpcResponse.Id);
-            Assert.IsType<long>(jsonRpcResponse.Result);
-            Assert.Equal(19L, jsonRpcResponse.Result);
+            Assert.Equal(1L, jsonRpcMessage.Id);
+            Assert.IsType<long>(jsonRpcMessage.Result);
+            Assert.Equal(19L, jsonRpcMessage.Result);
         }
 
         [Fact]
         public void SpecExample010ResponseSerialize()
         {
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcResponse = new JsonRpcResponse(19L, 1L);
-            var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcResponse);
+            var jsonRpcMessage = new JsonRpcResponse(19L, 1L);
+            var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcMessage);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_01.0_res.txt");
 
             Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
@@ -90,35 +88,34 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void SpecExample011RequestDeserialize()
         {
-            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
+            var jsonRpcScheme = new JsonRpcSerializerScheme();
 
-            jsonRpcSerializerScheme.Methods["subtract"] = new JsonRpcMethodScheme(false, typeof(long[]));
+            jsonRpcScheme.Methods["subtract"] = new JsonRpcMethodScheme(new[] { typeof(long), typeof(long) });
 
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_01.1_req.txt");
-            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeRequestsData(jsonSample);
+            var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
 
-            Assert.False(jsonRpcDataInfo.IsBatch);
+            Assert.False(jsonRpcData.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
+            var jsonRpcItem = jsonRpcData.SingleItem;
 
-            Assert.True(jsonRpcMessageInfo.IsValid);
+            Assert.True(jsonRpcItem.IsValid);
 
-            var jsonRpcRequest = jsonRpcMessageInfo.GetMessage();
+            var jsonRpcMessage = jsonRpcItem.Message;
 
-            Assert.Equal(2L, jsonRpcRequest.Id);
-            Assert.Equal("subtract", jsonRpcRequest.Method);
-            Assert.True(jsonRpcRequest.HasParams);
-            Assert.IsType<long[]>(jsonRpcRequest.Params);
-            Assert.Equal(new[] { 23L, 42L }, jsonRpcRequest.Params);
+            Assert.Equal(2L, jsonRpcMessage.Id);
+            Assert.Equal("subtract", jsonRpcMessage.Method);
+            Assert.Equal(JsonRpcParamsType.ByPosition, jsonRpcMessage.ParamsType);
+            Assert.Equal(new object[] { 23L, 42L }, jsonRpcMessage.ParamsByPosition);
         }
 
         [Fact]
         public void SpecExample011RequestSerialize()
         {
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcRequest = new JsonRpcRequest("subtract", 2L, new[] { 23L, 42L });
-            var jsonResult = jsonRpcSerializer.SerializeRequest(jsonRpcRequest);
+            var jsonRpcMessage = new JsonRpcRequest("subtract", 2L, new object[] { 23L, 42L });
+            var jsonResult = jsonRpcSerializer.SerializeRequest(jsonRpcMessage);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_01.1_req.txt");
 
             Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
@@ -127,38 +124,38 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void SpecExample011ResponseDeserialize()
         {
-            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
+            var jsonRpcScheme = new JsonRpcSerializerScheme();
 
-            jsonRpcSerializerScheme.Methods["subtract"] = new JsonRpcMethodScheme(typeof(long), typeof(object));
+            jsonRpcScheme.Methods["subtract"] = new JsonRpcMethodScheme(typeof(long), null);
 
             var jsonRpcBindings = new Dictionary<JsonRpcId, string>
             {
                 [2L] = "subtract"
             };
 
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_01.1_res.txt");
-            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeResponsesData(jsonSample, jsonRpcBindings);
+            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample, jsonRpcBindings);
 
-            Assert.False(jsonRpcDataInfo.IsBatch);
+            Assert.False(jsonRpcData.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
+            var jsonRpcItem = jsonRpcData.SingleItem;
 
-            Assert.True(jsonRpcMessageInfo.IsValid);
+            Assert.True(jsonRpcItem.IsValid);
 
-            var jsonRpcResponse = jsonRpcMessageInfo.GetMessage();
+            var jsonRpcMessage = jsonRpcItem.Message;
 
-            Assert.Equal(2L, jsonRpcResponse.Id);
-            Assert.IsType<long>(jsonRpcResponse.Result);
-            Assert.Equal(-19L, jsonRpcResponse.Result);
+            Assert.Equal(2L, jsonRpcMessage.Id);
+            Assert.IsType<long>(jsonRpcMessage.Result);
+            Assert.Equal(-19L, jsonRpcMessage.Result);
         }
 
         [Fact]
         public void SpecExample011ResponseSerialize()
         {
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcResponse = new JsonRpcResponse(-19L, 2L);
-            var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcResponse);
+            var jsonRpcMessage = new JsonRpcResponse(-19L, 2L);
+            var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcMessage);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_01.1_res.txt");
 
             Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
@@ -171,39 +168,48 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void SpecExample020RequestDeserialize()
         {
-            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
+            var jsonRpcScheme = new JsonRpcSerializerScheme();
 
-            jsonRpcSerializerScheme.Methods["subtract"] = new JsonRpcMethodScheme(false, typeof(SpecExample020Params));
+            var jsonRpcSubtractParamsScheme = new Dictionary<string, Type>
+            {
+                ["subtrahend"] = typeof(long),
+                ["minuend"] = typeof(long)
+            };
 
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
+            jsonRpcScheme.Methods["subtract"] = new JsonRpcMethodScheme(jsonRpcSubtractParamsScheme);
+
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_02.0_req.txt");
-            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeRequestsData(jsonSample);
+            var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
 
-            Assert.False(jsonRpcDataInfo.IsBatch);
+            Assert.False(jsonRpcData.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
+            var jsonRpcItem = jsonRpcData.SingleItem;
 
-            Assert.True(jsonRpcMessageInfo.IsValid);
+            Assert.True(jsonRpcItem.IsValid);
 
-            var jsonRpcRequest = jsonRpcMessageInfo.GetMessage();
+            var jsonRpcMessage = jsonRpcItem.Message;
 
-            Assert.Equal(3L, jsonRpcRequest.Id);
-            Assert.Equal("subtract", jsonRpcRequest.Method);
-            Assert.True(jsonRpcRequest.HasParams);
-            Assert.IsType<SpecExample020Params>(jsonRpcRequest.Params);
-
-            var @params = (SpecExample020Params)jsonRpcRequest.Params;
-
-            Assert.Equal(23L, @params.Subtrahend);
-            Assert.Equal(42L, @params.Minuend);
+            Assert.Equal(3L, jsonRpcMessage.Id);
+            Assert.Equal("subtract", jsonRpcMessage.Method);
+            Assert.Equal(JsonRpcParamsType.ByName, jsonRpcMessage.ParamsType);
+            Assert.Equal(23L, jsonRpcMessage.ParamsByName["subtrahend"]);
+            Assert.Equal(42L, jsonRpcMessage.ParamsByName["minuend"]);
         }
 
         [Fact]
         public void SpecExample020RequestSerialize()
         {
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcRequest = new JsonRpcRequest("subtract", 3L, new SpecExample020Params { Subtrahend = 23L, Minuend = 42L });
-            var jsonResult = jsonRpcSerializer.SerializeRequest(jsonRpcRequest);
+
+            var jsonRpcSubtractParams = new Dictionary<string, object>
+            {
+                ["subtrahend"] = 23L,
+                ["minuend"] = 42L
+            };
+
+            var jsonRpcMessage = new JsonRpcRequest("subtract", 3L, jsonRpcSubtractParams);
+            var jsonResult = jsonRpcSerializer.SerializeRequest(jsonRpcMessage);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_02.0_req.txt");
 
             Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
@@ -212,38 +218,38 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void SpecExample020ResponseDeserialize()
         {
-            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
+            var jsonRpcScheme = new JsonRpcSerializerScheme();
 
-            jsonRpcSerializerScheme.Methods["subtract"] = new JsonRpcMethodScheme(typeof(long), typeof(object));
+            jsonRpcScheme.Methods["subtract"] = new JsonRpcMethodScheme(typeof(long), null);
 
             var jsonRpcBindings = new Dictionary<JsonRpcId, string>
             {
                 [3] = "subtract"
             };
 
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_02.0_res.txt");
-            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeResponsesData(jsonSample, jsonRpcBindings);
+            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample, jsonRpcBindings);
 
-            Assert.False(jsonRpcDataInfo.IsBatch);
+            Assert.False(jsonRpcData.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
+            var jsonRpcItem = jsonRpcData.SingleItem;
 
-            Assert.True(jsonRpcMessageInfo.IsValid);
+            Assert.True(jsonRpcItem.IsValid);
 
-            var jsonRpcResponse = jsonRpcMessageInfo.GetMessage();
+            var jsonRpcMessage = jsonRpcItem.Message;
 
-            Assert.Equal(3L, jsonRpcResponse.Id);
-            Assert.IsType<long>(jsonRpcResponse.Result);
-            Assert.Equal(19L, jsonRpcResponse.Result);
+            Assert.Equal(3L, jsonRpcMessage.Id);
+            Assert.IsType<long>(jsonRpcMessage.Result);
+            Assert.Equal(19L, jsonRpcMessage.Result);
         }
 
         [Fact]
         public void SpecExample020ResponseSerialize()
         {
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcResponse = new JsonRpcResponse(19L, 3L);
-            var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcResponse);
+            var jsonRpcMessage = new JsonRpcResponse(19L, 3L);
+            var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcMessage);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_02.0_res.txt");
 
             Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
@@ -252,39 +258,48 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void SpecExample021RequestDeserialize()
         {
-            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
+            var jsonRpcScheme = new JsonRpcSerializerScheme();
 
-            jsonRpcSerializerScheme.Methods["subtract"] = new JsonRpcMethodScheme(false, typeof(SpecExample020Params));
+            var jsonRpcSubtractParamsScheme = new Dictionary<string, Type>
+            {
+                ["subtrahend"] = typeof(long),
+                ["minuend"] = typeof(long)
+            };
 
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
+            jsonRpcScheme.Methods["subtract"] = new JsonRpcMethodScheme(jsonRpcSubtractParamsScheme);
+
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_02.1_req.txt");
-            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeRequestsData(jsonSample);
+            var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
 
-            Assert.False(jsonRpcDataInfo.IsBatch);
+            Assert.False(jsonRpcData.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
+            var jsonRpcItem = jsonRpcData.SingleItem;
 
-            Assert.True(jsonRpcMessageInfo.IsValid);
+            Assert.True(jsonRpcItem.IsValid);
 
-            var jsonRpcRequest = jsonRpcMessageInfo.GetMessage();
+            var jsonRpcMessage = jsonRpcItem.Message;
 
-            Assert.Equal(4L, jsonRpcRequest.Id);
-            Assert.Equal("subtract", jsonRpcRequest.Method);
-            Assert.True(jsonRpcRequest.HasParams);
-            Assert.IsType<SpecExample020Params>(jsonRpcRequest.Params);
-
-            var @params = (SpecExample020Params)jsonRpcRequest.Params;
-
-            Assert.Equal(23L, @params.Subtrahend);
-            Assert.Equal(42L, @params.Minuend);
+            Assert.Equal(4L, jsonRpcMessage.Id);
+            Assert.Equal("subtract", jsonRpcMessage.Method);
+            Assert.Equal(JsonRpcParamsType.ByName, jsonRpcMessage.ParamsType);
+            Assert.Equal(23L, jsonRpcMessage.ParamsByName["subtrahend"]);
+            Assert.Equal(42L, jsonRpcMessage.ParamsByName["minuend"]);
         }
 
         [Fact]
         public void SpecExample021RequestSerialize()
         {
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcRequest = new JsonRpcRequest("subtract", 4L, new SpecExample020Params { Subtrahend = 23L, Minuend = 42L });
-            var jsonResult = jsonRpcSerializer.SerializeRequest(jsonRpcRequest);
+
+            var jsonRpcSubtractParams = new Dictionary<string, object>
+            {
+                ["subtrahend"] = 23L,
+                ["minuend"] = 42L
+            };
+
+            var jsonRpcMessage = new JsonRpcRequest("subtract", 4L, jsonRpcSubtractParams);
+            var jsonResult = jsonRpcSerializer.SerializeRequest(jsonRpcMessage);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_02.1_req.txt");
 
             Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
@@ -293,38 +308,38 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void SpecExample021ResponseDeserialize()
         {
-            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
+            var jsonRpcScheme = new JsonRpcSerializerScheme();
 
-            jsonRpcSerializerScheme.Methods["subtract"] = new JsonRpcMethodScheme(typeof(long), typeof(object));
+            jsonRpcScheme.Methods["subtract"] = new JsonRpcMethodScheme(typeof(long), null);
 
             var jsonRpcBindings = new Dictionary<JsonRpcId, string>
             {
                 [4] = "subtract"
             };
 
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_02.1_res.txt");
-            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeResponsesData(jsonSample, jsonRpcBindings);
+            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample, jsonRpcBindings);
 
-            Assert.False(jsonRpcDataInfo.IsBatch);
+            Assert.False(jsonRpcData.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
+            var jsonRpcItem = jsonRpcData.SingleItem;
 
-            Assert.True(jsonRpcMessageInfo.IsValid);
+            Assert.True(jsonRpcItem.IsValid);
 
-            var jsonRpcResponse = jsonRpcMessageInfo.GetMessage();
+            var jsonRpcMessage = jsonRpcItem.Message;
 
-            Assert.Equal(4L, jsonRpcResponse.Id);
-            Assert.IsType<long>(jsonRpcResponse.Result);
-            Assert.Equal(19L, jsonRpcResponse.Result);
+            Assert.Equal(4L, jsonRpcMessage.Id);
+            Assert.IsType<long>(jsonRpcMessage.Result);
+            Assert.Equal(19L, jsonRpcMessage.Result);
         }
 
         [Fact]
         public void SpecExample021ResponseSerialize()
         {
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcResponse = new JsonRpcResponse(19L, 4L);
-            var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcResponse);
+            var jsonRpcMessage = new JsonRpcResponse(19L, 4L);
+            var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcMessage);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_02.1_res.txt");
 
             Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
@@ -337,35 +352,35 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void SpecExample030RequestDeserialize()
         {
-            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
+            var jsonRpcScheme = new JsonRpcSerializerScheme();
+            var jsonRpcSubtractParamsScheme = new[] { typeof(long), typeof(long), typeof(long), typeof(long), typeof(long) };
 
-            jsonRpcSerializerScheme.Methods["update"] = new JsonRpcMethodScheme(true, typeof(long[]));
+            jsonRpcScheme.Methods["update"] = new JsonRpcMethodScheme(jsonRpcSubtractParamsScheme);
 
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_03.0_req.txt");
-            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeRequestsData(jsonSample);
+            var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
 
-            Assert.False(jsonRpcDataInfo.IsBatch);
+            Assert.False(jsonRpcData.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
+            var jsonRpcItem = jsonRpcData.SingleItem;
 
-            Assert.True(jsonRpcMessageInfo.IsValid);
+            Assert.True(jsonRpcItem.IsValid);
 
-            var jsonRpcRequest = jsonRpcMessageInfo.GetMessage();
+            var jsonRpcMessage = jsonRpcItem.Message;
 
-            Assert.Equal(JsonRpcId.None, jsonRpcRequest.Id);
-            Assert.Equal("update", jsonRpcRequest.Method);
-            Assert.True(jsonRpcRequest.HasParams);
-            Assert.IsType<long[]>(jsonRpcRequest.Params);
-            Assert.Equal(new[] { 1L, 2L, 3L, 4L, 5L }, jsonRpcRequest.Params);
+            Assert.Equal(JsonRpcId.None, jsonRpcMessage.Id);
+            Assert.Equal("update", jsonRpcMessage.Method);
+            Assert.Equal(JsonRpcParamsType.ByPosition, jsonRpcMessage.ParamsType);
+            Assert.Equal(new object[] { 1L, 2L, 3L, 4L, 5L }, jsonRpcMessage.ParamsByPosition);
         }
 
         [Fact]
         public void SpecExample030RequestSerialize()
         {
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcRequest = new JsonRpcRequest("update", JsonRpcId.None, new[] { 1L, 2L, 3L, 4L, 5L });
-            var jsonResult = jsonRpcSerializer.SerializeRequest(jsonRpcRequest);
+            var jsonRpcMessage = new JsonRpcRequest("update", new object[] { 1L, 2L, 3L, 4L, 5L });
+            var jsonResult = jsonRpcSerializer.SerializeRequest(jsonRpcMessage);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_03.0_req.txt");
 
             Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
@@ -374,33 +389,33 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void SpecExample031RequestDeserialize()
         {
-            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
+            var jsonRpcScheme = new JsonRpcSerializerScheme();
 
-            jsonRpcSerializerScheme.Methods["foobar"] = new JsonRpcMethodScheme(true);
+            jsonRpcScheme.Methods["foobar"] = new JsonRpcMethodScheme();
 
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_03.1_req.txt");
-            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeRequestsData(jsonSample);
+            var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
 
-            Assert.False(jsonRpcDataInfo.IsBatch);
+            Assert.False(jsonRpcData.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
+            var jsonRpcItem = jsonRpcData.SingleItem;
 
-            Assert.True(jsonRpcMessageInfo.IsValid);
+            Assert.True(jsonRpcItem.IsValid);
 
-            var jsonRpcRequest = jsonRpcMessageInfo.GetMessage();
+            var jsonRpcMessage = jsonRpcItem.Message;
 
-            Assert.Equal(JsonRpcId.None, jsonRpcRequest.Id);
-            Assert.Equal("foobar", jsonRpcRequest.Method);
-            Assert.False(jsonRpcRequest.HasParams);
+            Assert.Equal(JsonRpcId.None, jsonRpcMessage.Id);
+            Assert.Equal("foobar", jsonRpcMessage.Method);
+            Assert.Equal(JsonRpcParamsType.None, jsonRpcMessage.ParamsType);
         }
 
         [Fact]
         public void SpecExample031RequestSerialize()
         {
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcRequest = new JsonRpcRequest("foobar", JsonRpcId.None);
-            var jsonResult = jsonRpcSerializer.SerializeRequest(jsonRpcRequest);
+            var jsonRpcMessage = new JsonRpcRequest("foobar", JsonRpcId.None);
+            var jsonResult = jsonRpcSerializer.SerializeRequest(jsonRpcMessage);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_03.1_req.txt");
 
             Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
@@ -413,33 +428,33 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void SpecExample040RequestDeserialize()
         {
-            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
+            var jsonRpcScheme = new JsonRpcSerializerScheme();
 
-            jsonRpcSerializerScheme.Methods["foobar"] = new JsonRpcMethodScheme(false);
+            jsonRpcScheme.Methods["foobar"] = new JsonRpcMethodScheme();
 
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_04.0_req.txt");
-            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeRequestsData(jsonSample);
+            var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
 
-            Assert.False(jsonRpcDataInfo.IsBatch);
+            Assert.False(jsonRpcData.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
+            var jsonRpcItem = jsonRpcData.SingleItem;
 
-            Assert.True(jsonRpcMessageInfo.IsValid);
+            Assert.True(jsonRpcItem.IsValid);
 
-            var jsonRpcRequest = jsonRpcMessageInfo.GetMessage();
+            var jsonRpcMessage = jsonRpcItem.Message;
 
-            Assert.Equal("1", jsonRpcRequest.Id);
-            Assert.Equal("foobar", jsonRpcRequest.Method);
-            Assert.False(jsonRpcRequest.HasParams);
+            Assert.Equal("1", jsonRpcMessage.Id);
+            Assert.Equal("foobar", jsonRpcMessage.Method);
+            Assert.Equal(JsonRpcParamsType.None, jsonRpcMessage.ParamsType);
         }
 
         [Fact]
         public void SpecExample040RequestSerialize()
         {
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcRequest = new JsonRpcRequest("foobar", "1");
-            var jsonResult = jsonRpcSerializer.SerializeRequest(jsonRpcRequest);
+            var jsonRpcMessage = new JsonRpcRequest("foobar", "1");
+            var jsonResult = jsonRpcSerializer.SerializeRequest(jsonRpcMessage);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_04.0_req.txt");
 
             Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
@@ -448,36 +463,36 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void SpecExample040ResponseDeserialize()
         {
-            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
+            var jsonRpcScheme = new JsonRpcSerializerScheme();
             var jsonRpcBindings = new Dictionary<JsonRpcId, string>();
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_04.0_res.txt");
-            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeResponsesData(jsonSample, jsonRpcBindings);
+            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample, jsonRpcBindings);
 
-            Assert.False(jsonRpcDataInfo.IsBatch);
+            Assert.False(jsonRpcData.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
+            var jsonRpcItem = jsonRpcData.SingleItem;
 
-            Assert.True(jsonRpcMessageInfo.IsValid);
+            Assert.True(jsonRpcItem.IsValid);
 
-            var jsonRpcResponse = jsonRpcMessageInfo.GetMessage();
+            var jsonRpcMessage = jsonRpcItem.Message;
 
-            Assert.Equal("1", jsonRpcResponse.Id);
-            Assert.False(jsonRpcResponse.Success);
+            Assert.Equal("1", jsonRpcMessage.Id);
+            Assert.False(jsonRpcMessage.Success);
 
-            var jsonRpcResponseError = jsonRpcResponse.Error;
+            var jsonRpcError = jsonRpcMessage.Error;
 
-            Assert.Equal(JsonRpcErrorType.InvalidMethod, jsonRpcResponseError.Type);
-            Assert.NotNull(jsonRpcResponseError.Message);
-            Assert.False(jsonRpcResponseError.Message.Length == 0);
+            Assert.Equal(JsonRpcErrorType.InvalidMethod, jsonRpcError.Type);
+            Assert.NotNull(jsonRpcError.Message);
+            Assert.False(jsonRpcError.Message.Length == 0);
         }
 
         [Fact]
         public void SpecExample040ResponseSerialize()
         {
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcResponse = new JsonRpcResponse(new JsonRpcError(-32601L, "Method not found"), "1");
-            var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcResponse);
+            var jsonRpcMessage = new JsonRpcResponse(new JsonRpcError(-32601L, "Method not found"), "1");
+            var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcMessage);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_04.0_res.txt");
 
             Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
@@ -490,14 +505,14 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void SpecExample050RequestDeserialize()
         {
-            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
+            var jsonRpcScheme = new JsonRpcSerializerScheme();
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_05.0_req.txt");
 
             var exception = Assert.Throws<JsonRpcException>(() =>
-                jsonRpcSerializer.DeserializeRequestsData(jsonSample));
+                jsonRpcSerializer.DeserializeRequestData(jsonSample));
 
-            Assert.Equal(JsonRpcExceptionType.ParseError, exception.Type);
+            Assert.Equal(JsonRpcExceptionType.Parsing, exception.Type);
         }
 
         [Fact]
@@ -509,34 +524,34 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void SpecExample050ResponseDeserialize()
         {
-            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
+            var jsonRpcScheme = new JsonRpcSerializerScheme();
             var jsonRpcBindings = new Dictionary<JsonRpcId, string>();
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_05.0_res.txt");
-            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeResponsesData(jsonSample, jsonRpcBindings);
+            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample, jsonRpcBindings);
 
-            Assert.False(jsonRpcDataInfo.IsBatch);
+            Assert.False(jsonRpcData.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
+            var jsonRpcItem = jsonRpcData.SingleItem;
 
-            Assert.True(jsonRpcMessageInfo.IsValid);
+            Assert.True(jsonRpcItem.IsValid);
 
-            var jsonRpcResponse = jsonRpcMessageInfo.GetMessage();
+            var jsonRpcMessage = jsonRpcItem.Message;
 
-            Assert.Equal(JsonRpcId.None, jsonRpcResponse.Id);
-            Assert.False(jsonRpcResponse.Success);
+            Assert.Equal(JsonRpcId.None, jsonRpcMessage.Id);
+            Assert.False(jsonRpcMessage.Success);
 
-            var jsonRpcResponseError = jsonRpcResponse.Error;
+            var jsonRpcError = jsonRpcMessage.Error;
 
-            Assert.Equal(JsonRpcErrorType.ParseError, jsonRpcResponseError.Type);
+            Assert.Equal(JsonRpcErrorType.Parsing, jsonRpcError.Type);
         }
 
         [Fact]
         public void SpecExample050ResponseSerialize()
         {
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcResponse = new JsonRpcResponse(new JsonRpcError(-32700L, "Parse error"), JsonRpcId.None);
-            var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcResponse);
+            var jsonRpcMessage = new JsonRpcResponse(new JsonRpcError(-32700L, "Parse error"), JsonRpcId.None);
+            var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcMessage);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_05.0_res.txt");
 
             Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
@@ -549,23 +564,20 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void SpecExample060RequestDeserialize()
         {
-            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
+            var jsonRpcScheme = new JsonRpcSerializerScheme();
 
-            jsonRpcSerializerScheme.Methods["subtract"] = new JsonRpcMethodScheme(true);
+            jsonRpcScheme.Methods["subtract"] = new JsonRpcMethodScheme();
 
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_06.0_req.txt");
-            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeRequestsData(jsonSample);
+            var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
 
-            Assert.False(jsonRpcDataInfo.IsBatch);
+            Assert.False(jsonRpcData.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
+            var jsonRpcItem = jsonRpcData.SingleItem;
 
-            Assert.False(jsonRpcMessageInfo.IsValid);
-
-            var jsonRpcMessageInfoException = jsonRpcMessageInfo.GetException();
-
-            Assert.Equal(JsonRpcExceptionType.InvalidMessage, jsonRpcMessageInfoException.Type);
+            Assert.False(jsonRpcItem.IsValid);
+            Assert.Equal(JsonRpcExceptionType.InvalidMessage, jsonRpcItem.Exception.Type);
         }
 
         [Fact]
@@ -577,34 +589,34 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void SpecExample060ResponseDeserialize()
         {
-            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
+            var jsonRpcScheme = new JsonRpcSerializerScheme();
             var jsonRpcBindings = new Dictionary<JsonRpcId, string>();
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_06.0_res.txt");
-            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeResponsesData(jsonSample, jsonRpcBindings);
+            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample, jsonRpcBindings);
 
-            Assert.False(jsonRpcDataInfo.IsBatch);
+            Assert.False(jsonRpcData.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
+            var jsonRpcItem = jsonRpcData.SingleItem;
 
-            Assert.True(jsonRpcMessageInfo.IsValid);
+            Assert.True(jsonRpcItem.IsValid);
 
-            var jsonRpcResponse = jsonRpcMessageInfo.GetMessage();
+            var jsonRpcMessage = jsonRpcItem.Message;
 
-            Assert.Equal(JsonRpcId.None, jsonRpcResponse.Id);
-            Assert.False(jsonRpcResponse.Success);
+            Assert.Equal(JsonRpcId.None, jsonRpcMessage.Id);
+            Assert.False(jsonRpcMessage.Success);
 
-            var jsonRpcResponseError = jsonRpcResponse.Error;
+            var jsonRpcError = jsonRpcMessage.Error;
 
-            Assert.Equal(JsonRpcErrorType.InvalidRequest, jsonRpcResponseError.Type);
+            Assert.Equal(JsonRpcErrorType.InvalidRequest, jsonRpcError.Type);
         }
 
         [Fact]
         public void SpecExample060ResponseSerialize()
         {
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcResponse = new JsonRpcResponse(new JsonRpcError(-32600L, "Invalid Request"), JsonRpcId.None);
-            var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcResponse);
+            var jsonRpcMessage = new JsonRpcResponse(new JsonRpcError(-32600L, "Invalid Request"), JsonRpcId.None);
+            var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcMessage);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_06.0_res.txt");
 
             Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
@@ -617,14 +629,14 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void SpecExample070RequestDeserialize()
         {
-            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
+            var jsonRpcScheme = new JsonRpcSerializerScheme();
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_07.0_req.txt");
 
             var exception = Assert.Throws<JsonRpcException>(() =>
-                jsonRpcSerializer.DeserializeRequestsData(jsonSample));
+                jsonRpcSerializer.DeserializeRequestData(jsonSample));
 
-            Assert.Equal(JsonRpcExceptionType.ParseError, exception.Type);
+            Assert.Equal(JsonRpcExceptionType.Parsing, exception.Type);
         }
 
         [Fact]
@@ -636,34 +648,34 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void SpecExample070ResponseDeserialize()
         {
-            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
+            var jsonRpcScheme = new JsonRpcSerializerScheme();
             var jsonRpcBindings = new Dictionary<JsonRpcId, string>();
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_07.0_res.txt");
-            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeResponsesData(jsonSample, jsonRpcBindings);
+            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample, jsonRpcBindings);
 
-            Assert.False(jsonRpcDataInfo.IsBatch);
+            Assert.False(jsonRpcData.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
+            var jsonRpcItem = jsonRpcData.SingleItem;
 
-            Assert.True(jsonRpcMessageInfo.IsValid);
+            Assert.True(jsonRpcItem.IsValid);
 
-            var jsonRpcResponse = jsonRpcMessageInfo.GetMessage();
+            var jsonRpcMessage = jsonRpcItem.Message;
 
-            Assert.Equal(JsonRpcId.None, jsonRpcResponse.Id);
-            Assert.False(jsonRpcResponse.Success);
+            Assert.Equal(JsonRpcId.None, jsonRpcMessage.Id);
+            Assert.False(jsonRpcMessage.Success);
 
-            var jsonRpcResponseError = jsonRpcResponse.Error;
+            var jsonRpcError = jsonRpcMessage.Error;
 
-            Assert.Equal(JsonRpcErrorType.ParseError, jsonRpcResponseError.Type);
+            Assert.Equal(JsonRpcErrorType.Parsing, jsonRpcError.Type);
         }
 
         [Fact]
         public void SpecExample070ResponseSerialize()
         {
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcResponse = new JsonRpcResponse(new JsonRpcError(-32700L, "Parse error"), JsonRpcId.None);
-            var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcResponse);
+            var jsonRpcMessage = new JsonRpcResponse(new JsonRpcError(-32700L, "Parse error"), JsonRpcId.None);
+            var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcMessage);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_07.0_res.txt");
 
             Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
@@ -676,12 +688,12 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void SpecExample080RequestDeserialize()
         {
-            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
+            var jsonRpcScheme = new JsonRpcSerializerScheme();
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_08.0_req.txt");
 
             var exception = Assert.Throws<JsonRpcException>(() =>
-                jsonRpcSerializer.DeserializeRequestsData(jsonSample));
+                jsonRpcSerializer.DeserializeRequestData(jsonSample));
 
             Assert.Equal(JsonRpcExceptionType.InvalidMessage, exception.Type);
         }
@@ -695,34 +707,34 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void SpecExample080ResponseDeserialize()
         {
-            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
+            var jsonRpcScheme = new JsonRpcSerializerScheme();
             var jsonRpcBindings = new Dictionary<JsonRpcId, string>();
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_08.0_res.txt");
-            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeResponsesData(jsonSample, jsonRpcBindings);
+            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample, jsonRpcBindings);
 
-            Assert.False(jsonRpcDataInfo.IsBatch);
+            Assert.False(jsonRpcData.IsBatch);
 
-            var jsonRpcMessageInfo = jsonRpcDataInfo.GetSingleItem();
+            var jsonRpcItem = jsonRpcData.SingleItem;
 
-            Assert.True(jsonRpcMessageInfo.IsValid);
+            Assert.True(jsonRpcItem.IsValid);
 
-            var jsonRpcResponse = jsonRpcMessageInfo.GetMessage();
+            var jsonRpcMessage = jsonRpcItem.Message;
 
-            Assert.Equal(JsonRpcId.None, jsonRpcResponse.Id);
-            Assert.False(jsonRpcResponse.Success);
+            Assert.Equal(JsonRpcId.None, jsonRpcMessage.Id);
+            Assert.False(jsonRpcMessage.Success);
 
-            var jsonRpcResponseError = jsonRpcResponse.Error;
+            var jsonRpcError = jsonRpcMessage.Error;
 
-            Assert.Equal(JsonRpcErrorType.InvalidRequest, jsonRpcResponseError.Type);
+            Assert.Equal(JsonRpcErrorType.InvalidRequest, jsonRpcError.Type);
         }
 
         [Fact]
         public void SpecExample080ResponseSerialize()
         {
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcResponse = new JsonRpcResponse(new JsonRpcError(-32600L, "Invalid Request"), JsonRpcId.None);
-            var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcResponse);
+            var jsonRpcMessage = new JsonRpcResponse(new JsonRpcError(-32600L, "Invalid Request"), JsonRpcId.None);
+            var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcMessage);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_08.0_res.txt");
 
             Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
@@ -735,21 +747,18 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void SpecExample090RequestDeserialize()
         {
-            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
+            var jsonRpcScheme = new JsonRpcSerializerScheme();
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_09.0_req.txt");
-            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeRequestsData(jsonSample);
+            var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
 
-            Assert.True(jsonRpcDataInfo.IsBatch);
-            Assert.Equal(1, jsonRpcDataInfo.GetBatchItems().Count);
+            Assert.True(jsonRpcData.IsBatch);
+            Assert.Equal(1, jsonRpcData.BatchItems.Count);
 
-            var jsonRpcMessageInfo0 = jsonRpcDataInfo.GetBatchItems()[0];
+            var jsonRpcItem0 = jsonRpcData.BatchItems[0];
 
-            Assert.False(jsonRpcMessageInfo0.IsValid);
-
-            var jsonRpcMessageInfo0Exception = jsonRpcMessageInfo0.GetException();
-
-            Assert.Equal(JsonRpcExceptionType.InvalidMessage, jsonRpcMessageInfo0Exception.Type);
+            Assert.False(jsonRpcItem0.IsValid);
+            Assert.Equal(JsonRpcExceptionType.InvalidMessage, jsonRpcItem0.Exception.Type);
         }
 
         [Fact]
@@ -761,35 +770,35 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void SpecExample090ResponseDeserialize()
         {
-            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
+            var jsonRpcScheme = new JsonRpcSerializerScheme();
             var jsonRpcBindings = new Dictionary<JsonRpcId, string>();
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_09.0_res.txt");
-            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeResponsesData(jsonSample, jsonRpcBindings);
+            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample, jsonRpcBindings);
 
-            Assert.True(jsonRpcDataInfo.IsBatch);
-            Assert.Equal(1, jsonRpcDataInfo.GetBatchItems().Count);
+            Assert.True(jsonRpcData.IsBatch);
+            Assert.Equal(1, jsonRpcData.BatchItems.Count);
 
-            var jsonRpcMessageInfo0 = jsonRpcDataInfo.GetBatchItems()[0];
+            var jsonRpcItem0 = jsonRpcData.BatchItems[0];
 
-            Assert.True(jsonRpcMessageInfo0.IsValid);
+            Assert.True(jsonRpcItem0.IsValid);
 
-            var jsonRpcResponse0 = jsonRpcMessageInfo0.GetMessage();
+            var jsonRpcMessage0 = jsonRpcItem0.Message;
 
-            Assert.Equal(JsonRpcId.None, jsonRpcResponse0.Id);
-            Assert.False(jsonRpcResponse0.Success);
+            Assert.Equal(JsonRpcId.None, jsonRpcMessage0.Id);
+            Assert.False(jsonRpcMessage0.Success);
 
-            var jsonRpcResponse0Error = jsonRpcResponse0.Error;
+            var jsonRpcMessage0Error = jsonRpcMessage0.Error;
 
-            Assert.Equal(JsonRpcErrorType.InvalidRequest, jsonRpcResponse0Error.Type);
+            Assert.Equal(JsonRpcErrorType.InvalidRequest, jsonRpcMessage0Error.Type);
         }
 
         [Fact]
         public void SpecExample090ResponseSerialize()
         {
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcResponse = new JsonRpcResponse(new JsonRpcError(-32600L, "Invalid Request"), JsonRpcId.None);
-            var jsonResult = jsonRpcSerializer.SerializeResponses(new[] { jsonRpcResponse });
+            var jsonRpcMessage = new JsonRpcResponse(new JsonRpcError(-32600L, "Invalid Request"), JsonRpcId.None);
+            var jsonResult = jsonRpcSerializer.SerializeResponses(new[] { jsonRpcMessage });
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_09.0_res.txt");
 
             Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
@@ -802,16 +811,18 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void SpecExample100RequestDeserialize()
         {
-            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
+            var jsonRpcScheme = new JsonRpcSerializerScheme();
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_10.0_req.txt");
-            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeRequestsData(jsonSample);
+            var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
 
-            Assert.True(jsonRpcDataInfo.IsBatch);
-            Assert.Equal(3, jsonRpcDataInfo.GetBatchItems().Count);
+            Assert.True(jsonRpcData.IsBatch);
+            Assert.Equal(3, jsonRpcData.BatchItems.Count);
 
-            foreach (var jsonRpcMessageInfo in jsonRpcDataInfo.GetBatchItems())
-                Assert.False(jsonRpcMessageInfo.IsValid);
+            foreach (var jsonRpcItem in jsonRpcData.BatchItems)
+            {
+                Assert.False(jsonRpcItem.IsValid);
+            }
         }
 
         [Fact]
@@ -823,27 +834,27 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void SpecExample100ResponsDeserialize()
         {
-            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
+            var jsonRpcScheme = new JsonRpcSerializerScheme();
             var jsonRpcBindings = new Dictionary<JsonRpcId, string>();
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_10.0_res.txt");
-            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeResponsesData(jsonSample, jsonRpcBindings);
+            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample, jsonRpcBindings);
 
-            Assert.True(jsonRpcDataInfo.IsBatch);
-            Assert.Equal(3, jsonRpcDataInfo.GetBatchItems().Count);
+            Assert.True(jsonRpcData.IsBatch);
+            Assert.Equal(3, jsonRpcData.BatchItems.Count);
 
-            foreach (var jsonRpcMessageInfo in jsonRpcDataInfo.GetBatchItems())
+            foreach (var jsonRpcItem in jsonRpcData.BatchItems)
             {
-                Assert.True(jsonRpcMessageInfo.IsValid);
+                Assert.True(jsonRpcItem.IsValid);
 
-                var jsonRpcResponse = jsonRpcMessageInfo.GetMessage();
+                var jsonRpcMessage = jsonRpcItem.Message;
 
-                Assert.Equal(JsonRpcId.None, jsonRpcResponse.Id);
-                Assert.False(jsonRpcResponse.Success);
+                Assert.Equal(JsonRpcId.None, jsonRpcMessage.Id);
+                Assert.False(jsonRpcMessage.Success);
 
-                var jsonRpcResponseError = jsonRpcResponse.Error;
+                var jsonRpcError = jsonRpcMessage.Error;
 
-                Assert.Equal(JsonRpcErrorType.InvalidRequest, jsonRpcResponseError.Type);
+                Assert.Equal(JsonRpcErrorType.InvalidRequest, jsonRpcError.Type);
             }
         }
 
@@ -851,12 +862,14 @@ namespace System.Data.JsonRpc.Tests
         public void SpecExample100ResponseSerialize()
         {
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcResponseArray = new JsonRpcResponse[3];
+            var jsonRpcMessages = new JsonRpcResponse[3];
 
-            for (var i = 0; i < jsonRpcResponseArray.Length; i++)
-                jsonRpcResponseArray[i] = new JsonRpcResponse(new JsonRpcError(-32600L, "Invalid Request"), JsonRpcId.None);
+            for (var i = 0; i < jsonRpcMessages.Length; i++)
+            {
+                jsonRpcMessages[i] = new JsonRpcResponse(new JsonRpcError(-32600L, "Invalid Request"), JsonRpcId.None);
+            }
 
-            var jsonResult = jsonRpcSerializer.SerializeResponses(jsonRpcResponseArray);
+            var jsonResult = jsonRpcSerializer.SerializeResponses(jsonRpcMessages);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_10.0_res.txt");
 
             Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
@@ -869,73 +882,70 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void SpecExample110RequestDeserialize()
         {
-            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
+            var jsonRpcScheme = new JsonRpcSerializerScheme();
 
-            jsonRpcSerializerScheme.Methods["sum"] = new JsonRpcMethodScheme(false, typeof(long[]));
-            jsonRpcSerializerScheme.Methods["notify_hello"] = new JsonRpcMethodScheme(true, typeof(long[]));
-            jsonRpcSerializerScheme.Methods["subtract"] = new JsonRpcMethodScheme(false, typeof(long[]));
-            jsonRpcSerializerScheme.Methods["get_data"] = new JsonRpcMethodScheme(false);
+            jsonRpcScheme.Methods["sum"] = new JsonRpcMethodScheme(new[] { typeof(long), typeof(long), typeof(long) });
+            jsonRpcScheme.Methods["notify_hello"] = new JsonRpcMethodScheme(new[] { typeof(long) });
+            jsonRpcScheme.Methods["subtract"] = new JsonRpcMethodScheme(new[] { typeof(long), typeof(long) });
+            jsonRpcScheme.Methods["get_data"] = new JsonRpcMethodScheme();
 
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_11.0_req.txt");
-            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeRequestsData(jsonSample);
+            var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
 
-            Assert.True(jsonRpcDataInfo.IsBatch);
-            Assert.Equal(6, jsonRpcDataInfo.GetBatchItems().Count);
+            Assert.True(jsonRpcData.IsBatch);
+            Assert.Equal(6, jsonRpcData.BatchItems.Count);
 
-            var jsonRpcRequestInfo0 = jsonRpcDataInfo.GetBatchItems()[0];
+            var jsonRpcMessageInfo0 = jsonRpcData.BatchItems[0];
 
-            Assert.True(jsonRpcRequestInfo0.IsValid);
+            Assert.True(jsonRpcMessageInfo0.IsValid);
 
-            var jsonRpcRequest0 = jsonRpcRequestInfo0.GetMessage();
+            var jsonRpcMessage0 = jsonRpcMessageInfo0.Message;
 
-            Assert.Equal("1", jsonRpcRequest0.Id);
-            Assert.Equal("sum", jsonRpcRequest0.Method);
-            Assert.True(jsonRpcRequest0.HasParams);
-            Assert.IsType<long[]>(jsonRpcRequest0.Params);
-            Assert.Equal(new[] { 1L, 2L, 4L }, jsonRpcRequest0.Params);
+            Assert.Equal("1", jsonRpcMessage0.Id);
+            Assert.Equal("sum", jsonRpcMessage0.Method);
+            Assert.Equal(JsonRpcParamsType.ByPosition, jsonRpcMessage0.ParamsType);
+            Assert.Equal(new object[] { 1L, 2L, 4L }, jsonRpcMessage0.ParamsByPosition);
 
-            var jsonRpcRequestInfo1 = jsonRpcDataInfo.GetBatchItems()[1];
+            var jsonRpcMessageInfo1 = jsonRpcData.BatchItems[1];
 
-            Assert.True(jsonRpcRequestInfo1.IsValid);
+            Assert.True(jsonRpcMessageInfo1.IsValid);
 
-            var jsonRpcRequest1 = jsonRpcRequestInfo1.GetMessage();
+            var jsonRpcMessage1 = jsonRpcMessageInfo1.Message;
 
-            Assert.Equal(JsonRpcId.None, jsonRpcRequest1.Id);
-            Assert.Equal("notify_hello", jsonRpcRequest1.Method);
-            Assert.True(jsonRpcRequest1.HasParams);
-            Assert.IsType<long[]>(jsonRpcRequest1.Params);
-            Assert.Equal(new[] { 7L }, jsonRpcRequest1.Params);
+            Assert.Equal(JsonRpcId.None, jsonRpcMessage1.Id);
+            Assert.Equal("notify_hello", jsonRpcMessage1.Method);
+            Assert.Equal(JsonRpcParamsType.ByPosition, jsonRpcMessage1.ParamsType);
+            Assert.Equal(new object[] { 7L }, jsonRpcMessage1.ParamsByPosition);
 
-            var jsonRpcRequestInfo2 = jsonRpcDataInfo.GetBatchItems()[2];
+            var jsonRpcMessageInfo2 = jsonRpcData.BatchItems[2];
 
-            Assert.True(jsonRpcRequestInfo2.IsValid);
+            Assert.True(jsonRpcMessageInfo2.IsValid);
 
-            var jsonRpcRequest2 = jsonRpcRequestInfo2.GetMessage();
+            var jsonRpcMessage2 = jsonRpcMessageInfo2.Message;
 
-            Assert.Equal("2", jsonRpcRequest2.Id);
-            Assert.Equal("subtract", jsonRpcRequest2.Method);
-            Assert.True(jsonRpcRequest2.HasParams);
-            Assert.IsType<long[]>(jsonRpcRequest2.Params);
-            Assert.Equal(new[] { 42L, 23L }, jsonRpcRequest2.Params);
+            Assert.Equal("2", jsonRpcMessage2.Id);
+            Assert.Equal("subtract", jsonRpcMessage2.Method);
+            Assert.Equal(JsonRpcParamsType.ByPosition, jsonRpcMessage2.ParamsType);
+            Assert.Equal(new object[] { 42L, 23L }, jsonRpcMessage2.ParamsByPosition);
 
-            var jsonRpcRequestInfo3 = jsonRpcDataInfo.GetBatchItems()[3];
+            var jsonRpcMessageInfo3 = jsonRpcData.BatchItems[3];
 
-            Assert.False(jsonRpcRequestInfo3.IsValid);
+            Assert.False(jsonRpcMessageInfo3.IsValid);
 
-            var jsonRpcRequestInfo4 = jsonRpcDataInfo.GetBatchItems()[4];
+            var jsonRpcMessageInfo4 = jsonRpcData.BatchItems[4];
 
-            Assert.False(jsonRpcRequestInfo4.IsValid);
+            Assert.False(jsonRpcMessageInfo4.IsValid);
 
-            var jsonRpcRequestInfo5 = jsonRpcDataInfo.GetBatchItems()[5];
+            var jsonRpcMessageInfo5 = jsonRpcData.BatchItems[5];
 
-            Assert.True(jsonRpcRequestInfo5.IsValid);
+            Assert.True(jsonRpcMessageInfo5.IsValid);
 
-            var jsonRpcRequest5 = jsonRpcRequestInfo5.GetMessage();
+            var jsonRpcMessage5 = jsonRpcMessageInfo5.Message;
 
-            Assert.Equal("9", jsonRpcRequest5.Id);
-            Assert.Equal("get_data", jsonRpcRequest5.Method);
-            Assert.False(jsonRpcRequest5.HasParams);
+            Assert.Equal("9", jsonRpcMessage5.Id);
+            Assert.Equal("get_data", jsonRpcMessage5.Method);
+            Assert.Equal(JsonRpcParamsType.None, jsonRpcMessage5.ParamsType);
         }
 
         [Fact]
@@ -947,11 +957,11 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void SpecExample110ResponseDeserialize()
         {
-            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
+            var jsonRpcScheme = new JsonRpcSerializerScheme();
 
-            jsonRpcSerializerScheme.Methods["sum"] = new JsonRpcMethodScheme(typeof(long), typeof(object));
-            jsonRpcSerializerScheme.Methods["subtract"] = new JsonRpcMethodScheme(typeof(long), typeof(object));
-            jsonRpcSerializerScheme.Methods["get_data"] = new JsonRpcMethodScheme(typeof(object[]), typeof(object));
+            jsonRpcScheme.Methods["sum"] = new JsonRpcMethodScheme(typeof(long), typeof(object));
+            jsonRpcScheme.Methods["subtract"] = new JsonRpcMethodScheme(typeof(long), typeof(object));
+            jsonRpcScheme.Methods["get_data"] = new JsonRpcMethodScheme(typeof(object[]), typeof(object));
 
             var jsonRpcBindings = new Dictionary<JsonRpcId, string>
             {
@@ -961,68 +971,68 @@ namespace System.Data.JsonRpc.Tests
                 ["9"] = "get_data"
             };
 
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_11.0_res.txt");
-            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeResponsesData(jsonSample, jsonRpcBindings);
+            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample, jsonRpcBindings);
 
-            Assert.True(jsonRpcDataInfo.IsBatch);
-            Assert.Equal(5, jsonRpcDataInfo.GetBatchItems().Count);
+            Assert.True(jsonRpcData.IsBatch);
+            Assert.Equal(5, jsonRpcData.BatchItems.Count);
 
-            var jsonRpcMessageInfo0 = jsonRpcDataInfo.GetBatchItems()[0];
+            var jsonRpcItem0 = jsonRpcData.BatchItems[0];
 
-            Assert.True(jsonRpcMessageInfo0.IsValid);
+            Assert.True(jsonRpcItem0.IsValid);
 
-            var jsonRpcResponse0 = jsonRpcMessageInfo0.GetMessage();
+            var jsonRpcMessage0 = jsonRpcItem0.Message;
 
-            Assert.Equal("1", jsonRpcResponse0.Id);
-            Assert.IsType<long>(jsonRpcResponse0.Result);
-            Assert.Equal(7L, jsonRpcResponse0.Result);
+            Assert.Equal("1", jsonRpcMessage0.Id);
+            Assert.IsType<long>(jsonRpcMessage0.Result);
+            Assert.Equal(7L, jsonRpcMessage0.Result);
 
-            var jsonRpcMessageInfo1 = jsonRpcDataInfo.GetBatchItems()[1];
+            var jsonRpcItem1 = jsonRpcData.BatchItems[1];
 
-            Assert.True(jsonRpcMessageInfo1.IsValid);
+            Assert.True(jsonRpcItem1.IsValid);
 
-            var jsonRpcResponse1 = jsonRpcMessageInfo1.GetMessage();
+            var jsonRpcMessage1 = jsonRpcItem1.Message;
 
-            Assert.Equal("2", jsonRpcResponse1.Id);
-            Assert.IsType<long>(jsonRpcResponse1.Result);
-            Assert.Equal(19L, jsonRpcResponse1.Result);
+            Assert.Equal("2", jsonRpcMessage1.Id);
+            Assert.IsType<long>(jsonRpcMessage1.Result);
+            Assert.Equal(19L, jsonRpcMessage1.Result);
 
-            var jsonRpcMessageInfo2 = jsonRpcDataInfo.GetBatchItems()[2];
+            var jsonRpcItem2 = jsonRpcData.BatchItems[2];
 
-            Assert.True(jsonRpcMessageInfo2.IsValid);
+            Assert.True(jsonRpcItem2.IsValid);
 
-            var jsonRpcResponse2 = jsonRpcMessageInfo2.GetMessage();
+            var jsonRpcMessage2 = jsonRpcItem2.Message;
 
-            Assert.Equal(JsonRpcId.None, jsonRpcResponse2.Id);
-            Assert.False(jsonRpcResponse2.Success);
+            Assert.Equal(JsonRpcId.None, jsonRpcMessage2.Id);
+            Assert.False(jsonRpcMessage2.Success);
 
-            var jsonRpcResponse2Error = jsonRpcResponse2.Error;
+            var jsonRpcError2 = jsonRpcMessage2.Error;
 
-            Assert.Equal(JsonRpcErrorType.InvalidRequest, jsonRpcResponse2Error.Type);
+            Assert.Equal(JsonRpcErrorType.InvalidRequest, jsonRpcError2.Type);
 
-            var jsonRpcMessageInfo3 = jsonRpcDataInfo.GetBatchItems()[3];
+            var jsonRpcItem3 = jsonRpcData.BatchItems[3];
 
-            Assert.True(jsonRpcMessageInfo3.IsValid);
+            Assert.True(jsonRpcItem3.IsValid);
 
-            var jsonRpcResponse3 = jsonRpcMessageInfo3.GetMessage();
+            var jsonRpcMessage3 = jsonRpcItem3.Message;
 
-            Assert.Equal("5", jsonRpcResponse3.Id);
-            Assert.False(jsonRpcResponse3.Success);
+            Assert.Equal("5", jsonRpcMessage3.Id);
+            Assert.False(jsonRpcMessage3.Success);
 
-            var jsonRpcResponse3Error = jsonRpcResponse3.Error;
+            var jsonRpcError3 = jsonRpcMessage3.Error;
 
-            Assert.Equal(JsonRpcErrorType.InvalidMethod, jsonRpcResponse3Error.Type);
+            Assert.Equal(JsonRpcErrorType.InvalidMethod, jsonRpcError3.Type);
 
-            var jsonRpcMessageInfo4 = jsonRpcDataInfo.GetBatchItems()[4];
+            var jsonRpcItem4 = jsonRpcData.BatchItems[4];
 
-            Assert.True(jsonRpcMessageInfo4.IsValid);
+            Assert.True(jsonRpcItem4.IsValid);
 
-            var jsonRpcResponse4 = jsonRpcMessageInfo4.GetMessage();
+            var jsonRpcMessage4 = jsonRpcItem4.Message;
 
-            Assert.Equal("9", jsonRpcResponse4.Id);
-            Assert.IsType<object[]>(jsonRpcResponse4.Result);
-            Assert.Equal(new object[] { "hello", 5L }, jsonRpcResponse4.Result);
+            Assert.Equal("9", jsonRpcMessage4.Id);
+            Assert.IsType<object[]>(jsonRpcMessage4.Result);
+            Assert.Equal(new object[] { "hello", 5L }, jsonRpcMessage4.Result);
         }
 
         [Fact]
@@ -1030,15 +1040,15 @@ namespace System.Data.JsonRpc.Tests
         {
             var jsonRpcSerializer = new JsonRpcSerializer();
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_11.0_res.txt");
-            var jsonRpcResponseArray = new JsonRpcResponse[5];
+            var jsonRpcMessages = new JsonRpcResponse[5];
 
-            jsonRpcResponseArray[0] = new JsonRpcResponse(7L, "1");
-            jsonRpcResponseArray[1] = new JsonRpcResponse(19L, "2");
-            jsonRpcResponseArray[2] = new JsonRpcResponse(new JsonRpcError(-32600L, "Invalid Request"), JsonRpcId.None);
-            jsonRpcResponseArray[3] = new JsonRpcResponse(new JsonRpcError(-32601L, "Method not found"), "5");
-            jsonRpcResponseArray[4] = new JsonRpcResponse(new object[] { "hello", 5L }, "9");
+            jsonRpcMessages[0] = new JsonRpcResponse(7L, "1");
+            jsonRpcMessages[1] = new JsonRpcResponse(19L, "2");
+            jsonRpcMessages[2] = new JsonRpcResponse(new JsonRpcError(-32600L, "Invalid Request"), JsonRpcId.None);
+            jsonRpcMessages[3] = new JsonRpcResponse(new JsonRpcError(-32601L, "Method not found"), "5");
+            jsonRpcMessages[4] = new JsonRpcResponse(new object[] { "hello", 5L }, "9");
 
-            var jsonResult = jsonRpcSerializer.SerializeResponses(jsonRpcResponseArray);
+            var jsonResult = jsonRpcSerializer.SerializeResponses(jsonRpcMessages);
 
             Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
         }
@@ -1050,53 +1060,51 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void SpecExample120RequestDeserialize()
         {
-            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
+            var jsonRpcScheme = new JsonRpcSerializerScheme();
 
-            jsonRpcSerializerScheme.Methods["notify_sum"] = new JsonRpcMethodScheme(true, typeof(long[]));
-            jsonRpcSerializerScheme.Methods["notify_hello"] = new JsonRpcMethodScheme(true, typeof(long[]));
+            jsonRpcScheme.Methods["notify_sum"] = new JsonRpcMethodScheme(new[] { typeof(long), typeof(long), typeof(long) });
+            jsonRpcScheme.Methods["notify_hello"] = new JsonRpcMethodScheme(new[] { typeof(long) });
 
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_12.0_req.txt");
-            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeRequestsData(jsonSample);
+            var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
 
-            Assert.True(jsonRpcDataInfo.IsBatch);
-            Assert.Equal(2, jsonRpcDataInfo.GetBatchItems().Count);
+            Assert.True(jsonRpcData.IsBatch);
+            Assert.Equal(2, jsonRpcData.BatchItems.Count);
 
-            var jsonRpcMessageInfo0 = jsonRpcDataInfo.GetBatchItems()[0];
+            var jsonRpcItem0 = jsonRpcData.BatchItems[0];
 
-            Assert.True(jsonRpcMessageInfo0.IsValid);
+            Assert.True(jsonRpcItem0.IsValid);
 
-            var jsonRpcRequest0 = jsonRpcMessageInfo0.GetMessage();
+            var jsonRpcMessage0 = jsonRpcItem0.Message;
 
-            Assert.Equal(JsonRpcId.None, jsonRpcRequest0.Id);
-            Assert.Equal("notify_sum", jsonRpcRequest0.Method);
-            Assert.True(jsonRpcRequest0.HasParams);
-            Assert.IsType<long[]>(jsonRpcRequest0.Params);
-            Assert.Equal(new[] { 1L, 2L, 4L }, jsonRpcRequest0.Params);
+            Assert.Equal(JsonRpcId.None, jsonRpcMessage0.Id);
+            Assert.Equal("notify_sum", jsonRpcMessage0.Method);
+            Assert.Equal(JsonRpcParamsType.ByPosition, jsonRpcMessage0.ParamsType);
+            Assert.Equal(new object[] { 1L, 2L, 4L }, jsonRpcMessage0.ParamsByPosition);
 
-            var jsonRpcMessageInfo1 = jsonRpcDataInfo.GetBatchItems()[1];
+            var jsonRpcItem1 = jsonRpcData.BatchItems[1];
 
-            Assert.True(jsonRpcMessageInfo1.IsValid);
+            Assert.True(jsonRpcItem1.IsValid);
 
-            var jsonRpcRequest1 = jsonRpcMessageInfo1.GetMessage();
+            var jsonRpcMessage1 = jsonRpcItem1.Message;
 
-            Assert.Equal(JsonRpcId.None, jsonRpcRequest1.Id);
-            Assert.Equal("notify_hello", jsonRpcRequest1.Method);
-            Assert.True(jsonRpcRequest1.HasParams);
-            Assert.IsType<long[]>(jsonRpcRequest1.Params);
-            Assert.Equal(new[] { 7L }, jsonRpcRequest1.Params);
+            Assert.Equal(JsonRpcId.None, jsonRpcMessage1.Id);
+            Assert.Equal("notify_hello", jsonRpcMessage1.Method);
+            Assert.Equal(JsonRpcParamsType.ByPosition, jsonRpcMessage1.ParamsType);
+            Assert.Equal(new object[] { 7L }, jsonRpcMessage1.ParamsByPosition);
         }
 
         [Fact]
         public void SpecExample120RequestSerialize()
         {
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpvRequestArray = new JsonRpcRequest[2];
+            var jsonRpcMessages = new JsonRpcRequest[2];
 
-            jsonRpvRequestArray[0] = new JsonRpcRequest("notify_sum", JsonRpcId.None, new[] { 1L, 2L, 4L });
-            jsonRpvRequestArray[1] = new JsonRpcRequest("notify_hello", JsonRpcId.None, new[] { 7L });
+            jsonRpcMessages[0] = new JsonRpcRequest("notify_sum", JsonRpcId.None, new object[] { 1L, 2L, 4L });
+            jsonRpcMessages[1] = new JsonRpcRequest("notify_hello", JsonRpcId.None, new object[] { 7L });
 
-            var jsonResult = jsonRpcSerializer.SerializeRequests(jsonRpvRequestArray);
+            var jsonResult = jsonRpcSerializer.SerializeRequests(jsonRpcMessages);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_12.0_req.txt");
 
             Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
@@ -1105,33 +1113,19 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void SpecExample120ResponseDeserialize()
         {
-            var jsonRpcSerializerScheme = new JsonRpcSerializerScheme();
+            var jsonRpcScheme = new JsonRpcSerializerScheme();
             var jsonRpcBindings = new Dictionary<JsonRpcId, string>();
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcSerializerScheme);
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_12.0_res.txt");
-            var jsonRpcDataInfo = jsonRpcSerializer.DeserializeResponsesData(jsonSample, jsonRpcBindings);
+            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample, jsonRpcBindings);
 
-            Assert.True(jsonRpcDataInfo.IsEmpty);
+            Assert.True(jsonRpcData.IsEmpty);
         }
 
         [Fact]
         public void SpecExample120ResponseSerialize()
         {
             // N/A
-        }
-
-        #endregion
-
-        #region Test Types
-
-        [JsonObject(MemberSerialization.OptIn)]
-        private sealed class SpecExample020Params
-        {
-            [JsonProperty("minuend")]
-            public long Minuend { get; set; }
-
-            [JsonProperty("subtrahend")]
-            public long Subtrahend { get; set; }
         }
 
         #endregion

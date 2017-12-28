@@ -3,11 +3,14 @@
     /// <summary>Represents RPC exception type.</summary>
     public enum JsonRpcExceptionType
     {
-        /// <summary>An error occurred while parsing the JSON text.</summary>
-        ParseError,
+        /// <summary>Non-specific error.</summary>
+        Undefined,
 
-        /// <summary>Generic error.</summary>
-        GenericError,
+        /// <summary>An error occurred while parsing the JSON text.</summary>
+        Parsing,
+
+        /// <summary>Invalid method parameter(s).</summary>
+        InvalidParams,
 
         /// <summary>The method does not exist / is not available.</summary>
         InvalidMethod,

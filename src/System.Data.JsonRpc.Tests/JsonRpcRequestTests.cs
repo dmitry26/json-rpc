@@ -1,196 +1,90 @@
-﻿using Xunit;
+﻿using System.Collections.Generic;
+using Xunit;
 
 namespace System.Data.JsonRpc.Tests
 {
     public sealed class JsonRpcRequestTests
     {
         [Fact]
-        public void IdTypeIsNone()
+        public void IsNotificationIsTrueWhenIdIsNone()
         {
-            var jsonRpcRequest = new JsonRpcRequest("test_method", JsonRpcId.None);
+            var message = new JsonRpcRequest("m");
 
-            Assert.Equal(JsonRpcId.None, jsonRpcRequest.Id);
-            Assert.True(jsonRpcRequest.IsNotification);
+            Assert.Equal(JsonRpcId.None, message.Id);
+            Assert.True(message.IsNotification);
         }
 
         [Fact]
-        public void IdTypeIsNumber()
+        public void IsNotificationIsFalseWhenIdIsNumber()
         {
-            var jsonRpcRequest = new JsonRpcRequest("test_method", 100L);
+            var message = new JsonRpcRequest("m", 1L);
 
-            Assert.Equal(100L, jsonRpcRequest.Id);
-            Assert.False(jsonRpcRequest.IsNotification);
+            Assert.Equal(1L, message.Id);
+            Assert.False(message.IsNotification);
         }
 
         [Fact]
-        public void IdTypeIsString()
+        public void IsNotificationIsFalseWhenIdIsString()
         {
-            var jsonRpcRequest = new JsonRpcRequest("test_method", "100");
+            var message = new JsonRpcRequest("m", "1");
 
-            Assert.Equal("100", jsonRpcRequest.Id);
-            Assert.False(jsonRpcRequest.IsNotification);
+            Assert.Equal("1", message.Id);
+            Assert.False(message.IsNotification);
         }
 
         [Fact]
-        public void HasParamsIsFalse()
+        public void ParamsTypeIsNoneWhenIdIsNone()
         {
-            var jsonRpcRequest = new JsonRpcRequest("test_method", JsonRpcId.None);
+            var message = new JsonRpcRequest("m");
 
-            Assert.False(jsonRpcRequest.HasParams);
+            Assert.Equal(JsonRpcParamsType.None, message.ParamsType);
         }
 
         [Fact]
-        public void HasParamsIsTrue()
+        public void ParamsTypeIsByPositionWhenIdIsNone()
         {
-            var jsonRpcRequest = new JsonRpcRequest("test_method", JsonRpcId.None, new[] { 100L });
+            var message = new JsonRpcRequest("m", new object[] { 1L });
 
-            Assert.True(jsonRpcRequest.HasParams);
+            Assert.Equal(JsonRpcParamsType.ByPosition, message.ParamsType);
         }
 
         [Fact]
-        public void HasParamsIsFalseWhenIdIsNumber()
+        public void ParamsTypeIsByNameWhenIdIsNone()
         {
-            var jsonRpcRequest = new JsonRpcRequest("test_method", 100L);
+            var message = new JsonRpcRequest("m", new Dictionary<string, object> { ["p"] = 1L });
 
-            Assert.False(jsonRpcRequest.HasParams);
-        }
-
-        [Fact]
-        public void HasParamsIsFalseWhenIdIsString()
-        {
-            var jsonRpcRequest = new JsonRpcRequest("test_method", "100");
-
-            Assert.False(jsonRpcRequest.HasParams);
-        }
-
-        [Fact]
-        public void HasParamsIsTrueWhenIdIsNumber()
-        {
-            var jsonRpcRequest = new JsonRpcRequest("test_method", 100L, new[] { 100L });
-
-            Assert.True(jsonRpcRequest.HasParams);
-        }
-
-        [Fact]
-        public void HasParamsIsTrueWhenIdIsString()
-        {
-            var jsonRpcRequest = new JsonRpcRequest("test_method", "100", new[] { 100L });
-
-            Assert.True(jsonRpcRequest.HasParams);
+            Assert.Equal(JsonRpcParamsType.ByName, message.ParamsType);
         }
 
         [Fact]
         public void IsSystemIsFalse()
         {
-            var jsonRpcRequest = new JsonRpcRequest("test_method", JsonRpcId.None);
+            var message = new JsonRpcRequest("m");
 
-            Assert.False(jsonRpcRequest.IsSystem);
+            Assert.False(message.IsSystem);
         }
 
         [Fact]
         public void IsSystemIsTrue()
         {
-            var jsonRpcRequest = new JsonRpcRequest("rpc.test_method", JsonRpcId.None);
+            var message = new JsonRpcRequest("rpc.m");
 
-            Assert.True(jsonRpcRequest.IsSystem);
+            Assert.True(message.IsSystem);
         }
 
         [Fact]
         public void ConstructorWithMethodWhenMethodIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new JsonRpcRequest(default(string), JsonRpcId.None));
+                new JsonRpcRequest(default(string)));
         }
 
         [Fact]
         public void ConstructorWithMethodWhenMethodIsEmptyString()
         {
-            Assert.Throws<ArgumentException>(() =>
-                new JsonRpcRequest(string.Empty, JsonRpcId.None));
-        }
+            var message = new JsonRpcRequest(string.Empty);
 
-        [Fact]
-        public void ConstructorWithMethodAndParamsWhenMethodIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                new JsonRpcRequest(default(string), JsonRpcId.None, new[] { 100L }));
-        }
-
-        [Fact]
-        public void ConstructorWithMethodAndParamsWhenMethodIsEmptyString()
-        {
-            Assert.Throws<ArgumentException>(() =>
-                new JsonRpcRequest(string.Empty, JsonRpcId.None, new[] { 100L }));
-        }
-
-        [Fact]
-        public void ConstructorWithMethodAndIdWhenMethodIsNullAndIdIsNumber()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                new JsonRpcRequest(default(string), 100L));
-        }
-
-        [Fact]
-        public void ConstructorWithMethodAndIdWhenMethodIsEmptyStringAndIdIsNumber()
-        {
-            Assert.Throws<ArgumentException>(() =>
-                new JsonRpcRequest(string.Empty, 100L));
-        }
-
-        [Fact]
-        public void ConstructorWithMethodAndIdAndParamsWhenMethodIsNullAndIdIsNumber()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                new JsonRpcRequest(default(string), 100L, new[] { 100L }));
-        }
-
-        [Fact]
-        public void ConstructorWithMethodAndIdAndParamsWhenMethodIsEmptyStringAndIdIsNumber()
-        {
-            Assert.Throws<ArgumentException>(() =>
-                new JsonRpcRequest(string.Empty, 100L, new[] { 100L }));
-        }
-
-        [Fact]
-        public void ConstructorWithMethodAndIdWhenMethodIsNullAndIdIsString()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                new JsonRpcRequest(default(string), "100"));
-        }
-
-        [Fact]
-        public void ConstructorWithMethodAndIdWhenMethodIsEmptyStringAndIdIsString()
-        {
-            Assert.Throws<ArgumentException>(() =>
-                new JsonRpcRequest(string.Empty, "100"));
-        }
-
-        [Fact]
-        public void ConstructorWithMethodAndIdWhenIdIsStringAndIdIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                new JsonRpcRequest("test_method", default(string)));
-        }
-
-        [Fact]
-        public void ConstructorWithMethodAndIdAndParamsWhenMethodIsNullAndIdIsString()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                new JsonRpcRequest(default(string), "100", new[] { 100L }));
-        }
-
-        [Fact]
-        public void ConstructorWithMethodAndIdAndParamsWhenMethodIsEmptyStringAndIdIsString()
-        {
-            Assert.Throws<ArgumentException>(() =>
-                new JsonRpcRequest(string.Empty, "100", new[] { 100L }));
-        }
-
-        [Fact]
-        public void ConstructorWithMethodAndIdAndParamsWhenIdIsStringAndIdIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-                new JsonRpcRequest("test_method", default(string), new[] { 100L }));
+            Assert.Equal(string.Empty, message.Method);
         }
     }
 }

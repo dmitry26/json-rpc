@@ -11,9 +11,17 @@ namespace System.Data.JsonRpc
         }
 
         /// <summary>Gets or sets an optional <see cref="JsonSerializer" /> for serializing and deserializing JSON.</summary>
-        public JsonSerializer JsonSerializer { get; set; }
+        public JsonSerializer JsonSerializer
+        {
+            get;
+            set;
+        }
 
         /// <summary>Gets or sets an optional character buffer pool for serializing and deserializing JSON.</summary>
-        public IArrayPool<char> JsonSerializerArrayPool { get; set; }
+        public IArrayPool<char> JsonSerializerBufferPool
+        {
+            get;
+            set;
+        }
     }
 }

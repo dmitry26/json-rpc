@@ -5,65 +5,52 @@ namespace System.Data.JsonRpc
 {
     /// <summary>Represents RPC data.</summary>
     /// <typeparam name="T">Type of the message.</typeparam>
-    [DebuggerDisplay("Is Empty = {" + nameof(IsEmpty) + "}, Is Batch = {" + nameof(IsBatch) + "}")]
+    [DebuggerDisplay("IsEmpty = {IsEmpty}, IsBatch = {IsBatch}")]
     public sealed class JsonRpcData<T>
         where T : JsonRpcMessage
     {
-        private readonly JsonRpcItem<T> _item;
-        private readonly IReadOnlyList<JsonRpcItem<T>> _items;
-
         internal JsonRpcData()
         {
         }
 
-        internal JsonRpcData(JsonRpcItem<T> item)
+        internal JsonRpcData(JsonRpcItem<T> singleItem)
         {
-            _item = item;
+            SingleItem = singleItem;
         }
 
-        internal JsonRpcData(IReadOnlyList<JsonRpcItem<T>> items)
+        internal JsonRpcData(IReadOnlyList<JsonRpcItem<T>> batchItems)
         {
-            _items = items;
-        }
-
-        /// <summary>Gets an item for non-batch data.</summary>
-        /// <returns>An <see cref="JsonRpcItem{T}" /> object.</returns>
-        /// <exception cref="InvalidOperationException">The data is empty or is a batch.</exception>
-        public JsonRpcItem<T> GetSingleItem()
-        {
-            if (IsEmpty)
-            {
-                throw new InvalidOperationException("The data is empty");
-            }
-            if (IsBatch)
-            {
-                throw new InvalidOperationException("The data is a batch");
-            }
-
-            return _item;
-        }
-
-        /// <summary>Gets a collection of items for batch data.</summary>
-        /// <returns>A collection of <see cref="JsonRpcItem{T}" /> objects.</returns>
-        /// <exception cref="InvalidOperationException">The data is empty or is not a batch.</exception>
-        public IReadOnlyList<JsonRpcItem<T>> GetBatchItems()
-        {
-            if (IsEmpty)
-            {
-                throw new InvalidOperationException("The data is empty");
-            }
-            if (!IsBatch)
-            {
-                throw new InvalidOperationException("The data is not a batch");
-            }
-
-            return _items;
+            BatchItems = batchItems;
         }
 
         /// <summary>Gets a value indicating whether the data is a batch.</summary>
-        public bool IsBatch => _items != null;
+        public bool IsBatch
+        {
+            get => BatchItems != null;
+        }
 
         /// <summary>Gets a value indicating whether the data is empty.</summary>
-        public bool IsEmpty => object.Equals(_item, default(JsonRpcItem<T>)) && (_items == null);
+        public bool IsEmpty
+        {
+            get => (SingleItem == null) && (BatchItems == null);
+        }
+
+        /// <summary>Gets a value indicating whether the data is a single item.</summary>
+        public bool IsSingle
+        {
+            get => SingleItem != null;
+        }
+
+        /// <summary>Gets an item for non-batch data.</summary>
+        public JsonRpcItem<T> SingleItem
+        {
+            get;
+        }
+
+        /// <summary>Gets a collection of items for batch data.</summary>
+        public IReadOnlyList<JsonRpcItem<T>> BatchItems
+        {
+            get;
+        }
     }
 }

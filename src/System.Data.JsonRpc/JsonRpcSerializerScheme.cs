@@ -8,14 +8,20 @@ namespace System.Data.JsonRpc
         /// <summary>Initializes a new instance of the <see cref="JsonRpcSerializerScheme" /> class.</summary>
         public JsonRpcSerializerScheme()
         {
+            Methods = new Dictionary<string, JsonRpcMethodScheme>(StringComparer.Ordinal);
         }
 
-        /// <summary>Gets or sets generic error data type binding for deserializing a response.</summary>
-        public Type GenericErrorDataType { get; set; }
+        /// <summary>Gets schemes for deserializing methods.</summary>
+        public IDictionary<string, JsonRpcMethodScheme> Methods
+        {
+            get;
+        }
 
-        /// <summary>
-        /// Gets methods schemes.
-        /// </summary>
-        public IDictionary<string, JsonRpcMethodScheme> Methods { get; } = new Dictionary<string, JsonRpcMethodScheme>(StringComparer.Ordinal);
+        /// <summary>Gets or sets a type of default error data for deserializing a response.</summary>
+        public Type DefaultErrorDataType
+        {
+            get;
+            set;
+        }
     }
 }
