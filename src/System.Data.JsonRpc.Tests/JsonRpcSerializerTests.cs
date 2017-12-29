@@ -1,7 +1,7 @@
 ﻿using System.Buffers;
 using System.Collections.Generic;
 using System.Data.JsonRpc.Tests.Resources;
-using FakeItEasy;
+using Moq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xunit;
@@ -350,10 +350,10 @@ namespace System.Data.JsonRpc.Tests
         {
             var jsonRpcScheme = new JsonRpcSerializerScheme();
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
-            var jsonRpcBindings = A.Fake<IReadOnlyDictionary<JsonRpcId, string>>(x => x.Strict());
+            var jsonRpcBindingsMock = new Mock<IReadOnlyDictionary<JsonRpcId, string>>(MockBehavior.Strict);
 
             Assert.Throws<ArgumentNullException>(() =>
-                jsonRpcSerializer.DeserializeResponseData(null, jsonRpcBindings));
+                jsonRpcSerializer.DeserializeResponseData(null, jsonRpcBindingsMock.Object));
         }
 
         [Fact]
@@ -361,8 +361,8 @@ namespace System.Data.JsonRpc.Tests
         {
             var jsonRpcScheme = new JsonRpcSerializerScheme();
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
-            var jsonRpcBindings = A.Fake<IReadOnlyDictionary<JsonRpcId, string>>(x => x.Strict());
-            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(string.Empty, jsonRpcBindings);
+            var jsonRpcBindingsMock = new Mock<IReadOnlyDictionary<JsonRpcId, string>>(MockBehavior.Strict);
+            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(string.Empty, jsonRpcBindingsMock.Object);
 
             Assert.NotNull(jsonRpcData);
             Assert.True(jsonRpcData.IsEmpty);
@@ -374,10 +374,10 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcScheme = new JsonRpcSerializerScheme();
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.core_json_invalid_res.txt");
-            var jsonRpcBindings = A.Fake<IReadOnlyDictionary<JsonRpcId, string>>(x => x.Strict());
+            var jsonRpcBindingsMock = new Mock<IReadOnlyDictionary<JsonRpcId, string>>(MockBehavior.Strict);
 
             var exception = Assert.Throws<JsonRpcException>(() =>
-                jsonRpcSerializer.DeserializeResponseData(jsonSample, jsonRpcBindings));
+                jsonRpcSerializer.DeserializeResponseData(jsonSample, jsonRpcBindingsMock.Object));
 
             Assert.Equal(JsonRpcExceptionType.Parsing, exception.Type);
         }

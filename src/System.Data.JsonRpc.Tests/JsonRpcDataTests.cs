@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data.JsonRpc.Tests.Resources;
-using FakeItEasy;
+using Moq;
 using Xunit;
 
 namespace System.Data.JsonRpc.Tests
@@ -13,8 +13,8 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcScheme = new JsonRpcSerializerScheme();
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.data_empty.txt");
-            var jsonRpcBindings = A.Fake<IReadOnlyDictionary<JsonRpcId, string>>(x => x.Strict());
-            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample, jsonRpcBindings);
+            var jsonRpcBindingsMock = new Mock<IReadOnlyDictionary<JsonRpcId, string>>(MockBehavior.Strict);
+            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample, jsonRpcBindingsMock.Object);
 
             Assert.True(jsonRpcData.IsEmpty);
             Assert.False(jsonRpcData.IsSingle);
