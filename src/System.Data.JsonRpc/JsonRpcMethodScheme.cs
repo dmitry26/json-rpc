@@ -41,7 +41,7 @@ namespace System.Data.JsonRpc
         /// <summary>Initializes a new instance of the <see cref="JsonRpcMethodScheme" /> class.</summary>
         /// <param name="resultType">The type of method result.</param>
         /// <param name="errorDataType">The type of method error data.</param>
-        public JsonRpcMethodScheme(Type resultType, Type errorDataType)
+        public JsonRpcMethodScheme(Type resultType, Type errorDataType = null)
         {
             ResultType = resultType;
             ErrorDataType = errorDataType;

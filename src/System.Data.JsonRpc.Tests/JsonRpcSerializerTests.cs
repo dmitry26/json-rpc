@@ -16,7 +16,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcSerializer = new JsonRpcSerializer();
 
             Assert.Throws<ArgumentNullException>(() =>
-                jsonRpcSerializer.SerializeRequest(default));
+                jsonRpcSerializer.SerializeRequest(null));
         }
 
         [Fact]
@@ -25,7 +25,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcSerializer = new JsonRpcSerializer();
 
             Assert.Throws<ArgumentNullException>(() =>
-                jsonRpcSerializer.SerializeRequests(default));
+                jsonRpcSerializer.SerializeRequests(null));
         }
 
         [Fact]
@@ -45,7 +45,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcSerializer = new JsonRpcSerializer();
 
             var exception = Assert.Throws<JsonRpcException>(() =>
-                jsonRpcSerializer.SerializeRequests(new[] { default(JsonRpcRequest) }));
+                jsonRpcSerializer.SerializeRequests(new JsonRpcRequest[] { null }));
 
             Assert.Equal(JsonRpcExceptionType.InvalidMessage, exception.Type);
         }
@@ -54,10 +54,12 @@ namespace System.Data.JsonRpc.Tests
         public void SerializeRequestsWhenCollectionContainsDuplicateIdAndIdIsNumber()
         {
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcMessages = new JsonRpcRequest[2];
 
-            jsonRpcMessages[0] = new JsonRpcRequest("m_1", 1L);
-            jsonRpcMessages[1] = new JsonRpcRequest("m_2", 1L);
+            var jsonRpcMessages = new[]
+            {
+                new JsonRpcRequest("m_1", 1L),
+                new JsonRpcRequest("m_2", 1L)
+            };
 
             var exception = Assert.Throws<JsonRpcException>(() =>
                 jsonRpcSerializer.SerializeRequests(jsonRpcMessages));
@@ -69,10 +71,12 @@ namespace System.Data.JsonRpc.Tests
         public void SerializeRequestsWhenCollectionContainsDuplicateIdAndIdIsString()
         {
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcMessages = new JsonRpcRequest[2];
 
-            jsonRpcMessages[0] = new JsonRpcRequest("m_1", "1");
-            jsonRpcMessages[1] = new JsonRpcRequest("m_2", "1");
+            var jsonRpcMessages = new[]
+            {
+                new JsonRpcRequest("m_1", "1"),
+                new JsonRpcRequest("m_2", "1")
+            };
 
             var exception = Assert.Throws<JsonRpcException>(() =>
                 jsonRpcSerializer.SerializeRequests(jsonRpcMessages));
@@ -97,7 +101,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcSerializer = new JsonRpcSerializer();
 
             Assert.Throws<ArgumentNullException>(() =>
-                jsonRpcSerializer.SerializeResponse(default));
+                jsonRpcSerializer.SerializeResponse(null));
         }
 
         [Fact]
@@ -106,7 +110,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcSerializer = new JsonRpcSerializer();
 
             Assert.Throws<ArgumentNullException>(() =>
-                jsonRpcSerializer.SerializeResponses(default));
+                jsonRpcSerializer.SerializeResponses(null));
         }
 
         [Fact]
@@ -124,7 +128,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcSerializer = new JsonRpcSerializer();
 
             var exception = Assert.Throws<JsonRpcException>(() =>
-                jsonRpcSerializer.SerializeResponses(new[] { default(JsonRpcResponse) }));
+                jsonRpcSerializer.SerializeResponses(new JsonRpcResponse[] { null }));
 
             Assert.Equal(JsonRpcExceptionType.InvalidMessage, exception.Type);
         }
@@ -133,10 +137,12 @@ namespace System.Data.JsonRpc.Tests
         public void SerializeResponsesWhenCollectionContainsDuplicateIdAndIdIsNumber()
         {
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcMessages = new JsonRpcResponse[2];
 
-            jsonRpcMessages[0] = new JsonRpcResponse(new[] { 2L }, 1L);
-            jsonRpcMessages[1] = new JsonRpcResponse(new[] { 3L }, 1L);
+            var jsonRpcMessages = new[]
+            {
+                new JsonRpcResponse(new[] { 2L }, 1L),
+                new JsonRpcResponse(new[] { 3L }, 1L)
+            };
 
             var exception = Assert.Throws<JsonRpcException>(() =>
                 jsonRpcSerializer.SerializeResponses(jsonRpcMessages));
@@ -148,10 +154,12 @@ namespace System.Data.JsonRpc.Tests
         public void SerializeResponsesWhenCollectionContainsDuplicateIdAndIdIsString()
         {
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcMessages = new JsonRpcResponse[2];
 
-            jsonRpcMessages[0] = new JsonRpcResponse(new[] { 2L }, "1");
-            jsonRpcMessages[1] = new JsonRpcResponse(new[] { 3L }, "1");
+            var jsonRpcMessages = new[]
+            {
+                new JsonRpcResponse(new[] { 2L }, "1"),
+                new JsonRpcResponse(new[] { 3L }, "1")
+            };
 
             var exception = Assert.Throws<JsonRpcException>(() =>
                 jsonRpcSerializer.SerializeResponses(jsonRpcMessages));
@@ -166,7 +174,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
 
             Assert.Throws<ArgumentNullException>(() =>
-                jsonRpcSerializer.DeserializeRequestData(default));
+                jsonRpcSerializer.DeserializeRequestData(null));
         }
 
         [Fact]
@@ -345,7 +353,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcBindings = A.Fake<IReadOnlyDictionary<JsonRpcId, string>>(x => x.Strict());
 
             Assert.Throws<ArgumentNullException>(() =>
-                jsonRpcSerializer.DeserializeResponseData(default, jsonRpcBindings));
+                jsonRpcSerializer.DeserializeResponseData(null, jsonRpcBindings));
         }
 
         [Fact]
@@ -506,7 +514,7 @@ namespace System.Data.JsonRpc.Tests
 
             public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
             {
-                throw new NotImplementedException();
+                throw new NotSupportedException();
             }
         }
 

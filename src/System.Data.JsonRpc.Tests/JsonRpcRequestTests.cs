@@ -10,7 +10,7 @@ namespace System.Data.JsonRpc.Tests
         {
             var message = new JsonRpcRequest("m");
 
-            Assert.Equal(JsonRpcId.None, message.Id);
+            Assert.Equal(default, message.Id);
             Assert.True(message.IsNotification);
         }
 
@@ -76,7 +76,7 @@ namespace System.Data.JsonRpc.Tests
         public void ConstructorWithMethodWhenMethodIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new JsonRpcRequest(default(string)));
+                new JsonRpcRequest(null));
         }
 
         [Fact]

@@ -33,7 +33,7 @@ var jrParams = new Dictionary<string, object>
 var jrRequest = new JsonRpcRequest("generateUUIDs", 0L, jrParams);
 var jrBindings = new Dictionary<JsonRpcId, JsonRpcMethodScheme>
 {
-    [0L] = new JsonRpcMethodScheme(typeof(UuidsResult), null)
+    [0L] = new JsonRpcMethodScheme(typeof(UuidsResult))
 };
 var jrSerializer = new JsonRpcSerializer();
 var httpRequestString = jrSerializer.SerializeRequest(jrRequest);

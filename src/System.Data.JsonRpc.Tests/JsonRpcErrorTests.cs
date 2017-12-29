@@ -4,6 +4,7 @@ namespace System.Data.JsonRpc.Tests
 {
     public sealed class JsonRpcErrorTests
     {
+        [Theory]
         [InlineData(-32769L, JsonRpcErrorType.Undefined)]
         [InlineData(-32768L, JsonRpcErrorType.System)]
         [InlineData(-32767L, JsonRpcErrorType.System)]
@@ -21,7 +22,6 @@ namespace System.Data.JsonRpc.Tests
         [InlineData(-00001L, JsonRpcErrorType.Undefined)]
         [InlineData(+00000L, JsonRpcErrorType.Undefined)]
         [InlineData(+00001L, JsonRpcErrorType.Undefined)]
-        [Theory]
         public void HasProperType(long code, JsonRpcErrorType type)
         {
             var jsonRpcError = new JsonRpcError(code, "m");
@@ -33,7 +33,7 @@ namespace System.Data.JsonRpc.Tests
         public void ConstructorWhenMessageIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new JsonRpcError(1L, default));
+                new JsonRpcError(1L, null));
         }
 
         [Fact]

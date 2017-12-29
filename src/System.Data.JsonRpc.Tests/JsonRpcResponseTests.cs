@@ -28,14 +28,14 @@ namespace System.Data.JsonRpc.Tests
         public void ConstructorWithResultWhenResultIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new JsonRpcResponse(default(object), JsonRpcId.None));
+                new JsonRpcResponse(default(object), default));
         }
 
         [Fact]
         public void ConstructorWithErrorWhenErrorIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new JsonRpcResponse(default(JsonRpcError), JsonRpcId.None));
+                new JsonRpcResponse(default(JsonRpcError), default));
         }
     }
 }
