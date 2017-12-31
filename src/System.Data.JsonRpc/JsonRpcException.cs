@@ -9,7 +9,7 @@
             Type = type;
         }
 
-        internal JsonRpcException(JsonRpcExceptionType type, string message, JsonRpcId messageId)
+        internal JsonRpcException(JsonRpcExceptionType type, string message, in JsonRpcId messageId)
             : base(message)
         {
             Type = type;
@@ -22,7 +22,7 @@
             Type = type;
         }
 
-        internal JsonRpcException(JsonRpcExceptionType type, string message, JsonRpcId messageId, Exception innerException)
+        internal JsonRpcException(JsonRpcExceptionType type, string message, in JsonRpcId messageId, Exception innerException)
             : base(message, innerException)
         {
             Type = type;
