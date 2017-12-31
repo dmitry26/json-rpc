@@ -1,4 +1,5 @@
 ﻿using System.Data.JsonRpc.Resources;
+using System.Globalization;
 
 namespace System.Data.JsonRpc
 {
@@ -169,16 +170,28 @@ namespace System.Data.JsonRpc
 
         /// <summary>Performs an implicit conversion from <see cref="JsonRpcId" /> to <see cref="long" />.</summary>
         /// <param name="value">The value to create a <see cref="long" />.</param>
+        /// <exception cref="InvalidCastException">The underlying value is not of type <see cref="long" />.</exception>
         public static explicit operator long(JsonRpcId value)
         {
-            return value.Type == JsonRpcIdType.Number ? value._valueNumber : throw new InvalidOperationException(Strings.GetString("id.cast.number.invalid_type"));
+            if (value.Type != JsonRpcIdType.Number)
+            {
+                throw new InvalidCastException(string.Format(CultureInfo.InvariantCulture, Strings.GetString("id.invalid_cast"), typeof(JsonRpcId), typeof(long)));
+            }
+
+            return value._valueNumber;
         }
 
         /// <summary>Performs an implicit conversion from <see cref="JsonRpcId" /> to <see cref="string" />.</summary>
         /// <param name="value">The value to create a <see cref="string" />.</param>
+        /// <exception cref="InvalidCastException">The underlying value is not of type <see cref="string" />.</exception>
         public static explicit operator string(JsonRpcId value)
         {
-            return value.Type == JsonRpcIdType.String ? value._valueString : throw new InvalidOperationException(Strings.GetString("id.cast.string.invalid_type"));
+            if (value.Type != JsonRpcIdType.String)
+            {
+                throw new InvalidCastException(string.Format(CultureInfo.InvariantCulture, Strings.GetString("id.invalid_cast"), typeof(JsonRpcId), typeof(string)));
+            }
+
+            return value._valueString;
         }
     }
 }

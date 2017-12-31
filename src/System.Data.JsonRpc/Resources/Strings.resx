@@ -192,10 +192,7 @@
   <data name="core.serialize.json_issue" xml:space="preserve">
     <value>An error occurred during serialization to JSON</value>
   </data>
-  <data name="id.cast.number.invalid_type" xml:space="preserve">
-    <value>The current value is not a number</value>
-  </data>
-  <data name="id.cast.string.invalid_type" xml:space="preserve">
-    <value>The current value is not a string</value>
+  <data name="id.invalid_cast" xml:space="preserve">
+    <value>Unable to cast object of type {0} to type {1}</value>
   </data>
 </root>

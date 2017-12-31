@@ -10,8 +10,8 @@ namespace System.Data.JsonRpc.Tests
             var result = default(JsonRpcId);
 
             Assert.Equal(JsonRpcIdType.None, result.Type);
-            Assert.Throws<InvalidOperationException>(() => (long)result);
-            Assert.Throws<InvalidOperationException>(() => (string)result);
+            Assert.Throws<InvalidCastException>(() => (long)result);
+            Assert.Throws<InvalidCastException>(() => (string)result);
             Assert.True(result == default);
             Assert.False(result == new JsonRpcId(1L));
             Assert.False(result == new JsonRpcId("1"));
@@ -33,7 +33,7 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.Equal(JsonRpcIdType.Number, result.Type);
             Assert.Equal(1L, (long)result);
-            Assert.Throws<InvalidOperationException>(() => (string)result);
+            Assert.Throws<InvalidCastException>(() => (string)result);
             Assert.False(result == default);
             Assert.True(result == new JsonRpcId(1L));
             Assert.False(result == new JsonRpcId("1"));
@@ -54,7 +54,7 @@ namespace System.Data.JsonRpc.Tests
             var result = new JsonRpcId("1");
 
             Assert.Equal(JsonRpcIdType.String, result.Type);
-            Assert.Throws<InvalidOperationException>(() => (long)result);
+            Assert.Throws<InvalidCastException>(() => (long)result);
             Assert.Equal("1", (string)result);
             Assert.False(result == default);
             Assert.False(result == new JsonRpcId(1L));
