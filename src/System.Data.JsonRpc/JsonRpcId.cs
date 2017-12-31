@@ -47,20 +47,25 @@ namespace System.Data.JsonRpc
         /// <returns>A 32-bit signed integer hash code.</returns>
         public override int GetHashCode()
         {
-            switch (Type)
+            unchecked
             {
-                case JsonRpcIdType.Number:
-                    {
-                        return _valueNumber.GetHashCode();
-                    }
-                case JsonRpcIdType.String:
-                    {
-                        return _valueString.GetHashCode();
-                    }
-                default:
-                    {
-                        return base.GetHashCode();
-                    }
+                var result = (int)2166136261;
+
+                switch (Type)
+                {
+                    case JsonRpcIdType.Number:
+                        {
+                            result = (result * 16777619) ^ _valueNumber.GetHashCode();
+                        }
+                        break;
+                    case JsonRpcIdType.String:
+                        {
+                            result = (result * 16777619) ^ _valueString.GetHashCode();
+                        }
+                        break;
+                }
+
+                return result;
             }
         }
 

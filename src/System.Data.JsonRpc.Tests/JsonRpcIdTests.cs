@@ -22,6 +22,8 @@ namespace System.Data.JsonRpc.Tests
             Assert.False(result == "1");
             Assert.True(result != 1L);
             Assert.True(result != "1");
+            Assert.False(result == 2L);
+            Assert.False(result == "2");
         }
 
         [Fact]
@@ -42,6 +44,8 @@ namespace System.Data.JsonRpc.Tests
             Assert.False(result == "1");
             Assert.False(result != 1L);
             Assert.True(result != "1");
+            Assert.False(result == 2L);
+            Assert.False(result == "2");
         }
 
         [Fact]
@@ -62,6 +66,8 @@ namespace System.Data.JsonRpc.Tests
             Assert.True(result == "1");
             Assert.True(result != 1L);
             Assert.False(result != "1");
+            Assert.False(result == 2L);
+            Assert.False(result == "2");
         }
 
         [Fact]
