@@ -466,7 +466,7 @@ namespace System.Data.JsonRpc.Tests
 
             var bindings = new Dictionary<JsonRpcId, JsonRpcMethodScheme>
             {
-                [1L] = new JsonRpcMethodScheme(typeof(int), typeof(object))
+                [1L] = new JsonRpcMethodScheme(typeof(int))
             };
 
             var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample, bindings);
@@ -483,6 +483,66 @@ namespace System.Data.JsonRpc.Tests
             Assert.Equal(1, jsonRpcMessage.Id);
             Assert.True(jsonRpcMessage.Success);
             Assert.Equal(42, jsonRpcMessage.Result);
+        }
+
+        [Fact]
+        public void DeserializeResponseDataWhenResultIsNull()
+        {
+            var jsonRpcScheme = new JsonRpcSerializerScheme();
+
+            jsonRpcScheme.Methods["m"] = new JsonRpcMethodScheme(typeof(string));
+
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.core_result_null.json");
+
+            var bindings = new Dictionary<JsonRpcId, string>
+            {
+                [1L] = "m"
+            };
+
+            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample, bindings);
+
+            Assert.False(jsonRpcData.IsEmpty);
+            Assert.False(jsonRpcData.IsBatch);
+
+            var jsonRpcItem = jsonRpcData.SingleItem;
+
+            Assert.True(jsonRpcItem.IsValid);
+
+            var jsonRpcMessage = jsonRpcItem.Message;
+
+            Assert.Equal(1, jsonRpcMessage.Id);
+            Assert.True(jsonRpcMessage.Success);
+            Assert.Null(jsonRpcMessage.Result);
+        }
+
+        [Fact]
+        public void DeserializeResponseDataWhenResultWithoutId()
+        {
+            var jsonRpcScheme = new JsonRpcSerializerScheme();
+
+            jsonRpcScheme.Methods["m"] = new JsonRpcMethodScheme(typeof(string));
+
+            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.core_result_wo_id.json");
+
+            var bindings = new Dictionary<JsonRpcId, string>
+            {
+                [1L] = "m"
+            };
+
+            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample, bindings);
+
+            Assert.False(jsonRpcData.IsEmpty);
+            Assert.False(jsonRpcData.IsBatch);
+
+            var jsonRpcItem = jsonRpcData.SingleItem;
+
+            Assert.False(jsonRpcItem.IsValid);
+
+            var jsonRpcException = jsonRpcItem.Exception;
+
+            Assert.Equal(JsonRpcExceptionType.InvalidMessage, jsonRpcException.Type);
         }
 
         #region Test Types

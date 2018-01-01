@@ -81,7 +81,7 @@ namespace System.Data.JsonRpc
                                 }
                             }
 
-                            return JsonRpcErrorType.Undefined;
+                            return default;
                         }
                 }
             }

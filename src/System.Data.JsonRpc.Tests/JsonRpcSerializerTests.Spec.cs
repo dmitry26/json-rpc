@@ -550,7 +550,7 @@ namespace System.Data.JsonRpc.Tests
         public void SpecExample050ResponseSerialize()
         {
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcMessage = new JsonRpcResponse(new JsonRpcError(-32700L, "Parse error"), default);
+            var jsonRpcMessage = new JsonRpcResponse(new JsonRpcError(-32700L, "Parse error"));
             var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcMessage);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_05.0_res.json");
 
@@ -615,7 +615,7 @@ namespace System.Data.JsonRpc.Tests
         public void SpecExample060ResponseSerialize()
         {
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcMessage = new JsonRpcResponse(new JsonRpcError(-32600L, "Invalid Request"), default);
+            var jsonRpcMessage = new JsonRpcResponse(new JsonRpcError(-32600L, "Invalid Request"));
             var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcMessage);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_06.0_res.json");
 
@@ -674,7 +674,7 @@ namespace System.Data.JsonRpc.Tests
         public void SpecExample070ResponseSerialize()
         {
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcMessage = new JsonRpcResponse(new JsonRpcError(-32700L, "Parse error"), default);
+            var jsonRpcMessage = new JsonRpcResponse(new JsonRpcError(-32700L, "Parse error"));
             var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcMessage);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_07.0_res.json");
 
@@ -733,7 +733,7 @@ namespace System.Data.JsonRpc.Tests
         public void SpecExample080ResponseSerialize()
         {
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcMessage = new JsonRpcResponse(new JsonRpcError(-32600L, "Invalid Request"), default);
+            var jsonRpcMessage = new JsonRpcResponse(new JsonRpcError(-32600L, "Invalid Request"));
             var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcMessage);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_08.0_res.json");
 
@@ -797,7 +797,7 @@ namespace System.Data.JsonRpc.Tests
         public void SpecExample090ResponseSerialize()
         {
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcMessage = new JsonRpcResponse(new JsonRpcError(-32600L, "Invalid Request"), default);
+            var jsonRpcMessage = new JsonRpcResponse(new JsonRpcError(-32600L, "Invalid Request"));
             var jsonResult = jsonRpcSerializer.SerializeResponses(new[] { jsonRpcMessage });
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_09.0_res.json");
 
@@ -865,9 +865,9 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcMessages = new[]
             {
-                new JsonRpcResponse(new JsonRpcError(-32600L, "Invalid Request"), default),
-                new JsonRpcResponse(new JsonRpcError(-32600L, "Invalid Request"), default),
-                new JsonRpcResponse(new JsonRpcError(-32600L, "Invalid Request"), default)
+                new JsonRpcResponse(new JsonRpcError(-32600L, "Invalid Request")),
+                new JsonRpcResponse(new JsonRpcError(-32600L, "Invalid Request")),
+                new JsonRpcResponse(new JsonRpcError(-32600L, "Invalid Request"))
             };
 
             var jsonResult = jsonRpcSerializer.SerializeResponses(jsonRpcMessages);
@@ -1046,7 +1046,7 @@ namespace System.Data.JsonRpc.Tests
             {
                 new JsonRpcResponse(7L, "1"),
                 new JsonRpcResponse(19L, "2"),
-                new JsonRpcResponse(new JsonRpcError(-32600L, "Invalid Request"), default),
+                new JsonRpcResponse(new JsonRpcError(-32600L, "Invalid Request")),
                 new JsonRpcResponse(new JsonRpcError(-32601L, "Method not found"), "5"),
                 new JsonRpcResponse(new object[] { "hello", 5L }, "9")
             };

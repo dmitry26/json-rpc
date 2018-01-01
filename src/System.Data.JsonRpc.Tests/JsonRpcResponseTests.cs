@@ -15,27 +15,62 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SuccessIsTrue()
+        public void SuccessIsTrueWhenResultIsNumber()
         {
-            var message = new JsonRpcResponse(2L, 1L);
+            var message = new JsonRpcResponse(0L, 1L);
 
             Assert.True(message.Success);
             Assert.Null(message.Error);
-            Assert.NotNull(message.Result);
         }
 
         [Fact]
-        public void ConstructorWithResultWhenResultIsNull()
+        public void SuccessIsTrueWhenResultIsString()
         {
-            Assert.Throws<ArgumentNullException>(() =>
-                new JsonRpcResponse(default(object), default));
+            var message = new JsonRpcResponse("0", 1L);
+
+            Assert.True(message.Success);
+            Assert.Null(message.Error);
+        }
+
+        [Fact]
+        public void SuccessIsTrueWhenResultIsBoolean()
+        {
+            var message = new JsonRpcResponse(true, 1L);
+
+            Assert.True(message.Success);
+            Assert.Null(message.Error);
+        }
+
+        [Fact]
+        public void SuccessIsTrueWhenResultIsObject()
+        {
+            var message = new JsonRpcResponse(new object(), 1L);
+
+            Assert.True(message.Success);
+            Assert.Null(message.Error);
+        }
+
+        [Fact]
+        public void SuccessIsTrueWhenResultIsNull()
+        {
+            var message = new JsonRpcResponse(default(object), 1L);
+
+            Assert.True(message.Success);
+            Assert.Null(message.Error);
+        }
+
+        [Fact]
+        public void ConstructorWithResultWhenIdIsNone()
+        {
+            Assert.Throws<ArgumentException>(() =>
+                new JsonRpcResponse(1L, JsonRpcId.None));
         }
 
         [Fact]
         public void ConstructorWithErrorWhenErrorIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new JsonRpcResponse(default(JsonRpcError), default));
+                new JsonRpcResponse(default(JsonRpcError)));
         }
     }
 }

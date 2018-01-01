@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Data.JsonRpc.Resources;
+using System.Diagnostics;
 
 namespace System.Data.JsonRpc
 {
@@ -9,16 +10,24 @@ namespace System.Data.JsonRpc
         /// <summary>Initializes a new instance of the <see cref="JsonRpcResponse" /> class.</summary>
         /// <param name="result">The value, which is determined by the method invoked on the server.</param>
         /// <param name="id">The identifier, which must be the same as the value in the request object.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="result" /> is <see langword="null" />.</exception>
+        /// <exception cref="ArgumentException"><paramref name="id" /> is invalid.</exception>
         public JsonRpcResponse(object result, in JsonRpcId id)
             : base(in id)
         {
-            if (result == null)
+            if (id == default)
             {
-                throw new ArgumentNullException(nameof(result));
+                throw new ArgumentException(Strings.GetString("response.invalid_id"), nameof(id));
             }
 
             Result = result;
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="JsonRpcResponse" /> class.</summary>
+        /// <param name="error">The <see cref="JsonRpcError" /> object with information.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="error" /> is <see langword="null" />.</exception>
+        public JsonRpcResponse(JsonRpcError error)
+            : this(error, in JsonRpcId.None)
+        {
         }
 
         /// <summary>Initializes a new instance of the <see cref="JsonRpcResponse" /> class.</summary>
@@ -48,7 +57,7 @@ namespace System.Data.JsonRpc
             get;
         }
 
-        /// <summary>Gets a value indicating whether the response was successful.</summary>
+        /// <summary>Gets a value indicating whether the request was successful.</summary>
         public bool Success
         {
             get => Error == null;

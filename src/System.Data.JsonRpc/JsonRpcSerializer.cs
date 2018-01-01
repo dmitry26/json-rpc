@@ -10,8 +10,6 @@ namespace System.Data.JsonRpc
     /// <summary>Serializes and deserializes JSON-RPC messages into and from the JSON format.</summary>
     public sealed class JsonRpcSerializer
     {
-        private static readonly JValue _jsonTokenProtocol = new JValue("2.0");
-
         private readonly JsonConverter[] _jsonConverters;
         private readonly JsonSerializer _jsonSerializer;
         private readonly IArrayPool<char> _jsonSerializerBufferPool;
@@ -80,7 +78,7 @@ namespace System.Data.JsonRpc
                             item = new JsonRpcItem<JsonRpcRequest>(ConvertTokenToRequest(jsonObject));
                         }
                         catch (JsonRpcException e)
-                            when (e.Type != JsonRpcExceptionType.Undefined)
+                            when (e.Type != default)
                         {
                             item = new JsonRpcItem<JsonRpcRequest>(e);
                         }
@@ -119,14 +117,14 @@ namespace System.Data.JsonRpc
                                 request = ConvertTokenToRequest((JObject)jsonObject);
                             }
                             catch (JsonRpcException e)
-                                when (e.Type != JsonRpcExceptionType.Undefined)
+                                when (e.Type != default)
                             {
                                 items[i] = new JsonRpcItem<JsonRpcRequest>(e);
 
                                 continue;
                             }
 
-                            if (request.Id.Type != JsonRpcIdType.None)
+                            if (request.Id.Type != default)
                             {
                                 if ((jsonArray.Count - i > 1) && (identifiers == null))
                                 {
@@ -226,7 +224,7 @@ namespace System.Data.JsonRpc
                             item = new JsonRpcItem<JsonRpcResponse>(ConvertTokenToResponse(jsonObject, methodNameBindings, methodSchemeBindings));
                         }
                         catch (JsonRpcException e)
-                            when (e.Type != JsonRpcExceptionType.Undefined)
+                            when (e.Type != default)
                         {
                             item = new JsonRpcItem<JsonRpcResponse>(e);
                         }
@@ -265,14 +263,14 @@ namespace System.Data.JsonRpc
                                 response = ConvertTokenToResponse((JObject)jsonObject, methodNameBindings, methodSchemeBindings);
                             }
                             catch (JsonRpcException e)
-                                when (e.Type != JsonRpcExceptionType.Undefined)
+                                when (e.Type != default)
                             {
                                 items[i] = new JsonRpcItem<JsonRpcResponse>(e);
 
                                 continue;
                             }
 
-                            if (response.Id.Type != JsonRpcIdType.None)
+                            if (response.Id.Type != default)
                             {
                                 if ((jsonArray.Count - i > 1) && (identifiers == null))
                                 {
@@ -312,7 +310,7 @@ namespace System.Data.JsonRpc
             }
             catch (JsonException e)
             {
-                throw new JsonRpcException(JsonRpcExceptionType.Undefined, Strings.GetString("core.serialize.json_issue"), request.Id, e);
+                throw new JsonRpcException(Strings.GetString("core.serialize.json_issue"), request.Id, e);
             }
         }
 
@@ -342,7 +340,7 @@ namespace System.Data.JsonRpc
                     throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.serialize.batch.invalid_item"), index));
                 }
 
-                if (request.Id.Type != JsonRpcIdType.None)
+                if (request.Id.Type != default)
                 {
                     if ((requests.Count - index > 1) && (identifiers == null))
                     {
@@ -380,7 +378,7 @@ namespace System.Data.JsonRpc
             }
             catch (JsonException e)
             {
-                throw new JsonRpcException(JsonRpcExceptionType.Undefined, Strings.GetString("core.serialize.json_issue"), e);
+                throw new JsonRpcException(Strings.GetString("core.serialize.json_issue"), e);
             }
         }
 
@@ -402,7 +400,7 @@ namespace System.Data.JsonRpc
             }
             catch (JsonException e)
             {
-                throw new JsonRpcException(JsonRpcExceptionType.Undefined, Strings.GetString("core.serialize.json_issue"), response.Id, e);
+                throw new JsonRpcException(Strings.GetString("core.serialize.json_issue"), response.Id, e);
             }
         }
 
@@ -432,7 +430,7 @@ namespace System.Data.JsonRpc
                     throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.serialize.batch.invalid_item"), index));
                 }
 
-                if (response.Id.Type != JsonRpcIdType.None)
+                if (response.Id.Type != default)
                 {
                     if ((responses.Count - index > 1) && (identifiers == null))
                     {
@@ -470,7 +468,7 @@ namespace System.Data.JsonRpc
             }
             catch (JsonException e)
             {
-                throw new JsonRpcException(JsonRpcExceptionType.Undefined, Strings.GetString("core.serialize.json_issue"), e);
+                throw new JsonRpcException(Strings.GetString("core.serialize.json_issue"), e);
             }
         }
 
@@ -478,9 +476,9 @@ namespace System.Data.JsonRpc
         {
             if (_scheme == null)
             {
-                throw new JsonRpcException(JsonRpcExceptionType.Undefined, Strings.GetString("core.deserialize.scheme.undefined"));
+                throw new JsonRpcException(Strings.GetString("core.deserialize.scheme.undefined"));
             }
-            if (!jsonObject.TryGetValue("jsonrpc", out var jsonTokenProtocol) || (jsonTokenProtocol.Type != JTokenType.String) || !object.Equals(jsonTokenProtocol, _jsonTokenProtocol))
+            if (!jsonObject.TryGetValue("jsonrpc", out var jsonTokenProtocol) || (jsonTokenProtocol.Type != JTokenType.String) || ((string)jsonTokenProtocol != "2.0"))
             {
                 throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, Strings.GetString("core.deserialize.request.protocol.invalid_property"));
             }
@@ -523,7 +521,7 @@ namespace System.Data.JsonRpc
             }
             if (methodScheme == null)
             {
-                throw new JsonRpcException(JsonRpcExceptionType.Undefined, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.deserialize.request.method.scheme.undefined"), requestMethod), requestId);
+                throw new JsonRpcException(string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.deserialize.request.method.scheme.undefined"), requestMethod), requestId);
             }
 
             switch (methodScheme.ParamsType)
@@ -556,7 +554,7 @@ namespace System.Data.JsonRpc
                             }
                             catch (JsonException e)
                             {
-                                throw new JsonRpcException(JsonRpcExceptionType.Undefined, Strings.GetString("core.deserialize.json_issue"), requestId, e);
+                                throw new JsonRpcException(Strings.GetString("core.deserialize.json_issue"), requestId, e);
                             }
                         }
 
@@ -589,7 +587,7 @@ namespace System.Data.JsonRpc
                             }
                             catch (JsonException e)
                             {
-                                throw new JsonRpcException(JsonRpcExceptionType.Undefined, Strings.GetString("core.deserialize.json_issue"), requestId, e);
+                                throw new JsonRpcException(Strings.GetString("core.deserialize.json_issue"), requestId, e);
                             }
                         }
 
@@ -606,7 +604,7 @@ namespace System.Data.JsonRpc
         {
             var jsonObject = new JObject
             {
-                { "jsonrpc", _jsonTokenProtocol },
+                { "jsonrpc", "2.0" },
                 { "method", request.Method }
             };
 
@@ -624,7 +622,7 @@ namespace System.Data.JsonRpc
                             }
                             catch (JsonException e)
                             {
-                                throw new JsonRpcException(JsonRpcExceptionType.Undefined, Strings.GetString("core.serialize.json_issue"), request.Id, e);
+                                throw new JsonRpcException(Strings.GetString("core.serialize.json_issue"), request.Id, e);
                             }
                         }
 
@@ -643,7 +641,7 @@ namespace System.Data.JsonRpc
                             }
                             catch (JsonException e)
                             {
-                                throw new JsonRpcException(JsonRpcExceptionType.Undefined, Strings.GetString("core.serialize.json_issue"), request.Id, e);
+                                throw new JsonRpcException(Strings.GetString("core.serialize.json_issue"), request.Id, e);
                             }
                         }
 
@@ -671,7 +669,7 @@ namespace System.Data.JsonRpc
 
         private JsonRpcResponse ConvertTokenToResponse(JObject jsonObject, IReadOnlyDictionary<JsonRpcId, string> methodNameBindings, IReadOnlyDictionary<JsonRpcId, JsonRpcMethodScheme> methodSchemeBindings)
         {
-            if (!jsonObject.TryGetValue("jsonrpc", out var jsonTokenProtocol) || (jsonTokenProtocol.Type != JTokenType.String) || !object.Equals(jsonTokenProtocol, _jsonTokenProtocol))
+            if (!jsonObject.TryGetValue("jsonrpc", out var jsonTokenProtocol) || (jsonTokenProtocol.Type != JTokenType.String) || ((string)jsonTokenProtocol != "2.0"))
             {
                 throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, Strings.GetString("core.deserialize.response.protocol.invalid_property"));
             }
@@ -711,6 +709,11 @@ namespace System.Data.JsonRpc
 
             if (jsonTokenResult != null)
             {
+                if (responseId == default)
+                {
+                    throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, Strings.GetString("core.deserialize.response.invalid_properties"), responseId);
+                }
+
                 var methodScheme = GetMethodScheme(responseId, methodNameBindings, methodSchemeBindings);
                 var responseResult = default(object);
 
@@ -722,7 +725,7 @@ namespace System.Data.JsonRpc
                     }
                     catch (JsonException e)
                     {
-                        throw new JsonRpcException(JsonRpcExceptionType.Undefined, Strings.GetString("core.deserialize.json_issue"), responseId, e);
+                        throw new JsonRpcException(Strings.GetString("core.deserialize.json_issue"), responseId, e);
                     }
                 }
 
@@ -754,11 +757,11 @@ namespace System.Data.JsonRpc
 
                 if (jsonObjectError.TryGetValue("data", out var jsonTokenErrorData) && (jsonTokenErrorData.Type != JTokenType.Null))
                 {
-                    if (responseId.Type == JsonRpcIdType.None)
+                    if (responseId.Type == default)
                     {
                         if (_scheme == null)
                         {
-                            throw new JsonRpcException(JsonRpcExceptionType.Undefined, Strings.GetString("core.deserialize.scheme.undefined"));
+                            throw new JsonRpcException(Strings.GetString("core.deserialize.scheme.undefined"));
                         }
 
                         if (_scheme.DefaultErrorDataType != null)
@@ -769,7 +772,7 @@ namespace System.Data.JsonRpc
                             }
                             catch (JsonException e)
                             {
-                                throw new JsonRpcException(JsonRpcExceptionType.Undefined, Strings.GetString("core.deserialize.json_issue"), responseId, e);
+                                throw new JsonRpcException(Strings.GetString("core.deserialize.json_issue"), responseId, e);
                             }
                         }
                     }
@@ -785,7 +788,7 @@ namespace System.Data.JsonRpc
                             }
                             catch (JsonException e)
                             {
-                                throw new JsonRpcException(JsonRpcExceptionType.Undefined, Strings.GetString("core.deserialize.json_issue"), responseId, e);
+                                throw new JsonRpcException(Strings.GetString("core.deserialize.json_issue"), responseId, e);
                             }
                         }
                     }
@@ -809,7 +812,7 @@ namespace System.Data.JsonRpc
             {
                 if (_scheme == null)
                 {
-                    throw new JsonRpcException(JsonRpcExceptionType.Undefined, Strings.GetString("core.deserialize.scheme.undefined"));
+                    throw new JsonRpcException(Strings.GetString("core.deserialize.scheme.undefined"));
                 }
                 if (methodNameBindings.TryGetValue(identifier, out var messageMethod) && (messageMethod != null))
                 {
@@ -819,7 +822,7 @@ namespace System.Data.JsonRpc
 
             if (methodScheme == null)
             {
-                throw new JsonRpcException(JsonRpcExceptionType.Undefined, Strings.GetString("core.deserialize.response.method.scheme.undefined"), identifier);
+                throw new JsonRpcException(Strings.GetString("core.deserialize.response.method.scheme.undefined"), identifier);
             }
 
             return methodScheme;
@@ -829,10 +832,10 @@ namespace System.Data.JsonRpc
         {
             var jsonObject = new JObject
             {
-                { "jsonrpc", _jsonTokenProtocol }
+                { "jsonrpc", "2.0" }
             };
 
-            if (response.Result != null)
+            if (response.Success)
             {
                 var resultToken = default(JToken);
 
@@ -842,7 +845,7 @@ namespace System.Data.JsonRpc
                 }
                 catch (JsonException e)
                 {
-                    throw new JsonRpcException(JsonRpcExceptionType.Undefined, Strings.GetString("core.serialize.json_issue"), response.Id, e);
+                    throw new JsonRpcException(Strings.GetString("core.serialize.json_issue"), response.Id, e);
                 }
 
                 jsonObject.Add("result", resultToken);
@@ -865,7 +868,7 @@ namespace System.Data.JsonRpc
                     }
                     catch (JsonException e)
                     {
-                        throw new JsonRpcException(JsonRpcExceptionType.Undefined, Strings.GetString("core.serialize.json_issue"), response.Id, e);
+                        throw new JsonRpcException(Strings.GetString("core.serialize.json_issue"), response.Id, e);
                     }
 
                     errorToken.Add("data", responseErrorDataToken);

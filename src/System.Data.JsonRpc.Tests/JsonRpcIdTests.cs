@@ -7,7 +7,7 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void TypeIsNone()
         {
-            var result = default(JsonRpcId);
+            var result = new JsonRpcId();
 
             Assert.Equal(JsonRpcIdType.None, result.Type);
             Assert.Throws<InvalidCastException>(() => (long)result);

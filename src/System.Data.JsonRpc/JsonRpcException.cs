@@ -3,6 +3,28 @@
     /// <summary>Represents errors that occur during RPC message processing.</summary>
     public sealed class JsonRpcException : Exception
     {
+        internal JsonRpcException(string message)
+            : base(message)
+        {
+        }
+
+        internal JsonRpcException(string message, in JsonRpcId messageId)
+            : base(message)
+        {
+            MessageId = messageId;
+        }
+
+        internal JsonRpcException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
+
+        internal JsonRpcException(string message, in JsonRpcId messageId, Exception innerException)
+            : base(message, innerException)
+        {
+            MessageId = messageId;
+        }
+
         internal JsonRpcException(JsonRpcExceptionType type, string message)
             : base(message)
         {

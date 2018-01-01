@@ -169,7 +169,7 @@
     <value>The response has the invalid identifier property</value>
   </data>
   <data name="core.deserialize.response.invalid_properties" xml:space="preserve">
-    <value>The response has invalid properties set</value>
+    <value>The response has invalid set of properties</value>
   </data>
   <data name="core.deserialize.response.method.scheme.undefined" xml:space="preserve">
     <value>The method type scheme is not defined</value>
@@ -194,5 +194,8 @@
   </data>
   <data name="id.invalid_cast" xml:space="preserve">
     <value>Unable to cast object of type {0} to type {1}</value>
+  </data>
+  <data name="response.invalid_id" xml:space="preserve">
+    <value>The identifier is not valid</value>
   </data>
 </root>
