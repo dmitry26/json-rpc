@@ -88,7 +88,7 @@ namespace System.Data.JsonRpc.Tests
         public void SerializeRequestWithParameterEqualsNull()
         {
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.core_param_null.txt");
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.core_param_null.json");
             var jsonRpcMessage = new JsonRpcRequest("m", 1L, new object[] { null });
             var jsonResult = jsonRpcSerializer.SerializeRequest(jsonRpcMessage);
 
@@ -194,7 +194,7 @@ namespace System.Data.JsonRpc.Tests
         {
             var jsonRpcScheme = new JsonRpcSerializerScheme();
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.core_json_invalid_req.txt");
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.core_json_invalid_req.json");
 
             var exception = Assert.Throws<JsonRpcException>(() =>
                 jsonRpcSerializer.DeserializeRequestData(jsonSample));
@@ -207,7 +207,7 @@ namespace System.Data.JsonRpc.Tests
         {
             var jsonRpcScheme = new JsonRpcSerializerScheme();
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.core_protocol_undefined_req.txt");
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.core_protocol_undefined_req.json");
             var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
 
             Assert.False(jsonRpcData.IsEmpty);
@@ -227,7 +227,7 @@ namespace System.Data.JsonRpc.Tests
         {
             var jsonRpcScheme = new JsonRpcSerializerScheme();
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.core_protocol_undefined_res.txt");
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.core_protocol_undefined_res.json");
             var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample, new Dictionary<JsonRpcId, string>());
 
             Assert.False(jsonRpcData.IsEmpty);
@@ -247,7 +247,7 @@ namespace System.Data.JsonRpc.Tests
         {
             var jsonRpcScheme = new JsonRpcSerializerScheme();
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.core_protocol_invalid_type_req.txt");
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.core_protocol_invalid_type_req.json");
             var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
 
             Assert.False(jsonRpcData.IsEmpty);
@@ -267,7 +267,7 @@ namespace System.Data.JsonRpc.Tests
         {
             var jsonRpcScheme = new JsonRpcSerializerScheme();
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.core_protocol_invalid_type_res.txt");
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.core_protocol_invalid_type_res.json");
             var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample, new Dictionary<JsonRpcId, string>());
 
             Assert.False(jsonRpcData.IsEmpty);
@@ -287,7 +287,7 @@ namespace System.Data.JsonRpc.Tests
         {
             var jsonRpcScheme = new JsonRpcSerializerScheme();
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.core_protocol_invalid_value_req.txt");
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.core_protocol_invalid_value_req.json");
             var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
 
             Assert.False(jsonRpcData.IsEmpty);
@@ -307,7 +307,7 @@ namespace System.Data.JsonRpc.Tests
         {
             var jsonRpcScheme = new JsonRpcSerializerScheme();
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.core_protocol_invalid_value_res.txt");
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.core_protocol_invalid_value_res.json");
             var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample, new Dictionary<JsonRpcId, string>());
 
             Assert.False(jsonRpcData.IsEmpty);
@@ -330,7 +330,7 @@ namespace System.Data.JsonRpc.Tests
             jsonRpcScheme.Methods["m"] = new JsonRpcMethodScheme(new[] { typeof(object) });
 
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.core_params_invalid_type.txt");
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.core_params_invalid_type.json");
             var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
 
             Assert.False(jsonRpcData.IsEmpty);
@@ -373,7 +373,7 @@ namespace System.Data.JsonRpc.Tests
         {
             var jsonRpcScheme = new JsonRpcSerializerScheme();
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.core_json_invalid_res.txt");
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.core_json_invalid_res.json");
             var jsonRpcBindingsMock = new Mock<IReadOnlyDictionary<JsonRpcId, string>>(MockBehavior.Strict);
 
             var exception = Assert.Throws<JsonRpcException>(() =>
@@ -395,7 +395,7 @@ namespace System.Data.JsonRpc.Tests
             };
 
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme, jsonRpcSettings);
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.core_buffer_pool.txt");
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.core_buffer_pool.json");
             var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
 
             Assert.False(jsonRpcData.IsEmpty);
@@ -426,7 +426,7 @@ namespace System.Data.JsonRpc.Tests
             jsonRpcSettings.JsonSerializer.Converters.Add(new TestJsonConverter());
 
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme, jsonRpcSettings);
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.core_json_converter.txt");
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.core_json_converter.json");
             var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
 
             Assert.False(jsonRpcData.IsEmpty);
@@ -450,7 +450,7 @@ namespace System.Data.JsonRpc.Tests
             jsonRpcScheme.Methods["m"] = null;
 
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.core_binding_invalid.txt");
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.core_binding_invalid.json");
 
             var exception = Assert.Throws<JsonRpcException>(() =>
                 jsonRpcSerializer.DeserializeRequestData(jsonSample));
@@ -462,7 +462,7 @@ namespace System.Data.JsonRpc.Tests
         public void DeserializeResponseDataWhenMethodSchemeBindingIsDynamic()
         {
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.core_binding_dynamic.txt");
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.core_binding_dynamic.json");
 
             var bindings = new Dictionary<JsonRpcId, JsonRpcMethodScheme>
             {

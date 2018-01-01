@@ -13,7 +13,7 @@ namespace System.Data.JsonRpc.Tests
             jsonRpcScheme.Methods["m"] = new JsonRpcMethodScheme();
 
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.item_valid_true.txt");
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.item_valid_true.json");
             var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
             var jsonRpcItem = jsonRpcData.SingleItem;
 
@@ -30,7 +30,7 @@ namespace System.Data.JsonRpc.Tests
             jsonRpcScheme.Methods["m"] = new JsonRpcMethodScheme();
 
             var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.item_valid_false.txt");
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.item_valid_false.json");
             var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
             var jsonRpcItem = jsonRpcData.SingleItem;
 
