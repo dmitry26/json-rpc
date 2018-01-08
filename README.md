@@ -4,8 +4,6 @@ Provides support for serialization and deserialization of [JSON-RPC 2.0](http://
 
 [![NuGet package](https://img.shields.io/nuget/v/System.Data.JsonRpc.svg?style=flat-square)](https://www.nuget.org/packages/System.Data.JsonRpc)
 
-### Sample of communication with a JSON-RPC 2.0 server
-
 Generating a random UUID using RANDOM.ORG service.
 
 ```cs
