@@ -1,0 +1,20 @@
+[
+    {
+        "jsonrpc": "2.0",
+        "error": {
+            "code": 32000,
+            "message": "Unknown error",
+            "data": "6c5e6f20-e5f3-4c0e-9af6-7ac69e954459"
+        },
+        "id": "37f67ce5-a2ce-4c9a-aa48-82b898958be8"
+    },
+    {
+        "jsonrpc": "2.0",
+        "error": {
+            "code": 32000,
+            "message": "Unknown error",
+            "data": "6c5e6f20-e5f3-4c0e-9af6-7ac69e954459"
+        },
+        "id": "a846b75a-0c4b-4750-b505-644c94ecc7c0"
+    }
+]

@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <OutputPath>$(RepositoryPath)/bin/bin/$(AssemblyName)/$(Configuration)/</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="BenchmarkDotNet" Version="0.10.11" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="./Assets/**/*" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="./BenchmarkDotNet*/**/*" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../System.Data.JsonRpc/System.Data.JsonRpc.csproj" />
+  </ItemGroup>
+</Project>
