@@ -7,24 +7,19 @@ namespace System.Data.JsonRpc.Benchmarks
 {
     public abstract class JsonRpcSerializerBenchmarks
     {
-        private readonly JsonRpcSerializer _serializer;
+        private readonly JsonRpcSerializer _serializer = new JsonRpcSerializer();
         private readonly Dictionary<string, string> _resources = new Dictionary<string, string>(StringComparer.Ordinal);
         private readonly Dictionary<string, JsonRpcRequest[]> _requests = new Dictionary<string, JsonRpcRequest[]>(StringComparer.Ordinal);
         private readonly Dictionary<string, JsonRpcResponse[]> _responses = new Dictionary<string, JsonRpcResponse[]>(StringComparer.Ordinal);
-        private readonly Dictionary<JsonRpcId, JsonRpcMethodScheme> _bindings = new Dictionary<JsonRpcId, JsonRpcMethodScheme>();
 
         protected JsonRpcSerializerBenchmarks()
         {
-            var scheme = new JsonRpcSerializerScheme();
-
-            scheme.Methods["req_nam"] = new JsonRpcMethodScheme(new Dictionary<string, Type> { ["arg1"] = typeof(string), ["arg2"] = typeof(string) });
-            scheme.Methods["req_pos"] = new JsonRpcMethodScheme(new[] { typeof(string), typeof(string) });
-
-            _serializer = new JsonRpcSerializer(scheme);
+            _serializer.RequestContracts["req_nam"] = new JsonRpcRequestContract(new Dictionary<string, Type> { ["arg1"] = typeof(string), ["arg2"] = typeof(string) });
+            _serializer.RequestContracts["req_pos"] = new JsonRpcRequestContract(new[] { typeof(string), typeof(string) });
 
             foreach (var i in new JsonRpcId[] { 100, 200, "37f67ce5-a2ce-4c9a-aa48-82b898958be8", "a846b75a-0c4b-4750-b505-644c94ecc7c0" })
             {
-                _bindings[i] = new JsonRpcMethodScheme(typeof(string), typeof(string));
+                _serializer.DynamicResponseBindings[i] = new JsonRpcResponseContract(typeof(string), typeof(string));
             }
 
             foreach (var s in new[] { "req_num_nam", "req_num_pos", "req_str_nam", "req_str_pos" })
@@ -36,7 +31,7 @@ namespace System.Data.JsonRpc.Benchmarks
             foreach (var s in new[] { "res_num_err", "res_num_suc", "res_str_err", "res_str_suc" })
             {
                 _resources[s] = EmbeddedResourceManager.GetString($"Assets.{s}.json");
-                _responses[s] = _serializer.DeserializeResponseData(_resources[s], _bindings).BatchItems.Select(i => i.Message).ToArray();
+                _responses[s] = _serializer.DeserializeResponseData(_resources[s]).BatchItems.Select(i => i.Message).ToArray();
             }
         }
 
@@ -67,25 +62,25 @@ namespace System.Data.JsonRpc.Benchmarks
         [Benchmark(Description = "res: json -> .net [num, err]")]
         public void DeserializeResponsesWhenIdIsNumberAndParametersAreByName()
         {
-            _serializer.DeserializeResponseData(_resources["res_num_err"], _bindings);
+            _serializer.DeserializeResponseData(_resources["res_num_err"]);
         }
 
         [Benchmark(Description = "res: json -> .net [num, suc]")]
         public void DeserializeResponsesWhenIdIsNumberAndParametersAreByPosition()
         {
-            _serializer.DeserializeResponseData(_resources["res_num_suc"], _bindings);
+            _serializer.DeserializeResponseData(_resources["res_num_suc"]);
         }
 
         [Benchmark(Description = "res: json -> .net [str, err]")]
         public void DeserializeResponsesWhenIdIsStringAndParametersAreByName()
         {
-            _serializer.DeserializeResponseData(_resources["res_str_err"], _bindings);
+            _serializer.DeserializeResponseData(_resources["res_str_err"]);
         }
 
         [Benchmark(Description = "res: json -> .net [str, suc]")]
         public void DeserializeResponsesWhenIdIsStringAndParametersAreByPosition()
         {
-            _serializer.DeserializeResponseData(_resources["res_str_suc"], _bindings);
+            _serializer.DeserializeResponseData(_resources["res_str_suc"]);
         }
 
         [Benchmark(Description = "req: .net -> json [num, nam]")]

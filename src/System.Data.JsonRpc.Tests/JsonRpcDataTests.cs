@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Data.JsonRpc.Tests.Resources;
-using Moq;
+﻿using System.Data.JsonRpc.Tests.Resources;
 using Xunit;
 
 namespace System.Data.JsonRpc.Tests
@@ -10,11 +8,9 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void GetItemAndItemsWhenIsEmpty()
         {
-            var jsonRpcScheme = new JsonRpcSerializerScheme();
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.data_empty.json");
-            var jsonRpcBindingsMock = new Mock<IReadOnlyDictionary<JsonRpcId, string>>(MockBehavior.Strict);
-            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample, jsonRpcBindingsMock.Object);
+            var jsonRpcSerializer = new JsonRpcSerializer();
+            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample);
 
             Assert.True(jsonRpcData.IsEmpty);
             Assert.False(jsonRpcData.IsSingle);
@@ -26,9 +22,8 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void GetItemAndItemsWhenIsSingle()
         {
-            var jsonRpcScheme = new JsonRpcSerializerScheme();
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.data_single.json");
+            var jsonRpcSerializer = new JsonRpcSerializer();
             var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
 
             Assert.False(jsonRpcData.IsEmpty);
@@ -41,9 +36,8 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void GetItemAndItemsWhenIsBatch()
         {
-            var jsonRpcScheme = new JsonRpcSerializerScheme();
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.data_batch.json");
+            var jsonRpcSerializer = new JsonRpcSerializer();
             var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
 
             Assert.False(jsonRpcData.IsEmpty);

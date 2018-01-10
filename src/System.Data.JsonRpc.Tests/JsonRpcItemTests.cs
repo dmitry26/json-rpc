@@ -8,12 +8,11 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void IsValidIsTrue()
         {
-            var jsonRpcScheme = new JsonRpcSerializerScheme();
-
-            jsonRpcScheme.Methods["m"] = new JsonRpcMethodScheme();
-
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.item_valid_true.json");
+            var jsonRpcSerializer = new JsonRpcSerializer();
+
+            jsonRpcSerializer.RequestContracts["m"] = JsonRpcRequestContract.Default;
+
             var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
             var jsonRpcItem = jsonRpcData.SingleItem;
 
@@ -25,12 +24,11 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void IsValidIsFalse()
         {
-            var jsonRpcScheme = new JsonRpcSerializerScheme();
-
-            jsonRpcScheme.Methods["m"] = new JsonRpcMethodScheme();
-
-            var jsonRpcSerializer = new JsonRpcSerializer(jsonRpcScheme);
             var jsonSample = EmbeddedResourceManager.GetString("Assets.item_valid_false.json");
+            var jsonRpcSerializer = new JsonRpcSerializer();
+
+            jsonRpcSerializer.RequestContracts["m"] = JsonRpcRequestContract.Default;
+
             var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
             var jsonRpcItem = jsonRpcData.SingleItem;
 

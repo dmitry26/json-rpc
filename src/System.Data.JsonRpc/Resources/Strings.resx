@@ -135,10 +135,10 @@
   <data name="core.deserialize.request.id.invalid_property" xml:space="preserve">
     <value>The request has the invalid identifier property</value>
   </data>
-  <data name="core.deserialize.request.method.scheme.undefined" xml:space="preserve">
-    <value>The method type scheme for the name "{0}" is not defined</value>
+    <data name="core.deserialize.request.method.contract.undefined" xml:space="preserve">
+    <value>The method type contract for the name "{0}" is not defined</value>
   </data>
-  <data name="core.deserialize.request.method.unsupported" xml:space="preserve">
+    <data name="core.deserialize.request.method.unsupported" xml:space="preserve">
     <value>The request method "{0}" is not supported</value>
   </data>
   <data name="core.deserialize.request.params.invalid_count" xml:space="preserve">
@@ -171,14 +171,11 @@
   <data name="core.deserialize.response.invalid_properties" xml:space="preserve">
     <value>The response has invalid set of properties</value>
   </data>
-  <data name="core.deserialize.response.method.scheme.undefined" xml:space="preserve">
-    <value>The method type scheme is not defined</value>
+  <data name="core.deserialize.response.method.contract.undefined" xml:space="preserve">
+    <value>The method type contract is not defined</value>
   </data>
   <data name="core.deserialize.response.protocol.invalid_property" xml:space="preserve">
     <value>The response does not have a valid protocol property</value>
-  </data>
-  <data name="core.deserialize.scheme.undefined" xml:space="preserve">
-    <value>The message type scheme is not defined</value>
   </data>
   <data name="core.serialize.batch.duplicate_id" xml:space="preserve">
     <value>The batch contains messages with the same identifier: "{0}"</value>

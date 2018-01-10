@@ -37,20 +37,20 @@ var rpcParameters = new Dictionary<string, object>
     ["n"] = 1
 };
 
-var rpcRequest = new JsonRpcRequest("generateUUIDs", 0, rpcParameters);
+var rpcRequest = new JsonRpcRequest("generateUUIDs", 0L, rpcParameters);
 
-var rpcBindings = new Dictionary<JsonRpcId, JsonRpcMethodScheme>
-{
-    [0] = new JsonRpcMethodScheme(typeof(UuidsResult))
-};
+rpcSerializer.DynamicResponseBindings[0L] = new JsonRpcResponseContract(typeof(UuidsResult))
 
 var jsonRequest = rpcSerializer.SerializeRequest(rpcRequest);
 var httpRequestContent = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
 var httpResponse = await httpClient.PostAsync(rpcUri, httpRequestContent);
 var jsonResponse = await httpResponse.Content.ReadAsStringAsync();
 
-var rpcData = rpcSerializer.DeserializeResponseData(jsonResponse, rpcBindings);
+var rpcData = rpcSerializer.DeserializeResponseData(jsonResponse);
 var rpcResult = (UuidsResult)rpcData.SingleItem.Message.Result;
 
 Console.WriteLine("Random UUID: " + rpcResult.Random.Data[0]);
 ```
+
+- Sample of JSON-RPC client: [Community.RandomOrg](https://github.com/alexanderkozlenko/random-org)
+- Sample of JSON-RPC server: [Community.AspNetCore.JsonRpc](https://github.com/alexanderkozlenko/aspnetcore-json-rpc)
