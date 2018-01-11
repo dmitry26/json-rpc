@@ -79,34 +79,29 @@ namespace System.Data.JsonRpc
             {
                 case JsonRpcId other:
                     {
-                        if (Type != other.Type)
-                        {
-                            return false;
-                        }
-
-                        switch (Type)
+                        switch (other.Type)
                         {
                             case JsonRpcIdType.Number:
                                 {
-                                    return object.Equals(_valueNumber, other._valueNumber);
+                                    return (Type == JsonRpcIdType.Number) && _valueNumber.Equals(other._valueNumber);
                                 }
                             case JsonRpcIdType.String:
                                 {
-                                    return object.Equals(_valueString, other._valueString);
+                                    return (Type == JsonRpcIdType.String) && _valueString.Equals(other._valueString);
                                 }
                             default:
                                 {
-                                    return true;
+                                    return (Type == JsonRpcIdType.None);
                                 }
                         }
                     }
                 case long other:
                     {
-                        return object.Equals(_valueNumber, other);
+                        return (Type == JsonRpcIdType.Number) && _valueNumber.Equals(other);
                     }
                 case string other:
                     {
-                        return object.Equals(_valueString, other);
+                        return (Type == JsonRpcIdType.String) && _valueString.Equals(other);
                     }
                 default:
                     {

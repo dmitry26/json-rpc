@@ -10,7 +10,7 @@ namespace System.Data.JsonRpc.Tests
         #region Example #01: RPC call with positional parameters
 
         [Fact]
-        public void SpecExample010RequestDeserialize()
+        public void Spec010DeserializeRequest()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_01.0_req.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -34,7 +34,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample010RequestSerialize()
+        public void Spec010SerializeRequest()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_01.0_req.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -45,7 +45,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample010ResponseDeserialize()
+        public void Spec010DeserializeResponse()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_01.0_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -69,7 +69,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample010ResponseSerialize()
+        public void Spec010SerializeResponse()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_01.0_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -80,7 +80,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample011RequestDeserialize()
+        public void Spec011DeserializeRequest()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_01.1_req.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -104,7 +104,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample011RequestSerialize()
+        public void Spec011SerializeRequest()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_01.1_req.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -115,7 +115,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample011ResponseDeserialize()
+        public void Spec011DeserializeResponse()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_01.1_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -139,7 +139,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample011ResponseSerialize()
+        public void Spec011SerializeResponse()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_01.1_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -154,7 +154,7 @@ namespace System.Data.JsonRpc.Tests
         #region Example #02: RPC call with named parameters
 
         [Fact]
-        public void SpecExample020RequestDeserialize()
+        public void Spec020DeserializeRequest()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_02.0_req.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -185,7 +185,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample020RequestSerialize()
+        public void Spec020SerializeRequest()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_02.0_req.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -203,7 +203,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample020ResponseDeserialize()
+        public void Spec020DeserializeResponse()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_02.0_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -227,7 +227,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample020ResponseSerialize()
+        public void Spec020SerializeResponse()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_02.0_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -238,7 +238,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample021RequestDeserialize()
+        public void Spec021DeserializeRequest()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_02.1_req.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -269,7 +269,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample021RequestSerialize()
+        public void Spec021SerializeRequest()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_02.1_req.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -287,7 +287,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample021ResponseDeserialize()
+        public void Spec021DeserializeResponse()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_02.1_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -311,7 +311,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample021ResponseSerialize()
+        public void Spec021SerializeResponse()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_02.1_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -326,7 +326,7 @@ namespace System.Data.JsonRpc.Tests
         #region Example #03: a notification
 
         [Fact]
-        public void SpecExample030RequestDeserialize()
+        public void Spec030DeserializeRequest()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_03.0_req.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -351,7 +351,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample030RequestSerialize()
+        public void Spec030SerializeRequest()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_03.0_req.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -362,7 +362,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample031RequestDeserialize()
+        public void Spec031DeserializeRequest()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_03.1_req.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -385,7 +385,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample031RequestSerialize()
+        public void Spec031SerializeRequest()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_03.1_req.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -400,7 +400,7 @@ namespace System.Data.JsonRpc.Tests
         #region Example #04: RPC call of non-existent method
 
         [Fact]
-        public void SpecExample040RequestDeserialize()
+        public void Spec040DeserializeRequest()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_04.0_req.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -423,7 +423,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample040RequestSerialize()
+        public void Spec040SerializeRequest()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_04.0_req.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -434,7 +434,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample040ResponseDeserialize()
+        public void Spec040DeserializeResponse()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_04.0_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -459,7 +459,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample040ResponseSerialize()
+        public void Spec040SerializeResponse()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_04.0_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -474,7 +474,7 @@ namespace System.Data.JsonRpc.Tests
         #region Example #05: RPC call with invalid JSON
 
         [Fact]
-        public void SpecExample050RequestDeserialize()
+        public void Spec050DeserializeRequest()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_05.0_req.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -486,13 +486,13 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample050RequestSerialize()
+        public void Spec050SerializeRequest()
         {
             // N/A
         }
 
         [Fact]
-        public void SpecExample050ResponseDeserialize()
+        public void Spec050DeserializeResponse()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_05.0_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -515,7 +515,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample050ResponseSerialize()
+        public void Spec050SerializeResponse()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_05.0_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -530,7 +530,7 @@ namespace System.Data.JsonRpc.Tests
         #region Example #06: RPC call with invalid request object
 
         [Fact]
-        public void SpecExample060RequestDeserialize()
+        public void Spec060DeserializeRequest()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_06.0_req.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -548,13 +548,13 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample060RequestSerialize()
+        public void Spec060SerializeRequest()
         {
             // N/A
         }
 
         [Fact]
-        public void SpecExample060ResponseDeserialize()
+        public void Spec060DeserializeResponse()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_06.0_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -577,7 +577,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample060ResponseSerialize()
+        public void Spec060SerializeResponse()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_06.0_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -592,7 +592,7 @@ namespace System.Data.JsonRpc.Tests
         #region Example #07: RPC call batch, invalid JSON
 
         [Fact]
-        public void SpecExample070RequestDeserialize()
+        public void Spec070DeserializeRequest()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_07.0_req.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -604,13 +604,13 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample070RequestSerialize()
+        public void Spec070SerializeRequest()
         {
             // N/A
         }
 
         [Fact]
-        public void SpecExample070ResponseDeserialize()
+        public void Spec070DeserializeResponse()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_07.0_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -633,7 +633,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample070ResponseSerialize()
+        public void Spec070SerializeResponse()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_07.0_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -648,7 +648,7 @@ namespace System.Data.JsonRpc.Tests
         #region Example #08: RPC call with an empty array
 
         [Fact]
-        public void SpecExample080RequestDeserialize()
+        public void Spec080DeserializeRequest()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_08.0_req.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -660,13 +660,13 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample080RequestSerialize()
+        public void Spec080SerializeRequest()
         {
             // N/A
         }
 
         [Fact]
-        public void SpecExample080ResponseDeserialize()
+        public void Spec080DeserializeResponse()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_08.0_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -689,7 +689,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample080ResponseSerialize()
+        public void Spec080SerializeResponse()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_08.0_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -704,7 +704,7 @@ namespace System.Data.JsonRpc.Tests
         #region Example #09: RPC call with an invalid batch (but not empty)
 
         [Fact]
-        public void SpecExample090RequestDeserialize()
+        public void Spec090DeserializeRequest()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_09.0_req.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -720,13 +720,13 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample090RequestSerialize()
+        public void Spec090SerializeRequest()
         {
             // N/A
         }
 
         [Fact]
-        public void SpecExample090ResponseDeserialize()
+        public void Spec090DeserializeResponse()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_09.0_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -750,7 +750,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample090ResponseSerialize()
+        public void Spec090SerializeResponse()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_09.0_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -765,7 +765,7 @@ namespace System.Data.JsonRpc.Tests
         #region Example #10: RPC call with invalid batch
 
         [Fact]
-        public void SpecExample100RequestDeserialize()
+        public void Spec100DeserializeRequest()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_10.0_req.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -781,13 +781,13 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample100RequestSerialize()
+        public void Spec100SerializeRequest()
         {
             // N/A
         }
 
         [Fact]
-        public void SpecExample100ResponsDeserialize()
+        public void Spec100ResponsDeserialize()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_10.0_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -812,7 +812,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample100ResponseSerialize()
+        public void Spec100SerializeResponse()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_10.0_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -834,7 +834,7 @@ namespace System.Data.JsonRpc.Tests
         #region Example #11: RPC call batch
 
         [Fact]
-        public void SpecExample110RequestDeserialize()
+        public void Spec110DeserializeRequest()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_11.0_req.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -902,13 +902,13 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample110RequestSerialize()
+        public void Spec110SerializeRequest()
         {
             // N/A
         }
 
         [Fact]
-        public void SpecExample110ResponseDeserialize()
+        public void Spec110DeserializeResponse()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_11.0_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -984,7 +984,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample110ResponseSerialize()
+        public void Spec110SerializeResponse()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_11.0_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -1008,7 +1008,7 @@ namespace System.Data.JsonRpc.Tests
         #region Example #12: RPC call batch (all notifications)
 
         [Fact]
-        public void SpecExample120RequestDeserialize()
+        public void Spec120DeserializeRequest()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_12.0_req.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -1045,7 +1045,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample120RequestSerialize()
+        public void Spec120SerializeRequest()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_12.0_req.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -1062,7 +1062,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample120ResponseDeserialize()
+        public void Spec120DeserializeResponse()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_12.0_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -1072,7 +1072,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SpecExample120ResponseSerialize()
+        public void Spec120SerializeResponse()
         {
             // N/A
         }
