@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Data.JsonRpc.Tests.Resources;
-using Newtonsoft.Json.Linq;
 using Xunit;
 
 namespace System.Data.JsonRpc.Tests
@@ -41,7 +40,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcMessage = new JsonRpcRequest("subtract", 1L, new object[] { 42L, 23L });
             var jsonResult = jsonRpcSerializer.SerializeRequest(jsonRpcMessage);
 
-            Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
+            CompareJsonStrings(jsonSample, jsonResult);
         }
 
         [Fact]
@@ -76,7 +75,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcMessage = new JsonRpcResponse(19L, 1L);
             var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcMessage);
 
-            Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
+            CompareJsonStrings(jsonSample, jsonResult);
         }
 
         [Fact]
@@ -111,7 +110,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcMessage = new JsonRpcRequest("subtract", 2L, new object[] { 23L, 42L });
             var jsonResult = jsonRpcSerializer.SerializeRequest(jsonRpcMessage);
 
-            Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
+            CompareJsonStrings(jsonSample, jsonResult);
         }
 
         [Fact]
@@ -146,7 +145,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcMessage = new JsonRpcResponse(-19L, 2L);
             var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcMessage);
 
-            Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
+            CompareJsonStrings(jsonSample, jsonResult);
         }
 
         #endregion
@@ -199,7 +198,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcMessage = new JsonRpcRequest("subtract", 3L, jsonRpcSubtractParams);
             var jsonResult = jsonRpcSerializer.SerializeRequest(jsonRpcMessage);
 
-            Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
+            CompareJsonStrings(jsonSample, jsonResult);
         }
 
         [Fact]
@@ -234,7 +233,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcMessage = new JsonRpcResponse(19L, 3L);
             var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcMessage);
 
-            Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
+            CompareJsonStrings(jsonSample, jsonResult);
         }
 
         [Fact]
@@ -283,7 +282,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcMessage = new JsonRpcRequest("subtract", 4L, jsonRpcSubtractParams);
             var jsonResult = jsonRpcSerializer.SerializeRequest(jsonRpcMessage);
 
-            Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
+            CompareJsonStrings(jsonSample, jsonResult);
         }
 
         [Fact]
@@ -318,7 +317,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcMessage = new JsonRpcResponse(19L, 4L);
             var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcMessage);
 
-            Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
+            CompareJsonStrings(jsonSample, jsonResult);
         }
 
         #endregion
@@ -358,7 +357,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcMessage = new JsonRpcRequest("update", new object[] { 1L, 2L, 3L, 4L, 5L });
             var jsonResult = jsonRpcSerializer.SerializeRequest(jsonRpcMessage);
 
-            Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
+            CompareJsonStrings(jsonSample, jsonResult);
         }
 
         [Fact]
@@ -392,7 +391,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcMessage = new JsonRpcRequest("foobar");
             var jsonResult = jsonRpcSerializer.SerializeRequest(jsonRpcMessage);
 
-            Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
+            CompareJsonStrings(jsonSample, jsonResult);
         }
 
         #endregion
@@ -430,7 +429,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcMessage = new JsonRpcRequest("foobar", "1");
             var jsonResult = jsonRpcSerializer.SerializeRequest(jsonRpcMessage);
 
-            Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
+            CompareJsonStrings(jsonSample, jsonResult);
         }
 
         [Fact]
@@ -466,7 +465,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcMessage = new JsonRpcResponse(new JsonRpcError(-32601L, "Method not found"), "1");
             var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcMessage);
 
-            Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
+            CompareJsonStrings(jsonSample, jsonResult);
         }
 
         #endregion
@@ -522,7 +521,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcMessage = new JsonRpcResponse(new JsonRpcError(-32700L, "Parse error"));
             var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcMessage);
 
-            Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
+            CompareJsonStrings(jsonSample, jsonResult);
         }
 
         #endregion
@@ -584,7 +583,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcMessage = new JsonRpcResponse(new JsonRpcError(-32600L, "Invalid Request"));
             var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcMessage);
 
-            Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
+            CompareJsonStrings(jsonSample, jsonResult);
         }
 
         #endregion
@@ -640,7 +639,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcMessage = new JsonRpcResponse(new JsonRpcError(-32700L, "Parse error"));
             var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcMessage);
 
-            Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
+            CompareJsonStrings(jsonSample, jsonResult);
         }
 
         #endregion
@@ -696,7 +695,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcMessage = new JsonRpcResponse(new JsonRpcError(-32600L, "Invalid Request"));
             var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcMessage);
 
-            Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
+            CompareJsonStrings(jsonSample, jsonResult);
         }
 
         #endregion
@@ -757,7 +756,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcMessage = new JsonRpcResponse(new JsonRpcError(-32600L, "Invalid Request"));
             var jsonResult = jsonRpcSerializer.SerializeResponses(new[] { jsonRpcMessage });
 
-            Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
+            CompareJsonStrings(jsonSample, jsonResult);
         }
 
         #endregion
@@ -826,7 +825,7 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonResult = jsonRpcSerializer.SerializeResponses(jsonRpcMessages);
 
-            Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
+            CompareJsonStrings(jsonSample, jsonResult);
         }
 
         #endregion
@@ -1000,7 +999,7 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonResult = jsonRpcSerializer.SerializeResponses(jsonRpcMessages);
 
-            Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
+            CompareJsonStrings(jsonSample, jsonResult);
         }
 
         #endregion
@@ -1058,7 +1057,7 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonResult = jsonRpcSerializer.SerializeRequests(jsonRpcMessages);
 
-            Assert.True(JToken.DeepEquals(JToken.Parse(jsonSample), JToken.Parse(jsonResult)));
+            CompareJsonStrings(jsonSample, jsonResult);
         }
 
         [Fact]

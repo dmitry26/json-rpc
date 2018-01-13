@@ -24,19 +24,19 @@ namespace System.Data.JsonRpc.Benchmarks.Resources
                 throw new ArgumentNullException(nameof(name));
             }
 
-            using (var bufferStream = new MemoryStream())
+            using (var resourceStream = _assembly.GetManifestResourceStream(_assemblyName + "." + name))
             {
-                using (var resourceStream = _assembly.GetManifestResourceStream(FormattableString.Invariant($"{_assemblyName}.{name}")))
+                if (resourceStream == null)
                 {
-                    if (resourceStream == null)
-                    {
-                        throw new InvalidOperationException(FormattableString.Invariant($"The specified resource \"{name}\" is not found"));
-                    }
-
-                    resourceStream.CopyTo(bufferStream);
+                    throw new InvalidOperationException(FormattableString.Invariant($"The specified resource \"{name}\" is not found"));
                 }
 
-                return Encoding.UTF8.GetString(bufferStream.ToArray());
+                using (var bufferStream = new MemoryStream((int)resourceStream.Length))
+                {
+                    resourceStream.CopyTo(bufferStream);
+
+                    return Encoding.UTF8.GetString(bufferStream.ToArray());
+                }
             }
         }
     }

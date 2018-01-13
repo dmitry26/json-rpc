@@ -32,7 +32,7 @@ namespace System.Data.JsonRpc
         /// <summary>Gets a value indicating whether the data is empty.</summary>
         public bool IsEmpty
         {
-            get => (SingleItem == null) && (BatchItems == null);
+            get => !IsSingle && !IsBatch;
         }
 
         /// <summary>Gets a value indicating whether the data is a single item.</summary>
