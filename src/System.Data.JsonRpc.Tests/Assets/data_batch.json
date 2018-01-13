@@ -1,3 +1,6 @@
 [
-    {"jsonrpc": "2.0", "method": "m"}
+    {
+        "jsonrpc": "2.0",
+        "method": "m"
+    }
 ]

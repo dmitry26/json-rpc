@@ -778,7 +778,16 @@ namespace System.Data.JsonRpc
                     }
                 }
 
-                var responseError = new JsonRpcError(responseErrorCode, responseErrorMessage, responseErrorData);
+                var responseError = default(JsonRpcError);
+
+                try
+                {
+                    responseError = new JsonRpcError(responseErrorCode, responseErrorMessage, responseErrorData);
+                }
+                catch (ArgumentOutOfRangeException e)
+                {
+                    throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, Strings.GetString("core.deserialize.response.error.code.invalid_range"), responseId, e);
+                }
 
                 return new JsonRpcResponse(responseError, responseId);
             }

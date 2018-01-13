@@ -412,9 +412,32 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void DeserializeResponseDataWhenResultWithoutId()
+        public void DeserializeResponseDataWhenResultHasNoId()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.core_result_wo_id.json");
+            var jsonRpcSerializer = new JsonRpcSerializer();
+
+            jsonRpcSerializer.ResponseContracts["m"] = new JsonRpcResponseContract(typeof(string));
+            jsonRpcSerializer.StaticResponseBindings[1L] = "m";
+
+            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample);
+
+            Assert.False(jsonRpcData.IsEmpty);
+            Assert.False(jsonRpcData.IsBatch);
+
+            var jsonRpcItem = jsonRpcData.SingleItem;
+
+            Assert.False(jsonRpcItem.IsValid);
+
+            var jsonRpcException = jsonRpcItem.Exception;
+
+            Assert.Equal(JsonRpcExceptionType.InvalidMessage, jsonRpcException.Type);
+        }
+
+        [Fact]
+        public void DeserializeResponseDataWhenErrorCodeIsInvalid()
+        {
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.core_error_code_invalid.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
 
             jsonRpcSerializer.ResponseContracts["m"] = new JsonRpcResponseContract(typeof(string));

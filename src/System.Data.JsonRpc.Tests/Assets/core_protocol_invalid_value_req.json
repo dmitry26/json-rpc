@@ -1,1 +1,4 @@
-{"jsonrpc": "3.0", "method": "m"}
+{
+    "jsonrpc": "3.0",
+    "method": "m"
+}
