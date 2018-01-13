@@ -489,6 +489,8 @@ namespace System.Data.JsonRpc
                         }
                         break;
                     case JTokenType.Null:
+                        {
+                        }
                         break;
                     default:
                         {
@@ -533,18 +535,18 @@ namespace System.Data.JsonRpc
                             throw new JsonRpcException(JsonRpcExceptionType.InvalidParams, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.deserialize.request.params.invalid_count"), jsonArrayParams.Count), requestId);
                         }
 
-                        var requestParams = new object[jsonArrayParams.Count];
+                        var requestParams = new object[contract.ParamsByPosition.Count];
 
-                        for (var i = 0; i < jsonArrayParams.Count; i++)
+                        try
                         {
-                            try
+                            for (var i = 0; i < requestParams.Length; i++)
                             {
                                 requestParams[i] = jsonArrayParams[i].ToObject(contract.ParamsByPosition[i], _jsonSerializer);
                             }
-                            catch (JsonException e)
-                            {
-                                throw new JsonRpcException(Strings.GetString("core.deserialize.json_issue"), requestId, e);
-                            }
+                        }
+                        catch (JsonException e)
+                        {
+                            throw new JsonRpcException(Strings.GetString("core.deserialize.json_issue"), requestId, e);
                         }
 
                         return new JsonRpcRequest(requestMethod, requestId, requestParams);
@@ -561,23 +563,23 @@ namespace System.Data.JsonRpc
                         }
 
                         var jsonObjectParams = (JObject)jsonTokenParams;
-                        var requestParams = new Dictionary<string, object>(StringComparer.Ordinal);
+                        var requestParams = new Dictionary<string, object>(contract.ParamsByName.Count, StringComparer.Ordinal);
 
-                        foreach (var kvp in contract.ParamsByName)
+                        try
                         {
-                            if (!jsonObjectParams.TryGetValue(kvp.Key, out var jsonObjectParam))
+                            foreach (var kvp in contract.ParamsByName)
                             {
-                                continue;
-                            }
+                                if (!jsonObjectParams.TryGetValue(kvp.Key, StringComparison.Ordinal, out var jsonObjectParam))
+                                {
+                                    continue;
+                                }
 
-                            try
-                            {
                                 requestParams[kvp.Key] = jsonObjectParam.ToObject(kvp.Value, _jsonSerializer);
                             }
-                            catch (JsonException e)
-                            {
-                                throw new JsonRpcException(Strings.GetString("core.deserialize.json_issue"), requestId, e);
-                            }
+                        }
+                        catch (JsonException e)
+                        {
+                            throw new JsonRpcException(Strings.GetString("core.deserialize.json_issue"), requestId, e);
                         }
 
                         return new JsonRpcRequest(requestMethod, requestId, requestParams);
@@ -603,16 +605,16 @@ namespace System.Data.JsonRpc
                     {
                         var jsonTokenParams = new JArray();
 
-                        for (var i = 0; i < request.ParamsByPosition.Count; i++)
+                        try
                         {
-                            try
+                            for (var i = 0; i < request.ParamsByPosition.Count; i++)
                             {
                                 jsonTokenParams.Add(request.ParamsByPosition[i] != null ? JToken.FromObject(request.ParamsByPosition[i], _jsonSerializer) : JValue.CreateNull());
                             }
-                            catch (JsonException e)
-                            {
-                                throw new JsonRpcException(Strings.GetString("core.serialize.json_issue"), request.Id, e);
-                            }
+                        }
+                        catch (JsonException e)
+                        {
+                            throw new JsonRpcException(Strings.GetString("core.serialize.json_issue"), request.Id, e);
                         }
 
                         jsonObject.Add("params", jsonTokenParams);
@@ -622,16 +624,16 @@ namespace System.Data.JsonRpc
                     {
                         var jsonTokenParams = new JObject();
 
-                        foreach (var kvp in request.ParamsByName)
+                        try
                         {
-                            try
+                            foreach (var kvp in request.ParamsByName)
                             {
                                 jsonTokenParams.Add(kvp.Key, kvp.Value != null ? JToken.FromObject(kvp.Value, _jsonSerializer) : JValue.CreateNull());
                             }
-                            catch (JsonException e)
-                            {
-                                throw new JsonRpcException(Strings.GetString("core.serialize.json_issue"), request.Id, e);
-                            }
+                        }
+                        catch (JsonException e)
+                        {
+                            throw new JsonRpcException(Strings.GetString("core.serialize.json_issue"), request.Id, e);
                         }
 
                         jsonObject.Add("params", jsonTokenParams);
@@ -680,6 +682,8 @@ namespace System.Data.JsonRpc
                         }
                         break;
                     case JTokenType.Null:
+                        {
+                        }
                         break;
                     default:
                         {
