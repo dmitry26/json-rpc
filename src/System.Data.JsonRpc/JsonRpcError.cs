@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Data.JsonRpc.Resources;
+using System.Diagnostics;
 
 namespace System.Data.JsonRpc
 {
@@ -10,8 +11,21 @@ namespace System.Data.JsonRpc
         /// <param name="code">The number that indicates the error type that occurred.</param>
         /// <param name="message">The string providing a short description of the error. The message should be limited to a single concise sentence.</param>
         /// <param name="data">The primitive or structured value that contains additional information about the error.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="message" /> is <see langword="null" />.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="code" /> is is outside the allowable range of the JSON-RPC 2.0 error codes.</exception>
         public JsonRpcError(long code, string message, object data = null)
         {
+            if ((code >= -32768L) && (code <= -32100L))
+            {
+                if ((code != -32700L) &&
+                    (code != -32603L) &&
+                    (code != -32602L) &&
+                    (code != -32601L) &&
+                    (code != -32600L))
+                {
+                    throw new ArgumentOutOfRangeException(nameof(code), code, Strings.GetString("error.code.invalid_range"));
+                }
+            }
             if (message == null)
             {
                 throw new ArgumentNullException(nameof(message));
@@ -69,19 +83,7 @@ namespace System.Data.JsonRpc
                         }
                     default:
                         {
-                            if (Code <= -32000L)
-                            {
-                                if (Code >= -32099L)
-                                {
-                                    return JsonRpcErrorType.Server;
-                                }
-                                if (Code >= -32768L)
-                                {
-                                    return JsonRpcErrorType.System;
-                                }
-                            }
-
-                            return default;
+                            return (Code >= -32099L) && (Code <= -32000L) ? JsonRpcErrorType.Server : JsonRpcErrorType.Undefined;
                         }
                 }
             }

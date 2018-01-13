@@ -135,10 +135,10 @@
   <data name="core.deserialize.request.id.invalid_property" xml:space="preserve">
     <value>The request has the invalid identifier property</value>
   </data>
-    <data name="core.deserialize.request.method.contract.undefined" xml:space="preserve">
+  <data name="core.deserialize.request.method.contract.undefined" xml:space="preserve">
     <value>The method type contract for the name "{0}" is not defined</value>
   </data>
-    <data name="core.deserialize.request.method.unsupported" xml:space="preserve">
+  <data name="core.deserialize.request.method.unsupported" xml:space="preserve">
     <value>The request method "{0}" is not supported</value>
   </data>
   <data name="core.deserialize.request.params.invalid_count" xml:space="preserve">
@@ -188,6 +188,9 @@
   </data>
   <data name="core.serialize.json_issue" xml:space="preserve">
     <value>An error occurred during serialization to JSON</value>
+  </data>
+  <data name="error.code.invalid_range" xml:space="preserve">
+    <value>The specified value is reserved for future use</value>
   </data>
   <data name="id.invalid_cast" xml:space="preserve">
     <value>Unable to cast object of type {0} to type {1}</value>

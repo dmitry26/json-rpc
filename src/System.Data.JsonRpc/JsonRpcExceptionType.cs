@@ -1,21 +1,21 @@
 ﻿namespace System.Data.JsonRpc
 {
     /// <summary>Represents RPC exception type.</summary>
-    public enum JsonRpcExceptionType
+    public enum JsonRpcExceptionType : long
     {
         /// <summary>Non-specific error.</summary>
-        Undefined,
+        Undefined = 0L,
 
         /// <summary>An error occurred while parsing the JSON text.</summary>
-        Parsing,
+        Parsing = -32700L,
 
         /// <summary>Invalid method parameter(s).</summary>
-        InvalidParams,
+        InvalidParams = -32602L,
 
         /// <summary>The method does not exist / is not available.</summary>
-        InvalidMethod,
+        InvalidMethod = -32601L,
 
         /// <summary>The JSON is not a valid message object.</summary>
-        InvalidMessage
+        InvalidMessage = -32600L
     }
 }
