@@ -13,7 +13,7 @@
     <EmbeddedResource Include="./Assets/**/*" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="./BenchmarkDotNet*/**/*" />
+    <None Remove="./*Artifacts*/**/*" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../System.Data.JsonRpc/System.Data.JsonRpc.csproj" />

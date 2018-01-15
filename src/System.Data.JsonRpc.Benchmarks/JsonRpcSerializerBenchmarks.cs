@@ -1,16 +1,18 @@
 ﻿using System.Collections.Generic;
+using System.Data.JsonRpc.Benchmarks.Framework;
 using System.Data.JsonRpc.Benchmarks.Resources;
 using System.Linq;
 using BenchmarkDotNet.Attributes;
 
 namespace System.Data.JsonRpc.Benchmarks
 {
+    [BenchmarkSuite(nameof(JsonRpcSerializer))]
     public abstract class JsonRpcSerializerBenchmarks
     {
         private readonly JsonRpcSerializer _serializer = new JsonRpcSerializer();
-        private readonly Dictionary<string, string> _resources = new Dictionary<string, string>(StringComparer.Ordinal);
-        private readonly Dictionary<string, JsonRpcRequest[]> _requests = new Dictionary<string, JsonRpcRequest[]>(StringComparer.Ordinal);
-        private readonly Dictionary<string, JsonRpcResponse[]> _responses = new Dictionary<string, JsonRpcResponse[]>(StringComparer.Ordinal);
+        private readonly IDictionary<string, string> _resources = new Dictionary<string, string>(StringComparer.Ordinal);
+        private readonly IDictionary<string, JsonRpcRequest[]> _requests = new Dictionary<string, JsonRpcRequest[]>(StringComparer.Ordinal);
+        private readonly IDictionary<string, JsonRpcResponse[]> _responses = new Dictionary<string, JsonRpcResponse[]>(StringComparer.Ordinal);
 
         protected JsonRpcSerializerBenchmarks()
         {
