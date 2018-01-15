@@ -16,7 +16,7 @@ namespace System.Data.JsonRpc.Benchmarks
             var configuration = ManualConfig.CreateEmpty();
 
             configuration.Add(DefaultConfig.Instance.GetColumnProviders().ToArray());
-            configuration.Add(Job.Dry.With(RunStrategy.Throughput).WithTargetCount(05));
+            configuration.Add(Job.Dry.With(RunStrategy.Throughput).WithTargetCount(5));
             configuration.Add(ConsoleLogger.Default);
             configuration.Add(MemoryDiagnoser.Default);
             configuration.Add(JitOptimizationsValidator.DontFailOnError);

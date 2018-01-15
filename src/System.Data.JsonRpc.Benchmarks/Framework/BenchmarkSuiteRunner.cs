@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Loggers;
@@ -24,19 +24,30 @@ namespace System.Data.JsonRpc.Benchmarks.Framework
                 throw new ArgumentNullException(nameof(configuration));
             }
 
-            var suites = typeof(Program).Assembly.GetExportedTypes()
-                .Select(x => (Type: x, x.GetCustomAttribute<BenchmarkSuiteAttribute>()?.Name))
-                .Where(x => x.Name != null)
-                .OrderBy(x => x.Name)
-                .ToArray();
+            var suites = new List<(Type, string)>();
+            var types = assembly.GetExportedTypes();
 
-            WriteLine(configuration, $"Found {suites.Length} benchmark suite(s)");
-
-            foreach (var suite in suites)
+            for (var i = 0; i < types.Length; i++)
             {
-                WriteLine(configuration, $"Running benchmark suite \"{suite.Name}\"...");
+                var attribute = types[i].GetCustomAttribute<BenchmarkSuiteAttribute>();
 
-                BenchmarkRunner.Run(suite.Type, configuration);
+                if (attribute != null)
+                {
+                    suites.Add((types[i], attribute.Name));
+                }
+            }
+
+            suites.Sort();
+
+            WriteLine(configuration, $"Found {suites.Count} benchmark suite(s)");
+
+            for (var i = 0; i < suites.Count; i++)
+            {
+                var (type, name) = suites[i];
+
+                WriteLine(configuration, $"Running benchmark suite \"{name}\"...");
+
+                BenchmarkRunner.Run(type, configuration);
             }
         }
 
