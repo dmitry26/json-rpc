@@ -4,7 +4,7 @@ using System.Data.JsonRpc.Benchmarks.Resources;
 using System.Linq;
 using BenchmarkDotNet.Attributes;
 
-namespace System.Data.JsonRpc.Benchmarks
+namespace System.Data.JsonRpc.Benchmarks.Suites
 {
     [BenchmarkSuite(nameof(JsonRpcSerializer))]
     public abstract class JsonRpcSerializerBenchmarks
