@@ -1,7 +1,8 @@
-﻿using BenchmarkDotNet.Configs;
-using BenchmarkDotNet.Running;
-using System.Linq;
+﻿using System.Linq;
 using System.Reflection;
+using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Loggers;
+using BenchmarkDotNet.Running;
 
 namespace System.Data.JsonRpc.Benchmarks.Framework
 {
@@ -11,12 +12,16 @@ namespace System.Data.JsonRpc.Benchmarks.Framework
         /// <summary>Runs benchmark suites from the specified assembly.</summary>
         /// <param name="assembly">Assembly to search benchmark suites in.</param>
         /// <param name="configuration">Benchmark runninng configuration.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="assembly" /> is <see langword="null" />.</exception>
-        public static void Run(Assembly assembly, IConfig configuration = null)
+        /// <exception cref="ArgumentNullException"><paramref name="assembly" /> or <paramref name="configuration" /> is <see langword="null" />.</exception>
+        public static void Run(Assembly assembly, IConfig configuration)
         {
             if (assembly == null)
             {
                 throw new ArgumentNullException(nameof(assembly));
+            }
+            if (configuration == null)
+            {
+                throw new ArgumentNullException(nameof(configuration));
             }
 
             var suites = typeof(Program).Assembly.GetExportedTypes()
@@ -25,12 +30,21 @@ namespace System.Data.JsonRpc.Benchmarks.Framework
                 .OrderBy(x => x.Name)
                 .ToArray();
 
-            Console.WriteLine($"Found {suites.Length} benchmark suite(s)");
+            WriteLine(configuration, $"Found {suites.Length} benchmark suite(s)");
 
             foreach (var suite in suites)
             {
-                Console.WriteLine($"Running benchmark suite \"{suite.Name}\"...");
+                WriteLine(configuration, $"Running benchmark suite \"{suite.Name}\"...");
+
                 BenchmarkRunner.Run(suite.Type, configuration);
+            }
+        }
+
+        private static void WriteLine(IConfig configuration, string text)
+        {
+            foreach (var logger in configuration.GetLoggers())
+            {
+                logger.WriteLine(LogKind.Default, text);
             }
         }
     }

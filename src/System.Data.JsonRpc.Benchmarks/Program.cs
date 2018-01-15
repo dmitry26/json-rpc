@@ -1,11 +1,11 @@
 ﻿using System.Data.JsonRpc.Benchmarks.Framework;
 using System.Linq;
 using BenchmarkDotNet.Configs;
-using BenchmarkDotNet.Validators;
 using BenchmarkDotNet.Diagnosers;
 using BenchmarkDotNet.Engines;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Loggers;
+using BenchmarkDotNet.Validators;
 
 namespace System.Data.JsonRpc.Benchmarks
 {
