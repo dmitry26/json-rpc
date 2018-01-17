@@ -37,97 +37,97 @@ namespace System.Data.JsonRpc.Benchmarks.Suites
             }
         }
 
-        [Benchmark(Description = "req: json -> .net [num, nam]")]
+        [Benchmark(Description = "REQ STR-OBJ NUM NAM")]
         public void DeserializeRequestsWhenIdIsNumberAndParametersAreByName()
         {
             _serializer.DeserializeRequestData(_resources["req_num_nam"]);
         }
 
-        [Benchmark(Description = "req: json -> .net [num, pos]")]
+        [Benchmark(Description = "REQ STR-OBJ NUM POS")]
         public void DeserializeRequestsWhenIdIsNumberAndParametersAreByPosition()
         {
             _serializer.DeserializeRequestData(_resources["req_num_pos"]);
         }
 
-        [Benchmark(Description = "req: json -> .net [str, nam]")]
+        [Benchmark(Description = "REQ STR-OBJ STR NAM")]
         public void DeserializeRequestsWhenIdIsStringAndParametersAreByName()
         {
             _serializer.DeserializeRequestData(_resources["req_str_nam"]);
         }
 
-        [Benchmark(Description = "req: json -> .net [str, pos]")]
+        [Benchmark(Description = "REQ STR-OBJ STR POS")]
         public void DeserializeRequestsWhenIdIsStringAndParametersAreByPosition()
         {
             _serializer.DeserializeRequestData(_resources["req_str_pos"]);
         }
 
-        [Benchmark(Description = "res: json -> .net [num, err]")]
+        [Benchmark(Description = "RES STR-OBJ NUM ERR")]
         public void DeserializeResponsesWhenIdIsNumberAndParametersAreByName()
         {
             _serializer.DeserializeResponseData(_resources["res_num_err"]);
         }
 
-        [Benchmark(Description = "res: json -> .net [num, suc]")]
+        [Benchmark(Description = "RES STR-OBJ NUM SUC")]
         public void DeserializeResponsesWhenIdIsNumberAndParametersAreByPosition()
         {
             _serializer.DeserializeResponseData(_resources["res_num_suc"]);
         }
 
-        [Benchmark(Description = "res: json -> .net [str, err]")]
+        [Benchmark(Description = "RES STR-OBJ STR ERR")]
         public void DeserializeResponsesWhenIdIsStringAndParametersAreByName()
         {
             _serializer.DeserializeResponseData(_resources["res_str_err"]);
         }
 
-        [Benchmark(Description = "res: json -> .net [str, suc]")]
+        [Benchmark(Description = "RES STR-OBJ STR SUC")]
         public void DeserializeResponsesWhenIdIsStringAndParametersAreByPosition()
         {
             _serializer.DeserializeResponseData(_resources["res_str_suc"]);
         }
 
-        [Benchmark(Description = "req: .net -> json [num, nam]")]
+        [Benchmark(Description = "REQ OBJ-STR NUM NAM")]
         public void SerializeRequestsWhenIdIsNumberAndParametersAreByName()
         {
             _serializer.SerializeRequests(_requests["req_num_nam"]);
         }
 
-        [Benchmark(Description = "req: .net -> json [num, pos]")]
+        [Benchmark(Description = "REQ OBJ-STR NUM POS")]
         public void SerializeRequestsWhenIdIsNumberAndParametersAreByPosition()
         {
             _serializer.SerializeRequests(_requests["req_num_pos"]);
         }
 
-        [Benchmark(Description = "req: .net -> json [str, nam]")]
+        [Benchmark(Description = "REQ OBJ-STR STR NAM")]
         public void SerializeRequestsWhenIdIsStringAndParametersAreByName()
         {
             _serializer.SerializeRequests(_requests["req_str_nam"]);
         }
 
-        [Benchmark(Description = "req: .net -> json [str, pos]")]
+        [Benchmark(Description = "REQ OBJ-STR STR POS")]
         public void SerializeRequestsWhenIdIsStringAndParametersAreByPosition()
         {
             _serializer.SerializeRequests(_requests["req_str_pos"]);
         }
 
-        [Benchmark(Description = "res: .net -> json [num, err]")]
+        [Benchmark(Description = "RES OBJ-STR NUM ERR")]
         public void SerializeResponsesWhenIdIsNumberAndParametersAreByName()
         {
             _serializer.SerializeResponses(_responses["res_num_err"]);
         }
 
-        [Benchmark(Description = "res: .net -> json [num, suc]")]
+        [Benchmark(Description = "RES OBJ-STR NUM SUC")]
         public void SerializeResponsesWhenIdIsNumberAndParametersAreByPosition()
         {
             _serializer.SerializeResponses(_responses["res_num_suc"]);
         }
 
-        [Benchmark(Description = "res: .net -> json [str, err]")]
+        [Benchmark(Description = "RES OBJ-STR STR ERR")]
         public void SerializeResponsesWhenIdIsStringAndParametersAreByName()
         {
             _serializer.SerializeResponses(_responses["res_str_err"]);
         }
 
-        [Benchmark(Description = "res: .net -> json [str, suc]")]
+        [Benchmark(Description = "RES OBJ-STR STR SUC")]
         public void SerializeResponsesWhenIdIsStringAndParametersAreByPosition()
         {
             _serializer.SerializeResponses(_responses["res_str_suc"]);
