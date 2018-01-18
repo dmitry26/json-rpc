@@ -43,10 +43,13 @@ namespace System.Data.JsonRpc
 
             try
             {
-                using (var jsonReader = new JsonTextReader(new StringReader(jsonString)))
+                using (var stringReader = new StringReader(jsonString))
                 {
-                    jsonReader.ArrayPool = _jsonBufferPool;
-                    jsonToken = JToken.ReadFrom(jsonReader);
+                    using (var jsonReader = new JsonTextReader(stringReader))
+                    {
+                        jsonReader.ArrayPool = _jsonBufferPool;
+                        jsonToken = JToken.ReadFrom(jsonReader);
+                    }
                 }
             }
             catch (JsonException e)
@@ -154,10 +157,13 @@ namespace System.Data.JsonRpc
 
             try
             {
-                using (var jsonReader = new JsonTextReader(new StringReader(jsonString)))
+                using (var stringReader = new StringReader(jsonString))
                 {
-                    jsonReader.ArrayPool = _jsonBufferPool;
-                    jsonToken = JToken.ReadFrom(jsonReader);
+                    using (var jsonReader = new JsonTextReader(stringReader))
+                    {
+                        jsonReader.ArrayPool = _jsonBufferPool;
+                        jsonToken = JToken.ReadFrom(jsonReader);
+                    }
                 }
             }
             catch (JsonException e)

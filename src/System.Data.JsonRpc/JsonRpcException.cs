@@ -3,11 +3,6 @@
     /// <summary>Represents errors that occur during RPC message processing.</summary>
     public sealed class JsonRpcException : Exception
     {
-        internal JsonRpcException(string message)
-            : base(message)
-        {
-        }
-
         internal JsonRpcException(string message, in JsonRpcId messageId)
             : base(message)
         {
@@ -51,7 +46,7 @@
             MessageId = messageId;
         }
 
-        /// <summary>Gets an identifier for the related message if any.</summary>
+        /// <summary>Gets an identifier for the related message.</summary>
         public JsonRpcId MessageId
         {
             get;
