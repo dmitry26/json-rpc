@@ -13,7 +13,7 @@ namespace System.Data.JsonRpc
         {
         }
 
-        internal JsonRpcData(JsonRpcItem<T> singleItem)
+        internal JsonRpcData(in JsonRpcItem<T> singleItem)
         {
             SingleItem = singleItem;
         }
@@ -38,7 +38,7 @@ namespace System.Data.JsonRpc
         /// <summary>Gets a value indicating whether the data is a single item.</summary>
         public bool IsSingle
         {
-            get => SingleItem != null;
+            get => (SingleItem.Message != null) || (SingleItem.Exception != null);
         }
 
         /// <summary>Gets an item for non-batch data.</summary>

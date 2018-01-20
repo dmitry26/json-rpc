@@ -86,9 +86,8 @@ namespace System.Data.JsonRpc
                         }
 
                         var items = new JsonRpcItem<JsonRpcRequest>[jsonArray.Count];
-                        var identifiers = default(HashSet<JsonRpcId>);
 
-                        for (var i = 0; i < jsonArray.Count; i++)
+                        for (var i = 0; i < items.Length; i++)
                         {
                             var jsonObject = jsonArray[i];
 
@@ -113,18 +112,6 @@ namespace System.Data.JsonRpc
                                 items[i] = new JsonRpcItem<JsonRpcRequest>(e);
 
                                 continue;
-                            }
-
-                            if (request.Id.Type != default)
-                            {
-                                if ((jsonArray.Count - i > 1) && (identifiers == null))
-                                {
-                                    identifiers = new HashSet<JsonRpcId>();
-                                }
-                                if ((identifiers != null) && !identifiers.Add(request.Id))
-                                {
-                                    throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.deserialize.batch.duplicate_id"), request.Id));
-                                }
                             }
 
                             items[i] = new JsonRpcItem<JsonRpcRequest>(request);
@@ -200,9 +187,8 @@ namespace System.Data.JsonRpc
                         }
 
                         var items = new JsonRpcItem<JsonRpcResponse>[jsonArray.Count];
-                        var identifiers = default(HashSet<JsonRpcId>);
 
-                        for (var i = 0; i < jsonArray.Count; i++)
+                        for (var i = 0; i < items.Length; i++)
                         {
                             var jsonObject = jsonArray[i];
 
@@ -227,18 +213,6 @@ namespace System.Data.JsonRpc
                                 items[i] = new JsonRpcItem<JsonRpcResponse>(e);
 
                                 continue;
-                            }
-
-                            if (response.Id.Type != default)
-                            {
-                                if ((jsonArray.Count - i > 1) && (identifiers == null))
-                                {
-                                    identifiers = new HashSet<JsonRpcId>();
-                                }
-                                if ((identifiers != null) && !identifiers.Add(response.Id))
-                                {
-                                    throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.deserialize.batch.duplicate_id"), response.Id));
-                                }
                             }
 
                             items[i] = new JsonRpcItem<JsonRpcResponse>(response);
@@ -301,35 +275,17 @@ namespace System.Data.JsonRpc
             }
 
             var jsonArray = new JArray();
-            var identifiers = default(HashSet<JsonRpcId>);
 
-            void ProcessMessage(JsonRpcRequest request, int index)
+            if (requests is IReadOnlyList<JsonRpcRequest> requestsList)
             {
-                if (request == null)
+                for (var i = 0; i < requestsList.Count; i++)
                 {
-                    throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.serialize.batch.invalid_item"), index));
-                }
-
-                if (request.Id.Type != default)
-                {
-                    if ((requests.Count - index > 1) && (identifiers == null))
+                    if (requestsList[i] == null)
                     {
-                        identifiers = new HashSet<JsonRpcId>();
+                        throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.serialize.batch.invalid_item"), i));
                     }
-                    if ((identifiers != null) && !identifiers.Add(request.Id))
-                    {
-                        throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.serialize.batch.duplicate_id"), request.Id));
-                    }
-                }
 
-                jsonArray.Add(ConvertRequestToToken(request));
-            }
-
-            if (requests is IReadOnlyList<JsonRpcRequest> messagesList)
-            {
-                for (var i = 0; i < messagesList.Count; i++)
-                {
-                    ProcessMessage(messagesList[i], i);
+                    jsonArray.Add(ConvertRequestToToken(requestsList[i]));
                 }
             }
             else
@@ -338,7 +294,12 @@ namespace System.Data.JsonRpc
 
                 foreach (var request in requests)
                 {
-                    ProcessMessage(request, i++);
+                    if (request == null)
+                    {
+                        throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.serialize.batch.invalid_item"), i++));
+                    }
+
+                    jsonArray.Add(ConvertRequestToToken(request));
                 }
             }
 
@@ -411,35 +372,17 @@ namespace System.Data.JsonRpc
             }
 
             var jsonArray = new JArray();
-            var identifiers = default(HashSet<JsonRpcId>);
 
-            void ProcessMessage(JsonRpcResponse response, int index)
+            if (responses is IReadOnlyList<JsonRpcResponse> responsesList)
             {
-                if (response == null)
+                for (var i = 0; i < responsesList.Count; i++)
                 {
-                    throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.serialize.batch.invalid_item"), index));
-                }
-
-                if (response.Id.Type != default)
-                {
-                    if ((responses.Count - index > 1) && (identifiers == null))
+                    if (responsesList[i] == null)
                     {
-                        identifiers = new HashSet<JsonRpcId>();
+                        throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.serialize.batch.invalid_item"), i));
                     }
-                    if ((identifiers != null) && !identifiers.Add(response.Id))
-                    {
-                        throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.serialize.batch.duplicate_id"), response.Id));
-                    }
-                }
 
-                jsonArray.Add(ConvertResponseToToken(response));
-            }
-
-            if (responses is IReadOnlyList<JsonRpcResponse> messagesList)
-            {
-                for (var i = 0; i < messagesList.Count; i++)
-                {
-                    ProcessMessage(messagesList[i], i);
+                    jsonArray.Add(ConvertResponseToToken(responsesList[i]));
                 }
             }
             else
@@ -448,7 +391,12 @@ namespace System.Data.JsonRpc
 
                 foreach (var response in responses)
                 {
-                    ProcessMessage(response, i++);
+                    if (response == null)
+                    {
+                        throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.serialize.batch.invalid_item"), i++));
+                    }
+
+                    jsonArray.Add(ConvertResponseToToken(response));
                 }
             }
 

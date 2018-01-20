@@ -5,16 +5,18 @@ namespace System.Data.JsonRpc
     /// <summary>Represents information about an RPC message.</summary>
     /// <typeparam name="T">Type of the message.</typeparam>
     [DebuggerDisplay("IsValid = {IsValid}")]
-    public sealed class JsonRpcItem<T>
+    public readonly struct JsonRpcItem<T>
         where T : JsonRpcMessage
     {
         internal JsonRpcItem(T message)
         {
             Message = message;
+            Exception = null;
         }
 
         internal JsonRpcItem(JsonRpcException exception)
         {
+            Message = null;
             Exception = exception;
         }
 

@@ -180,9 +180,6 @@
   <data name="core.deserialize.response.protocol.invalid_property" xml:space="preserve">
     <value>The response does not have a valid protocol property</value>
   </data>
-  <data name="core.serialize.batch.duplicate_id" xml:space="preserve">
-    <value>The batch contains messages with the same identifier: "{0}"</value>
-  </data>
   <data name="core.serialize.batch.empty" xml:space="preserve">
     <value>The batch is empty</value>
   </data>

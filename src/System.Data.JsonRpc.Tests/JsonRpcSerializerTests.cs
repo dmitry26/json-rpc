@@ -66,40 +66,6 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SerializeRequestsWhenCollectionContainsDuplicateIdAndIdIsNumber()
-        {
-            var jsonRpcSerializer = new JsonRpcSerializer();
-
-            var jsonRpcMessages = new[]
-            {
-                new JsonRpcRequest("m_1", 1L),
-                new JsonRpcRequest("m_2", 1L)
-            };
-
-            var exception = Assert.Throws<JsonRpcException>(() =>
-                jsonRpcSerializer.SerializeRequests(jsonRpcMessages));
-
-            Assert.Equal(JsonRpcExceptionType.InvalidMessage, exception.Type);
-        }
-
-        [Fact]
-        public void SerializeRequestsWhenCollectionContainsDuplicateIdAndIdIsString()
-        {
-            var jsonRpcSerializer = new JsonRpcSerializer();
-
-            var jsonRpcMessages = new[]
-            {
-                new JsonRpcRequest("m_1", "1"),
-                new JsonRpcRequest("m_2", "1")
-            };
-
-            var exception = Assert.Throws<JsonRpcException>(() =>
-                jsonRpcSerializer.SerializeRequests(jsonRpcMessages));
-
-            Assert.Equal(JsonRpcExceptionType.InvalidMessage, exception.Type);
-        }
-
-        [Fact]
         public void SerializeRequestWithParameterEqualsNull()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.core_param_null.json");
@@ -144,40 +110,6 @@ namespace System.Data.JsonRpc.Tests
 
             var exception = Assert.Throws<JsonRpcException>(() =>
                 jsonRpcSerializer.SerializeResponses(new JsonRpcResponse[] { null }));
-
-            Assert.Equal(JsonRpcExceptionType.InvalidMessage, exception.Type);
-        }
-
-        [Fact]
-        public void SerializeResponsesWhenCollectionContainsDuplicateIdAndIdIsNumber()
-        {
-            var jsonRpcSerializer = new JsonRpcSerializer();
-
-            var jsonRpcMessages = new[]
-            {
-                new JsonRpcResponse(new[] { 2L }, 1L),
-                new JsonRpcResponse(new[] { 3L }, 1L)
-            };
-
-            var exception = Assert.Throws<JsonRpcException>(() =>
-                jsonRpcSerializer.SerializeResponses(jsonRpcMessages));
-
-            Assert.Equal(JsonRpcExceptionType.InvalidMessage, exception.Type);
-        }
-
-        [Fact]
-        public void SerializeResponsesWhenCollectionContainsDuplicateIdAndIdIsString()
-        {
-            var jsonRpcSerializer = new JsonRpcSerializer();
-
-            var jsonRpcMessages = new[]
-            {
-                new JsonRpcResponse(new[] { 2L }, "1"),
-                new JsonRpcResponse(new[] { 3L }, "1")
-            };
-
-            var exception = Assert.Throws<JsonRpcException>(() =>
-                jsonRpcSerializer.SerializeResponses(jsonRpcMessages));
 
             Assert.Equal(JsonRpcExceptionType.InvalidMessage, exception.Type);
         }

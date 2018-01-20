@@ -15,7 +15,6 @@ namespace System.Data.JsonRpc.Tests
             Assert.True(jsonRpcData.IsEmpty);
             Assert.False(jsonRpcData.IsSingle);
             Assert.False(jsonRpcData.IsBatch);
-            Assert.Null(jsonRpcData.SingleItem);
             Assert.Null(jsonRpcData.BatchItems);
         }
 
@@ -29,7 +28,6 @@ namespace System.Data.JsonRpc.Tests
             Assert.False(jsonRpcData.IsEmpty);
             Assert.True(jsonRpcData.IsSingle);
             Assert.False(jsonRpcData.IsBatch);
-            Assert.NotNull(jsonRpcData.SingleItem);
             Assert.Null(jsonRpcData.BatchItems);
         }
 
@@ -43,7 +41,6 @@ namespace System.Data.JsonRpc.Tests
             Assert.False(jsonRpcData.IsEmpty);
             Assert.False(jsonRpcData.IsSingle);
             Assert.True(jsonRpcData.IsBatch);
-            Assert.Null(jsonRpcData.SingleItem);
             Assert.NotNull(jsonRpcData.BatchItems);
         }
     }
