@@ -11,7 +11,6 @@ namespace System.Data.JsonRpc
     /// <summary>Serializes and deserializes JSON-RPC messages into and from the JSON format.</summary>
     public sealed class JsonRpcSerializer : IDisposable
     {
-        private readonly JsonSerializer _jsonSerializer = JsonSerializer.CreateDefault();
         private readonly IArrayPool<char> _jsonBufferPool = new JsonBufferPool();
         private readonly IDictionary<string, JsonRpcRequestContract> _requestContracts = new Dictionary<string, JsonRpcRequestContract>(StringComparer.Ordinal);
         private readonly IDictionary<string, JsonRpcResponseContract> _responseContracts = new Dictionary<string, JsonRpcResponseContract>(StringComparer.Ordinal);
@@ -495,7 +494,7 @@ namespace System.Data.JsonRpc
                         {
                             for (var i = 0; i < requestParams.Length; i++)
                             {
-                                requestParams[i] = jsonArrayParams[i].ToObject(contract.ParamsByPosition[i], _jsonSerializer);
+                                requestParams[i] = jsonArrayParams[i].ToObject(contract.ParamsByPosition[i]);
                             }
                         }
                         catch (JsonException e)
@@ -528,7 +527,7 @@ namespace System.Data.JsonRpc
                                     continue;
                                 }
 
-                                requestParams[kvp.Key] = jsonObjectParam.ToObject(kvp.Value, _jsonSerializer);
+                                requestParams[kvp.Key] = jsonObjectParam.ToObject(kvp.Value);
                             }
                         }
                         catch (JsonException e)
@@ -563,7 +562,7 @@ namespace System.Data.JsonRpc
                         {
                             for (var i = 0; i < request.ParamsByPosition.Count; i++)
                             {
-                                jsonTokenParams.Add(request.ParamsByPosition[i] != null ? JToken.FromObject(request.ParamsByPosition[i], _jsonSerializer) : JValue.CreateNull());
+                                jsonTokenParams.Add(request.ParamsByPosition[i] != null ? JToken.FromObject(request.ParamsByPosition[i]) : JValue.CreateNull());
                             }
                         }
                         catch (JsonException e)
@@ -582,7 +581,7 @@ namespace System.Data.JsonRpc
                         {
                             foreach (var kvp in request.ParamsByName)
                             {
-                                jsonTokenParams.Add(kvp.Key, kvp.Value != null ? JToken.FromObject(kvp.Value, _jsonSerializer) : JValue.CreateNull());
+                                jsonTokenParams.Add(kvp.Key, kvp.Value != null ? JToken.FromObject(kvp.Value) : JValue.CreateNull());
                             }
                         }
                         catch (JsonException e)
@@ -668,7 +667,7 @@ namespace System.Data.JsonRpc
                 {
                     try
                     {
-                        responseResult = jsonTokenResult.ToObject(contract.ResultType, _jsonSerializer);
+                        responseResult = jsonTokenResult.ToObject(contract.ResultType);
                     }
                     catch (JsonException e)
                     {
@@ -710,7 +709,7 @@ namespace System.Data.JsonRpc
                         {
                             try
                             {
-                                responseErrorData = jsonTokenErrorData.ToObject(DefaultErrorDataType, _jsonSerializer);
+                                responseErrorData = jsonTokenErrorData.ToObject(DefaultErrorDataType);
                             }
                             catch (JsonException e)
                             {
@@ -726,7 +725,7 @@ namespace System.Data.JsonRpc
                         {
                             try
                             {
-                                responseErrorData = jsonTokenErrorData.ToObject(contract.ErrorDataType, _jsonSerializer);
+                                responseErrorData = jsonTokenErrorData.ToObject(contract.ErrorDataType);
                             }
                             catch (JsonException e)
                             {
@@ -782,7 +781,7 @@ namespace System.Data.JsonRpc
 
                 try
                 {
-                    resultToken = JToken.FromObject(response.Result, _jsonSerializer);
+                    resultToken = JToken.FromObject(response.Result);
                 }
                 catch (JsonException e)
                 {
@@ -805,7 +804,7 @@ namespace System.Data.JsonRpc
 
                     try
                     {
-                        responseErrorDataToken = JToken.FromObject(response.Error.Data, _jsonSerializer);
+                        responseErrorDataToken = JToken.FromObject(response.Error.Data);
                     }
                     catch (JsonException e)
                     {
@@ -871,7 +870,7 @@ namespace System.Data.JsonRpc
             get => _staticResponseBindings;
         }
 
-        /// <summary>Gets or sets a type of default error data for deserializing a response.</summary>
+        /// <summary>Gets or sets a type of error data for deserializing a response without an identifier.</summary>
         public Type DefaultErrorDataType
         {
             get;
