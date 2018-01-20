@@ -262,7 +262,7 @@ namespace System.Data.JsonRpc
         /// <returns>A JSON string representation of the specified collection of requests.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="requests" /> is <see langword="null" />.</exception>
         /// <exception cref="JsonRpcException">An error occurred during message processing.</exception>
-        public string SerializeRequests(IReadOnlyCollection<JsonRpcRequest> requests)
+        public string SerializeRequests(IReadOnlyList<JsonRpcRequest> requests)
         {
             if (requests == null)
             {
@@ -275,31 +275,14 @@ namespace System.Data.JsonRpc
 
             var jsonArray = new JArray();
 
-            if (requests is IReadOnlyList<JsonRpcRequest> requestsList)
+            for (var i = 0; i < requests.Count; i++)
             {
-                for (var i = 0; i < requestsList.Count; i++)
+                if (requests[i] == null)
                 {
-                    if (requestsList[i] == null)
-                    {
-                        throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.serialize.batch.invalid_item"), i));
-                    }
-
-                    jsonArray.Add(ConvertRequestToToken(requestsList[i]));
+                    throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.serialize.batch.invalid_item"), i));
                 }
-            }
-            else
-            {
-                var i = 0;
 
-                foreach (var request in requests)
-                {
-                    if (request == null)
-                    {
-                        throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.serialize.batch.invalid_item"), i++));
-                    }
-
-                    jsonArray.Add(ConvertRequestToToken(request));
-                }
+                jsonArray.Add(ConvertRequestToToken(requests[i]));
             }
 
             try
@@ -359,7 +342,7 @@ namespace System.Data.JsonRpc
         /// <returns>A JSON string representation of the specified collection of responses.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="responses" /> is <see langword="null" />.</exception>
         /// <exception cref="JsonRpcException">An error occurred during message processing.</exception>
-        public string SerializeResponses(IReadOnlyCollection<JsonRpcResponse> responses)
+        public string SerializeResponses(IReadOnlyList<JsonRpcResponse> responses)
         {
             if (responses == null)
             {
@@ -372,31 +355,14 @@ namespace System.Data.JsonRpc
 
             var jsonArray = new JArray();
 
-            if (responses is IReadOnlyList<JsonRpcResponse> responsesList)
+            for (var i = 0; i < responses.Count; i++)
             {
-                for (var i = 0; i < responsesList.Count; i++)
+                if (responses[i] == null)
                 {
-                    if (responsesList[i] == null)
-                    {
-                        throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.serialize.batch.invalid_item"), i));
-                    }
-
-                    jsonArray.Add(ConvertResponseToToken(responsesList[i]));
+                    throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.serialize.batch.invalid_item"), i));
                 }
-            }
-            else
-            {
-                var i = 0;
 
-                foreach (var response in responses)
-                {
-                    if (response == null)
-                    {
-                        throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.serialize.batch.invalid_item"), i++));
-                    }
-
-                    jsonArray.Add(ConvertResponseToToken(response));
-                }
+                jsonArray.Add(ConvertResponseToToken(responses[i]));
             }
 
             try
