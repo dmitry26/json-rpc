@@ -3,6 +3,7 @@ using System.Data.JsonRpc.Internal;
 using System.Data.JsonRpc.Resources;
 using System.Globalization;
 using System.IO;
+using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -244,7 +245,7 @@ namespace System.Data.JsonRpc
             {
                 var jsonToken = ConvertRequestToToken(request);
 
-                using (var stringWriter = new StringWriter())
+                using (var stringWriter = new StringWriter(new StringBuilder(32), CultureInfo.InvariantCulture))
                 {
                     using (var jsonWriter = new JsonTextWriter(stringWriter))
                     {
@@ -291,7 +292,7 @@ namespace System.Data.JsonRpc
 
             try
             {
-                using (var stringWriter = new StringWriter())
+                using (var stringWriter = new StringWriter(new StringBuilder(32 * requests.Count), CultureInfo.InvariantCulture))
                 {
                     using (var jsonWriter = new JsonTextWriter(stringWriter))
                     {
@@ -324,7 +325,7 @@ namespace System.Data.JsonRpc
             {
                 var jsonToken = ConvertResponseToToken(response);
 
-                using (var stringWriter = new StringWriter())
+                using (var stringWriter = new StringWriter(new StringBuilder(32), CultureInfo.InvariantCulture))
                 {
                     using (var jsonWriter = new JsonTextWriter(stringWriter))
                     {
@@ -371,7 +372,7 @@ namespace System.Data.JsonRpc
 
             try
             {
-                using (var stringWriter = new StringWriter())
+                using (var stringWriter = new StringWriter(new StringBuilder(32 * responses.Count), CultureInfo.InvariantCulture))
                 {
                     using (var jsonWriter = new JsonTextWriter(stringWriter))
                     {
