@@ -119,7 +119,9 @@ namespace System.Data.JsonRpc
                         return new JsonRpcData<JsonRpcRequest>(items);
                     }
                 default:
-                    throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, Strings.GetString("core.deserialize.input.invalid_structure"));
+                    {
+                        throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, Strings.GetString("core.deserialize.input.invalid_structure"));
+                    }
             }
         }
 
@@ -220,7 +222,9 @@ namespace System.Data.JsonRpc
                         return new JsonRpcData<JsonRpcResponse>(items);
                     }
                 default:
-                    throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, Strings.GetString("core.deserialize.input.invalid_structure"));
+                    {
+                        throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, Strings.GetString("core.deserialize.input.invalid_structure"));
+                    }
             }
         }
 
