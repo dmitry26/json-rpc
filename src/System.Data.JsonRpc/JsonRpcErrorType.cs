@@ -3,25 +3,25 @@
     /// <summary>Represents RPC error type.</summary>
     public enum JsonRpcErrorType : long
     {
-        /// <summary>Non-specific error.</summary>
+        /// <summary>A non-specific error.</summary>
         Undefined = 0L,
 
-        /// <summary>An error occurred on the server while parsing the JSON text.</summary>
+        /// <summary>The provided JSON is invalid.</summary>
         Parsing = -32700L,
 
-        /// <summary>Internal JSON-RPC error.</summary>
+        /// <summary>An error occurred during processing the request.</summary>
         Internal = -32603L,
 
-        /// <summary>Invalid method parameter(s).</summary>
+        /// <summary>The specified method parameters are invalid.</summary>
         InvalidParams = -32602L,
 
-        /// <summary>The method does not exist / is not available.</summary>
+        /// <summary>The specified method does not exist or is not available.</summary>
         InvalidMethod = -32601L,
 
-        /// <summary>The JSON sent is not a valid request object.</summary>
+        /// <summary>The provided message is not a valid request.</summary>
         InvalidRequest = -32600L,
 
-        /// <summary>Implementation-defined server error.</summary>
+        /// <summary>An implementation-defined server error.</summary>
         Server = -32000L
     }
 }
