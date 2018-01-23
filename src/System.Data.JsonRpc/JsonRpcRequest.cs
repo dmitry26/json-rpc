@@ -11,7 +11,7 @@ namespace System.Data.JsonRpc
         /// <param name="method">The string containing the name of the method to be invoked.</param>
         /// <param name="id">The identifier established by the client.</param>
         /// <exception cref="ArgumentNullException"><paramref name="method" /> is <see langword="null" />.</exception>
-        public JsonRpcRequest(string method, in JsonRpcId id)
+        public JsonRpcRequest(string method, in JsonRpcId id = default)
             : base(in id)
         {
             if (method == null)
@@ -20,14 +20,6 @@ namespace System.Data.JsonRpc
             }
 
             Method = method;
-        }
-
-        /// <summary>Initializes a new instance of the <see cref="JsonRpcRequest" /> class.</summary>
-        /// <param name="method">The string containing the name of the method to be invoked.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="method" /> is <see langword="null" />.</exception>
-        public JsonRpcRequest(string method)
-            : this(method, in JsonRpcId.None)
-        {
         }
 
         /// <summary>Initializes a new instance of the <see cref="JsonRpcRequest" /> class.</summary>
