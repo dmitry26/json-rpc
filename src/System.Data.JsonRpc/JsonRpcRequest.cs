@@ -98,13 +98,13 @@ namespace System.Data.JsonRpc
             get;
         }
 
-        /// <summary>Gets a value indicating whether the message is a notification message.</summary>
+        /// <summary>Gets a value indicating whether the message is a notification.</summary>
         public bool IsNotification
         {
             get => Id.Type == JsonRpcIdType.None;
         }
 
-        /// <summary>Gets a value indicating whether the message is a system message.</summary>
+        /// <summary>Gets a value indicating whether the message is a system extension.</summary>
         public bool IsSystem
         {
             get => Method.StartsWith("rpc.", StringComparison.Ordinal);

@@ -817,31 +817,31 @@ namespace System.Data.JsonRpc
             _staticResponseBindings.Clear();
         }
 
-        /// <summary>Gets the container instance for request contracts.</summary>
+        /// <summary>Gets the request contracts scheme.</summary>
         public IDictionary<string, JsonRpcRequestContract> RequestContracts
         {
             get => _requestContracts;
         }
 
-        /// <summary>Gets the container instance for response contracts.</summary>
+        /// <summary>Gets the response contracts scheme.</summary>
         public IDictionary<string, JsonRpcResponseContract> ResponseContracts
         {
             get => _responseContracts;
         }
 
-        /// <summary>Gets the container instance for dynamic response bindings.</summary>
+        /// <summary>Gets the dynamic response bindings.</summary>
         public IDictionary<JsonRpcId, JsonRpcResponseContract> DynamicResponseBindings
         {
             get => _dynamicResponseBindings;
         }
 
-        /// <summary>Gets the container instance for static response bindings.</summary>
+        /// <summary>Gets the static response bindings.</summary>
         public IDictionary<JsonRpcId, string> StaticResponseBindings
         {
             get => _staticResponseBindings;
         }
 
-        /// <summary>Gets or sets a type of error data for deserializing a response without an identifier.</summary>
+        /// <summary>Gets or sets a type of error data for deserializing an unsuccessful response with empty identifier.</summary>
         public Type DefaultErrorDataType
         {
             get;

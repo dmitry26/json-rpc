@@ -3,10 +3,10 @@ using System.Globalization;
 
 namespace System.Data.JsonRpc
 {
-    /// <summary>Represents RPC identifier.</summary>
+    /// <summary>Represents RPC message identifier.</summary>
     public readonly struct JsonRpcId
     {
-        /// <summary>Represents not specified identifier.</summary>
+        /// <summary>Represents empty identifier.</summary>
         public static readonly JsonRpcId None = default;
 
         private readonly long _valueNumber;

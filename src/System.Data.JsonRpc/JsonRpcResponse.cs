@@ -37,13 +37,13 @@ namespace System.Data.JsonRpc
             Error = error;
         }
 
-        /// <summary>Gets a value, which is determined by the method invoked on the server. This member is required on success.</summary>
+        /// <summary>Gets a value, which is determined by the method invoked.</summary>
         public object Result
         {
             get;
         }
 
-        /// <summary>Gets an object, which represents error information. This member is required on error.</summary>
+        /// <summary>Gets an object, which represents error information.</summary>
         public JsonRpcError Error
         {
             get;

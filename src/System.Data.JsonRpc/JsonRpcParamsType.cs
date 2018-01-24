@@ -3,7 +3,7 @@
     /// <summary>Represents RPC method parameters type.</summary>
     public enum JsonRpcParamsType
     {
-        /// <summary>No parameters.</summary>
+        /// <summary>No parameters provided.</summary>
         None,
 
         /// <summary>Parameters are provided by position.</summary>

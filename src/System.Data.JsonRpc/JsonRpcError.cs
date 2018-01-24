@@ -12,7 +12,7 @@ namespace System.Data.JsonRpc
         /// <param name="message">The string providing a short description of the error. The message should be limited to a single concise sentence.</param>
         /// <param name="data">The primitive or structured value that contains additional information about the error.</param>
         /// <exception cref="ArgumentNullException"><paramref name="message" /> is <see langword="null" />.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="code" /> is outside the allowable range of the JSON-RPC 2.0 error codes.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="code" /> is outside the allowable range of the protocol error codes.</exception>
         public JsonRpcError(long code, string message, object data = null)
         {
             if ((code >= -32768L) && (code <= -32100L))
@@ -54,7 +54,7 @@ namespace System.Data.JsonRpc
             get;
         }
 
-        /// <summary>Gets an error type.</summary>
+        /// <summary>Gets RPC error type.</summary>
         public JsonRpcErrorType Type
         {
             get

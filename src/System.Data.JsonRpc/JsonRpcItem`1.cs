@@ -32,7 +32,7 @@ namespace System.Data.JsonRpc
             get;
         }
 
-        /// <summary>Gets a value indicating whether the item represents valid.</summary>
+        /// <summary>Gets a value indicating whether the item represents a valid message.</summary>
         public bool IsValid
         {
             get => Message != null;
