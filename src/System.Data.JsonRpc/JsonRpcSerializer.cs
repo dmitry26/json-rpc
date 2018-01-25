@@ -13,16 +13,24 @@ namespace System.Data.JsonRpc
     public sealed class JsonRpcSerializer : IDisposable
     {
         private readonly IArrayPool<char> _jsonBufferPool = new JsonBufferPool();
-        private readonly IDictionary<string, JsonRpcRequestContract> _requestContracts = new Dictionary<string, JsonRpcRequestContract>(StringComparer.Ordinal);
-        private readonly IDictionary<string, JsonRpcResponseContract> _responseContracts = new Dictionary<string, JsonRpcResponseContract>(StringComparer.Ordinal);
+        private readonly IDictionary<string, JsonRpcRequestContract> _requestContracts;
+        private readonly IDictionary<string, JsonRpcResponseContract> _responseContracts;
         private readonly IDictionary<JsonRpcId, string> _staticResponseBindings;
         private readonly IDictionary<JsonRpcId, JsonRpcResponseContract> _dynamicResponseBindings;
 
         /// <summary>Initializes a new instance of the <see cref="JsonRpcSerializer" /> class.</summary>
-        /// <param name="staticResponseBindings">Container instance for static response bindings.</param>
-        /// <param name="dynamicResponseBindings">Container instance for dynamic response bindings.</param>
-        public JsonRpcSerializer(IDictionary<JsonRpcId, string> staticResponseBindings = null, IDictionary<JsonRpcId, JsonRpcResponseContract> dynamicResponseBindings = null)
+        /// <param name="requestContracts">The request contracts scheme dictionary.</param>
+        /// <param name="responseContracts">The response contracts scheme dictionary.</param>
+        /// <param name="staticResponseBindings">The static response bindings dictionary.</param>
+        /// <param name="dynamicResponseBindings">The dynamic response bindings dictionary.</param>
+        public JsonRpcSerializer(
+            IDictionary<string, JsonRpcRequestContract> requestContracts = null,
+            IDictionary<string, JsonRpcResponseContract> responseContracts = null,
+            IDictionary<JsonRpcId, string> staticResponseBindings = null,
+            IDictionary<JsonRpcId, JsonRpcResponseContract> dynamicResponseBindings = null)
         {
+            _requestContracts = requestContracts ?? new Dictionary<string, JsonRpcRequestContract>(StringComparer.Ordinal);
+            _responseContracts = responseContracts ?? new Dictionary<string, JsonRpcResponseContract>(StringComparer.Ordinal);
             _staticResponseBindings = staticResponseBindings ?? new Dictionary<JsonRpcId, string>();
             _dynamicResponseBindings = dynamicResponseBindings ?? new Dictionary<JsonRpcId, JsonRpcResponseContract>();
         }
