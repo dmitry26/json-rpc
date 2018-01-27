@@ -74,6 +74,20 @@ namespace System.Data.JsonRpc
         {
         }
 
+        /// <summary>Checks whether the method is a system extension method.</summary>
+        /// <param name="method">The method name.</param>
+        /// <returns><see langword="true" /> if the specified method is a system extension method; otherwise, <see langword="false" />.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="method" /> is <see langword="null" />.</exception>
+        public static bool IsSystemMethod(string method)
+        {
+            if (method == null)
+            {
+                throw new ArgumentNullException(nameof(method));
+            }
+
+            return method.StartsWith("rpc.", StringComparison.Ordinal);
+        }
+
         /// <summary>Gets a string containing the name of the method to be invoked.</summary>
         public string Method
         {
@@ -107,7 +121,7 @@ namespace System.Data.JsonRpc
         /// <summary>Gets a value indicating whether the message is a system extension.</summary>
         public bool IsSystem
         {
-            get => Method.StartsWith("rpc.", StringComparison.Ordinal);
+            get => IsSystemMethod(Method);
         }
     }
 }

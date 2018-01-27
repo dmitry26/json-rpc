@@ -86,5 +86,28 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.Equal(string.Empty, message.Method);
         }
+
+        [Fact]
+        public void IsSystemMethodWhenMethodIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                JsonRpcRequest.IsSystemMethod(null));
+        }
+
+        [Fact]
+        public void IsSystemMethodIsFalse()
+        {
+            var result = JsonRpcRequest.IsSystemMethod("m");
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void IsSystemMethodIsTrue()
+        {
+            var result = JsonRpcRequest.IsSystemMethod("rpc.m");
+
+            Assert.True(result);
+        }
     }
 }
