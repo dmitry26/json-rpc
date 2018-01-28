@@ -1,6 +1,6 @@
 ﻿namespace System.Data.JsonRpc
 {
-    /// <summary>Specifies type contract for response deserialization.</summary>
+    /// <summary>Specifies a type contract for response deserialization.</summary>
     public sealed class JsonRpcResponseContract
     {
         private static readonly JsonRpcResponseContract _empty = new JsonRpcResponseContract();

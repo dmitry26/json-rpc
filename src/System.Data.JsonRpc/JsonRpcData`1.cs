@@ -3,8 +3,8 @@ using System.Diagnostics;
 
 namespace System.Data.JsonRpc
 {
-    /// <summary>Represents RPC data.</summary>
-    /// <typeparam name="T">Type of the message.</typeparam>
+    /// <summary>Represents deserialized RPC data.</summary>
+    /// <typeparam name="T">The type of the message.</typeparam>
     [DebuggerDisplay("IsEmpty = {IsEmpty}, IsBatch = {IsBatch}")]
     public sealed class JsonRpcData<T>
         where T : JsonRpcMessage

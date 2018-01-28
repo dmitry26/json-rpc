@@ -150,21 +150,21 @@ namespace System.Data.JsonRpc
         }
 
         /// <summary>Performs an implicit conversion from <see cref="ulong" /> to <see cref="JsonRpcId" />.</summary>
-        /// <param name="value">The value to create a <see cref="JsonRpcId" />.</param>
+        /// <param name="value">The value to create a <see cref="JsonRpcId" /> from.</param>
         public static implicit operator JsonRpcId(long value)
         {
             return new JsonRpcId(value);
         }
 
         /// <summary>Performs an implicit conversion from <see cref="string" /> to <see cref="JsonRpcId" />.</summary>
-        /// <param name="value">The value to create a <see cref="JsonRpcId" />.</param>
+        /// <param name="value">The value to create a <see cref="JsonRpcId" /> from.</param>
         public static implicit operator JsonRpcId(string value)
         {
             return new JsonRpcId(value);
         }
 
         /// <summary>Performs an implicit conversion from <see cref="JsonRpcId" /> to <see cref="long" />.</summary>
-        /// <param name="value">The value to create a <see cref="long" />.</param>
+        /// <param name="value">The identifier to get a <see cref="long" /> value from.</param>
         /// <exception cref="InvalidCastException">The underlying value is not of type <see cref="long" />.</exception>
         public static explicit operator long(JsonRpcId value)
         {
@@ -177,7 +177,7 @@ namespace System.Data.JsonRpc
         }
 
         /// <summary>Performs an implicit conversion from <see cref="JsonRpcId" /> to <see cref="string" />.</summary>
-        /// <param name="value">The value to create a <see cref="string" />.</param>
+        /// <param name="value">The identifier to get a <see cref="string" /> value from.</param>
         /// <exception cref="InvalidCastException">The underlying value is not of type <see cref="string" />.</exception>
         public static explicit operator string(JsonRpcId value)
         {

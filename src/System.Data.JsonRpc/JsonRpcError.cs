@@ -48,7 +48,7 @@ namespace System.Data.JsonRpc
             get;
         }
 
-        /// <summary>Gets an optional primitive or structured value that contains additional information about the error.</summary>
+        /// <summary>Gets an optional value that contains additional information about the error.</summary>
         public object Data
         {
             get;

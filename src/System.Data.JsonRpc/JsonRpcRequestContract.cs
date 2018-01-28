@@ -2,7 +2,7 @@
 
 namespace System.Data.JsonRpc
 {
-    /// <summary>Specifies type contract for request deserialization.</summary>
+    /// <summary>Specifies a type contract for request deserialization.</summary>
     public sealed class JsonRpcRequestContract
     {
         private static readonly JsonRpcRequestContract _empty = new JsonRpcRequestContract();

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>1.7.0</Version>
+    <Version>1.8.0</Version>
     <Description><![CDATA[Provides support for serialization and deserialization of JSON-RPC 2.0 messages]]></Description>
     <Authors><![CDATA[Alexander Kozlenko]]></Authors>
     <Copyright><![CDATA[© Alexander Kozlenko. All rights reserved.]]></Copyright>

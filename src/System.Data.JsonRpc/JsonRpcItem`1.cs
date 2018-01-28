@@ -3,7 +3,7 @@
 namespace System.Data.JsonRpc
 {
     /// <summary>Represents information about an RPC message.</summary>
-    /// <typeparam name="T">Type of the message.</typeparam>
+    /// <typeparam name="T">The type of the message.</typeparam>
     [DebuggerDisplay("IsValid = {IsValid}")]
     public readonly struct JsonRpcItem<T>
         where T : JsonRpcMessage
