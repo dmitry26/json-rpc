@@ -26,7 +26,7 @@ var rpcParameters = new[] { 1, 2 };
 var rpcRequest = new JsonRpcRequest("sum", 1L, rpcParameters);
 var jsonRequest = serializer.SerializeRequest(rpcRequest);
 
-// Sending an HTTP request and stores a response string in the "jsonResponse"
+// Sending an HTTP request and storing a response string in the "jsonResponse"
 // ...
 
 serializer.StaticResponseBindings[rpcRequest.Id] = "sum";
