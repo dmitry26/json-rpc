@@ -7,6 +7,7 @@ Provides support for serialization and deserialization of [JSON-RPC 2.0](http://
 ### Features
 
 - The serializer supports dynamic type contracts for responses for the cases, when result data type depends on invocation parameters.
+- A type contract for error data that contains additional information about the error is optional.
 
 ### Specifics
 
@@ -25,16 +26,13 @@ var rpcParameters = new[] { 1, 2 };
 var rpcRequest = new JsonRpcRequest("sum", 1L, rpcParameters);
 var jsonRequest = serializer.SerializeRequest(rpcRequest);
 
-// ...
-// Sending an HTTP request to a server and stores response content in the "jsonResponse"
+// Sending an HTTP request and stores a response string in the "jsonResponse"
 // ...
 
 serializer.StaticResponseBindings[rpcRequest.Id] = "sum";
 
 var rpcData = serializer.DeserializeResponseData(jsonResponse);
 var rpcResult = (int)rpcData.SingleItem.Message.Result;
-
-Console.WriteLine(rpcResult);
 ```
 
 - Example of client-side usage: [Community.RandomOrg](https://github.com/alexanderkozlenko/random-org)
