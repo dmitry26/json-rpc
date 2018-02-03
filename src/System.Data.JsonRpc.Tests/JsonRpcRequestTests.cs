@@ -43,7 +43,8 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void ParamsTypeIsByPositionWhenIdIsNone()
         {
-            var message = new JsonRpcRequest("m", new object[] { 1L });
+            var parameters = new object[] { 1L };
+            var message = new JsonRpcRequest("m", parameters);
 
             Assert.Equal(JsonRpcParamsType.ByPosition, message.ParamsType);
         }
@@ -51,9 +52,19 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void ParamsTypeIsByNameWhenIdIsNone()
         {
-            var message = new JsonRpcRequest("m", new Dictionary<string, object> { ["p"] = 1L });
+            var parameters = new Dictionary<string, object> { ["p"] = 1L };
+            var message = new JsonRpcRequest("m", parameters);
 
             Assert.Equal(JsonRpcParamsType.ByName, message.ParamsType);
+        }
+
+        [Fact]
+        public void ParamsTypeIsByPositionWhenCountIsZero()
+        {
+            var parameters = new object[] { };
+
+            Assert.Throws<ArgumentException>(() =>
+                new JsonRpcRequest("m", parameters));
         }
 
         [Fact]
@@ -82,16 +93,16 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void ConstructorWithMethodWhenMethodIsEmptyString()
         {
-            var message = new JsonRpcRequest(string.Empty);
+            var message = new JsonRpcRequest("");
 
-            Assert.Equal(string.Empty, message.Method);
+            Assert.Equal("", message.Method);
         }
 
         [Fact]
         public void IsSystemMethodWhenMethodIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                JsonRpcRequest.IsSystemMethod(null));
+                JsonRpcRequest.IsSystemMethod((string)null));
         }
 
         [Fact]

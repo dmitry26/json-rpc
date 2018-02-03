@@ -195,6 +195,9 @@
   <data name="id.invalid_cast" xml:space="preserve">
     <value>Unable to cast object of type {0} to type {1}</value>
   </data>
+  <data name="request.params.invalid_count" xml:space="preserve">
+    <value>The parameters count equals zero</value>
+  </data>
   <data name="response.invalid_id" xml:space="preserve">
     <value>The identifier is not valid</value>
   </data>
