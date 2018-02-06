@@ -24,6 +24,7 @@ namespace System.Data.JsonRpc.Tests
             Assert.True(result != "1");
             Assert.False(result == 2L);
             Assert.False(result == "2");
+            Assert.Equal("", result.ToString());
         }
 
         [Fact]
@@ -46,6 +47,7 @@ namespace System.Data.JsonRpc.Tests
             Assert.True(result != "1");
             Assert.False(result == 2L);
             Assert.False(result == "2");
+            Assert.Equal("1", result.ToString());
         }
 
         [Fact]
@@ -68,6 +70,20 @@ namespace System.Data.JsonRpc.Tests
             Assert.False(result != "1");
             Assert.False(result == 2L);
             Assert.False(result == "2");
+            Assert.Equal("1", result.ToString());
+        }
+
+        [Fact]
+        public void Equality()
+        {
+            Assert.True(object.Equals(new JsonRpcId(), new JsonRpcId()));
+            Assert.True(object.Equals(new JsonRpcId(1L), new JsonRpcId(1L)));
+            Assert.True(object.Equals(new JsonRpcId("1"), new JsonRpcId("1")));
+            Assert.False(object.Equals(new JsonRpcId(), new JsonRpcId(1L)));
+            Assert.False(object.Equals(new JsonRpcId(), new JsonRpcId("1")));
+            Assert.False(object.Equals(new JsonRpcId(1L), new JsonRpcId(2L)));
+            Assert.False(object.Equals(new JsonRpcId("1"), new JsonRpcId("2")));
+            Assert.False(object.Equals(new JsonRpcId(1L), new JsonRpcId("1")));
         }
 
         [Fact]

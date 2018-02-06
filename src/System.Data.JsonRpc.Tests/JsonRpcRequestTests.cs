@@ -87,7 +87,7 @@ namespace System.Data.JsonRpc.Tests
         public void ConstructorWithMethodWhenMethodIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new JsonRpcRequest(null));
+                new JsonRpcRequest((string)null));
         }
 
         [Fact]

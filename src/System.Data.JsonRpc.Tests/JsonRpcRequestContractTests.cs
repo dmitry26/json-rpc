@@ -22,7 +22,7 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void ParamsTypeIsNone()
         {
-            var contract = JsonRpcRequestContract.Default;
+            var contract = new JsonRpcRequestContract();
 
             Assert.Equal(JsonRpcParamsType.None, contract.ParamsType);
         }
