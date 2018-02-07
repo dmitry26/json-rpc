@@ -104,6 +104,24 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
+        public void CompareTo()
+        {
+            Assert.Equal(+0, new JsonRpcId().CompareTo(new JsonRpcId()));
+            Assert.Equal(-1, new JsonRpcId().CompareTo(new JsonRpcId(1L)));
+            Assert.Equal(-1, new JsonRpcId().CompareTo(new JsonRpcId("1")));
+            Assert.Equal(+1, new JsonRpcId(1L).CompareTo(new JsonRpcId()));
+            Assert.Equal(+1, new JsonRpcId(1L).CompareTo(new JsonRpcId(0L)));
+            Assert.Equal(+0, new JsonRpcId(1L).CompareTo(new JsonRpcId(1L)));
+            Assert.Equal(-1, new JsonRpcId(1L).CompareTo(new JsonRpcId(2L)));
+            Assert.Equal(-1, new JsonRpcId(1L).CompareTo(new JsonRpcId("1")));
+            Assert.Equal(+1, new JsonRpcId("1").CompareTo(new JsonRpcId()));
+            Assert.Equal(+1, new JsonRpcId("1").CompareTo(new JsonRpcId(1L)));
+            Assert.Equal(+1, new JsonRpcId("1").CompareTo(new JsonRpcId("0")));
+            Assert.Equal(+0, new JsonRpcId("1").CompareTo(new JsonRpcId("1")));
+            Assert.Equal(-1, new JsonRpcId("1").CompareTo(new JsonRpcId("2")));
+        }
+
+        [Fact]
         public void ConstructorWhenTypeIsStringAndEqualsNull()
         {
             Assert.Throws<ArgumentNullException>(() => new JsonRpcId(null));
