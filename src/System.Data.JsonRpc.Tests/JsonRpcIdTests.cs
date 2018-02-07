@@ -5,76 +5,72 @@ namespace System.Data.JsonRpc.Tests
     public sealed class JsonRpcIdTests
     {
         [Fact]
-        public void TypeIsNone()
+        public void IdTypeIsProper()
         {
-            var result = new JsonRpcId();
-
-            Assert.Equal(JsonRpcIdType.None, result.Type);
-            Assert.Throws<InvalidCastException>(() => (long)result);
-            Assert.Throws<InvalidCastException>(() => (string)result);
-            Assert.True(result == default);
-            Assert.False(result == new JsonRpcId(1L));
-            Assert.False(result == new JsonRpcId("1"));
-            Assert.False(result != default);
-            Assert.True(result != new JsonRpcId(1L));
-            Assert.True(result != new JsonRpcId("1"));
-            Assert.False(result == 1L);
-            Assert.False(result == "1");
-            Assert.True(result != 1L);
-            Assert.True(result != "1");
-            Assert.False(result == 2L);
-            Assert.False(result == "2");
-            Assert.Equal("", result.ToString());
+            Assert.Equal(JsonRpcIdType.None, new JsonRpcId().Type);
+            Assert.Equal(JsonRpcIdType.Number, new JsonRpcId(1L).Type);
+            Assert.Equal(JsonRpcIdType.String, new JsonRpcId("1").Type);
         }
 
         [Fact]
-        public void TypeIsNumber()
+        public void OperatorEquality()
         {
-            var result = new JsonRpcId(1L);
-
-            Assert.Equal(JsonRpcIdType.Number, result.Type);
-            Assert.Equal(1L, (long)result);
-            Assert.Throws<InvalidCastException>(() => (string)result);
-            Assert.False(result == default);
-            Assert.True(result == new JsonRpcId(1L));
-            Assert.False(result == new JsonRpcId("1"));
-            Assert.True(result != default);
-            Assert.False(result != new JsonRpcId(1L));
-            Assert.True(result != new JsonRpcId("1"));
-            Assert.True(result == 1L);
-            Assert.False(result == "1");
-            Assert.False(result != 1L);
-            Assert.True(result != "1");
-            Assert.False(result == 2L);
-            Assert.False(result == "2");
-            Assert.Equal("1", result.ToString());
+            Assert.True(new JsonRpcId() == default);
+            Assert.False(new JsonRpcId() == new JsonRpcId(1L));
+            Assert.False(new JsonRpcId() == new JsonRpcId("1"));
+            Assert.False(new JsonRpcId() == 1L);
+            Assert.False(new JsonRpcId() == "1");
+            Assert.False(new JsonRpcId() == 2L);
+            Assert.False(new JsonRpcId() == "2");
+            Assert.False(new JsonRpcId(1L) == default);
+            Assert.True(new JsonRpcId(1L) == new JsonRpcId(1L));
+            Assert.False(new JsonRpcId(1L) == new JsonRpcId("1"));
+            Assert.True(new JsonRpcId(1L) == 1L);
+            Assert.False(new JsonRpcId(1L) == "1");
+            Assert.False(new JsonRpcId(1L) == 2L);
+            Assert.False(new JsonRpcId(1L) == "2");
+            Assert.False(new JsonRpcId("1") == default);
+            Assert.False(new JsonRpcId("1") == new JsonRpcId(1L));
+            Assert.True(new JsonRpcId("1") == new JsonRpcId("1"));
+            Assert.False(new JsonRpcId("1") == 1L);
+            Assert.True(new JsonRpcId("1") == "1");
+            Assert.False(new JsonRpcId("1") == 2L);
+            Assert.False(new JsonRpcId("1") == "2");
         }
 
         [Fact]
-        public void TypeIsString()
+        public void OperatorInequality()
         {
-            var result = new JsonRpcId("1");
-
-            Assert.Equal(JsonRpcIdType.String, result.Type);
-            Assert.Throws<InvalidCastException>(() => (long)result);
-            Assert.Equal("1", (string)result);
-            Assert.False(result == default);
-            Assert.False(result == new JsonRpcId(1L));
-            Assert.True(result == new JsonRpcId("1"));
-            Assert.True(result != default);
-            Assert.True(result != new JsonRpcId(1L));
-            Assert.False(result != new JsonRpcId("1"));
-            Assert.False(result == 1L);
-            Assert.True(result == "1");
-            Assert.True(result != 1L);
-            Assert.False(result != "1");
-            Assert.False(result == 2L);
-            Assert.False(result == "2");
-            Assert.Equal("1", result.ToString());
+            Assert.False(new JsonRpcId() != default);
+            Assert.True(new JsonRpcId() != new JsonRpcId(1L));
+            Assert.True(new JsonRpcId() != new JsonRpcId("1"));
+            Assert.True(new JsonRpcId() != 1L);
+            Assert.True(new JsonRpcId() != "1");
+            Assert.True(new JsonRpcId(1L) != default);
+            Assert.False(new JsonRpcId(1L) != new JsonRpcId(1L));
+            Assert.True(new JsonRpcId(1L) != new JsonRpcId("1"));
+            Assert.False(new JsonRpcId(1L) != 1L);
+            Assert.True(new JsonRpcId(1L) != "1");
+            Assert.True(new JsonRpcId("1") != default);
+            Assert.True(new JsonRpcId("1") != new JsonRpcId(1L));
+            Assert.False(new JsonRpcId("1") != new JsonRpcId("1"));
+            Assert.True(new JsonRpcId("1") != 1L);
+            Assert.False(new JsonRpcId("1") != "1");
         }
 
         [Fact]
-        public void Equality()
+        public void ObjectCast()
+        {
+            Assert.Throws<InvalidCastException>(() => (long)new JsonRpcId());
+            Assert.Throws<InvalidCastException>(() => (string)new JsonRpcId());
+            Assert.Equal(1L, (long)new JsonRpcId(1L));
+            Assert.Throws<InvalidCastException>(() => (string)new JsonRpcId(1L));
+            Assert.Throws<InvalidCastException>(() => (long)new JsonRpcId("1"));
+            Assert.Equal("1", (string)new JsonRpcId("1"));
+        }
+
+        [Fact]
+        public void ObjectEquals()
         {
             Assert.True(object.Equals(new JsonRpcId(), new JsonRpcId()));
             Assert.True(object.Equals(new JsonRpcId(1L), new JsonRpcId(1L)));
@@ -87,18 +83,36 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
+        public void ObjectGetHashCode()
+        {
+            Assert.Equal(new JsonRpcId().GetHashCode(), new JsonRpcId().GetHashCode());
+            Assert.Equal(new JsonRpcId(1L).GetHashCode(), new JsonRpcId(1L).GetHashCode());
+            Assert.Equal(new JsonRpcId("1").GetHashCode(), new JsonRpcId("1").GetHashCode());
+            Assert.NotEqual(new JsonRpcId().GetHashCode(), new JsonRpcId(1L).GetHashCode());
+            Assert.NotEqual(new JsonRpcId().GetHashCode(), new JsonRpcId("1").GetHashCode());
+            Assert.NotEqual(new JsonRpcId(1L).GetHashCode(), new JsonRpcId(2L).GetHashCode());
+            Assert.NotEqual(new JsonRpcId("1").GetHashCode(), new JsonRpcId("2").GetHashCode());
+            Assert.NotEqual(new JsonRpcId(1L).GetHashCode(), new JsonRpcId("1").GetHashCode());
+        }
+
+        [Fact]
+        public void ObjectToString()
+        {
+            Assert.Equal("", new JsonRpcId().ToString());
+            Assert.Equal("1", new JsonRpcId(1L).ToString());
+            Assert.Equal("1", new JsonRpcId("1").ToString());
+        }
+
+        [Fact]
         public void ConstructorWhenTypeIsStringAndEqualsNull()
         {
-            Assert.Throws<ArgumentNullException>(() =>
-                new JsonRpcId(null));
+            Assert.Throws<ArgumentNullException>(() => new JsonRpcId(null));
         }
 
         [Fact]
         public void ConstructorWhenTypeIsStringAndEqualsEmptyString()
         {
-            var result = new JsonRpcId("");
-
-            Assert.Equal(JsonRpcIdType.String, result.Type);
+            Assert.Equal(JsonRpcIdType.String, new JsonRpcId("").Type);
         }
     }
 }
