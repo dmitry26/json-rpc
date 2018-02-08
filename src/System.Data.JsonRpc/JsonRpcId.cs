@@ -113,11 +113,11 @@ namespace System.Data.JsonRpc
             {
                 case JsonRpcIdType.Number:
                     {
-                        return (Type == JsonRpcIdType.Number) && (_valueNumber == other._valueNumber);
+                        return (Type == JsonRpcIdType.Number) && _valueNumber.Equals(other._valueNumber);
                     }
                 case JsonRpcIdType.String:
                     {
-                        return (Type == JsonRpcIdType.String) && (_valueString == other._valueString);
+                        return (Type == JsonRpcIdType.String) && _valueString.Equals(other._valueString);
                     }
                 default:
                     {
@@ -139,11 +139,11 @@ namespace System.Data.JsonRpc
                     }
                 case long other:
                     {
-                        return (Type == JsonRpcIdType.Number) && (_valueNumber == other);
+                        return (Type == JsonRpcIdType.Number) && _valueNumber.Equals(other);
                     }
                 case string other:
                     {
-                        return (Type == JsonRpcIdType.String) && (_valueString == other);
+                        return (Type == JsonRpcIdType.String) && _valueString.Equals(other);
                     }
                 default:
                     {
@@ -214,7 +214,7 @@ namespace System.Data.JsonRpc
         /// <returns><see langword="true" /> if the left <see cref="JsonRpcId" /> is not equal to the right <see cref="JsonRpcId" />; otherwise, <see langword="false" />.</returns>
         public static bool operator !=(JsonRpcId obj1, JsonRpcId obj2)
         {
-            return !(obj1 == obj2);
+            return !obj1.Equals(obj2);
         }
 
         /// <summary>Performs an implicit conversion from <see cref="ulong" /> to <see cref="JsonRpcId" />.</summary>
