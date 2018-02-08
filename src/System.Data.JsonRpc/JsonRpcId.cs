@@ -186,7 +186,7 @@ namespace System.Data.JsonRpc
             {
                 case JsonRpcIdType.Number:
                     {
-                        return _valueNumber.ToString();
+                        return _valueNumber.ToString(CultureInfo.InvariantCulture);
                     }
                 case JsonRpcIdType.String:
                     {
