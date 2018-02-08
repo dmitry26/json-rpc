@@ -366,7 +366,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_03.1_req.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
 
-            jsonRpcSerializer.RequestContracts["foobar"] = JsonRpcRequestContract.Default;
+            jsonRpcSerializer.RequestContracts["foobar"] = new JsonRpcRequestContract();
 
             var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
 
@@ -534,7 +534,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_06.0_req.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
 
-            jsonRpcSerializer.RequestContracts["subtract"] = JsonRpcRequestContract.Default;
+            jsonRpcSerializer.RequestContracts["subtract"] = new JsonRpcRequestContract();
 
             var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
 
@@ -841,7 +841,7 @@ namespace System.Data.JsonRpc.Tests
             jsonRpcSerializer.RequestContracts["sum"] = new JsonRpcRequestContract(new[] { typeof(long), typeof(long), typeof(long) });
             jsonRpcSerializer.RequestContracts["notify_hello"] = new JsonRpcRequestContract(new[] { typeof(long) });
             jsonRpcSerializer.RequestContracts["subtract"] = new JsonRpcRequestContract(new[] { typeof(long), typeof(long) });
-            jsonRpcSerializer.RequestContracts["get_data"] = JsonRpcRequestContract.Default;
+            jsonRpcSerializer.RequestContracts["get_data"] = new JsonRpcRequestContract();
 
             var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
 

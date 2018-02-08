@@ -6,8 +6,6 @@ namespace System.Data.JsonRpc
     /// <summary>Specifies a type contract for request deserialization.</summary>
     public sealed class JsonRpcRequestContract
     {
-        private static readonly JsonRpcRequestContract _empty = new JsonRpcRequestContract();
-
         /// <summary>Initializes a new instance of the <see cref="JsonRpcRequestContract" /> class.</summary>
         public JsonRpcRequestContract()
         {
@@ -49,12 +47,6 @@ namespace System.Data.JsonRpc
 
             ParamsByName = @params;
             ParamsType = JsonRpcParamsType.ByName;
-        }
-
-        /// <summary>Gets a default request contract.</summary>
-        public static JsonRpcRequestContract Default
-        {
-            get => _empty;
         }
 
         /// <summary>Gets a contract for parameters, provided by position.</summary>

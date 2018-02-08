@@ -11,7 +11,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonSample = EmbeddedResourceManager.GetString("Assets.item_valid_true.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
 
-            jsonRpcSerializer.RequestContracts["m"] = JsonRpcRequestContract.Default;
+            jsonRpcSerializer.RequestContracts["m"] = new JsonRpcRequestContract();
 
             var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
             var jsonRpcItem = jsonRpcData.SingleItem;
@@ -27,7 +27,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonSample = EmbeddedResourceManager.GetString("Assets.item_valid_false.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
 
-            jsonRpcSerializer.RequestContracts["m"] = JsonRpcRequestContract.Default;
+            jsonRpcSerializer.RequestContracts["m"] = new JsonRpcRequestContract();
 
             var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
             var jsonRpcItem = jsonRpcData.SingleItem;
