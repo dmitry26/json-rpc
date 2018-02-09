@@ -63,7 +63,7 @@ namespace System.Data.JsonRpc.Tests
         public void ConstructorWithResultWhenIdIsNone()
         {
             Assert.Throws<ArgumentException>(() =>
-                new JsonRpcResponse(1L, JsonRpcId.None));
+                new JsonRpcResponse(1L, default(JsonRpcId)));
         }
 
         [Fact]

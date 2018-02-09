@@ -13,7 +13,7 @@ namespace System.Data.JsonRpc
         /// <param name="id">The identifier established by the client.</param>
         /// <exception cref="ArgumentNullException"><paramref name="method" /> is <see langword="null" />.</exception>
         public JsonRpcRequest(string method, in JsonRpcId id = default)
-            : base(in id)
+            : base(id)
         {
             if (method == null)
             {
@@ -30,7 +30,7 @@ namespace System.Data.JsonRpc
         /// <exception cref="ArgumentException"><paramref name="params" /> is empty.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="method" /> or <paramref name="params" /> is <see langword="null" />.</exception>
         public JsonRpcRequest(string method, in JsonRpcId id, IReadOnlyList<object> @params)
-            : this(method, in id)
+            : this(method, id)
         {
             if (@params == null)
             {
@@ -51,7 +51,7 @@ namespace System.Data.JsonRpc
         /// <exception cref="ArgumentException"><paramref name="params" /> is empty.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="method" /> or <paramref name="params" /> is <see langword="null" />.</exception>
         public JsonRpcRequest(string method, IReadOnlyList<object> @params)
-            : this(method, in JsonRpcId.None, @params)
+            : this(method, default, @params)
         {
         }
 
@@ -61,7 +61,7 @@ namespace System.Data.JsonRpc
         /// <param name="params">The parameters to be used during the invocation of the method, provided by name.</param>
         /// <exception cref="ArgumentNullException"><paramref name="method" /> or <paramref name="params" /> is <see langword="null" />.</exception>
         public JsonRpcRequest(string method, in JsonRpcId id, IReadOnlyDictionary<string, object> @params)
-            : this(method, in id)
+            : this(method, id)
         {
             if (@params == null)
             {
@@ -77,7 +77,7 @@ namespace System.Data.JsonRpc
         /// <param name="params">The parameters to be used during the invocation of the method, provided by name.</param>
         /// <exception cref="ArgumentNullException"><paramref name="method" /> or <paramref name="params" /> is <see langword="null" />.</exception>
         public JsonRpcRequest(string method, IReadOnlyDictionary<string, object> @params)
-            : this(method, in JsonRpcId.None, @params)
+            : this(method, default, @params)
         {
         }
 

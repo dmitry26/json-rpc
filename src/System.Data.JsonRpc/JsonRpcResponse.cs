@@ -10,9 +10,9 @@ namespace System.Data.JsonRpc
         /// <summary>Initializes a new instance of the <see cref="JsonRpcResponse" /> class.</summary>
         /// <param name="result">The value, which is determined by the method invoked on the server.</param>
         /// <param name="id">The identifier, which must be the same as the value in the request object.</param>
-        /// <exception cref="ArgumentException"><paramref name="id" /> is <see cref="JsonRpcId.None" />.</exception>
+        /// <exception cref="ArgumentException"><paramref name="id" /> has empty value.</exception>
         public JsonRpcResponse(object result, in JsonRpcId id)
-            : base(in id)
+            : base(id)
         {
             if (id == default)
             {
@@ -27,7 +27,7 @@ namespace System.Data.JsonRpc
         /// <param name="id">The identifier, which must be the same as the value in the request object.</param>
         /// <exception cref="ArgumentNullException"><paramref name="error" /> is <see langword="null" />.</exception>
         public JsonRpcResponse(JsonRpcError error, in JsonRpcId id = default)
-            : base(in id)
+            : base(id)
         {
             if (error == null)
             {

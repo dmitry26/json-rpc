@@ -6,9 +6,6 @@ namespace System.Data.JsonRpc
     /// <summary>Represents RPC message identifier.</summary>
     public readonly struct JsonRpcId : IEquatable<JsonRpcId>, IComparable<JsonRpcId>
     {
-        /// <summary>Gets an empty identifier.</summary>
-        public static readonly JsonRpcId None = default;
-
         private readonly long _valueNumber;
         private readonly string _valueString;
 
