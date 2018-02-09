@@ -95,15 +95,6 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void SerializeResponsesWhenCollectionIsEmptyCollection()
-        {
-            var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonResult = jsonRpcSerializer.SerializeResponses(new JsonRpcResponse[] { });
-
-            Assert.Equal(string.Empty, jsonResult);
-        }
-
-        [Fact]
         public void SerializeResponsesWhenCollectionContainsNull()
         {
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -153,7 +144,6 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcSerializer = new JsonRpcSerializer();
             var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
 
-            Assert.False(jsonRpcData.IsEmpty);
             Assert.False(jsonRpcData.IsBatch);
 
             var jsonRpcItem = jsonRpcData.SingleItem;
@@ -172,7 +162,6 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcSerializer = new JsonRpcSerializer();
             var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample);
 
-            Assert.False(jsonRpcData.IsEmpty);
             Assert.False(jsonRpcData.IsBatch);
 
             var jsonRpcItem = jsonRpcData.SingleItem;
@@ -191,7 +180,6 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcSerializer = new JsonRpcSerializer();
             var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
 
-            Assert.False(jsonRpcData.IsEmpty);
             Assert.False(jsonRpcData.IsBatch);
 
             var jsonRpcItem = jsonRpcData.SingleItem;
@@ -210,7 +198,6 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcSerializer = new JsonRpcSerializer();
             var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample);
 
-            Assert.False(jsonRpcData.IsEmpty);
             Assert.False(jsonRpcData.IsBatch);
 
             var jsonRpcItem = jsonRpcData.SingleItem;
@@ -229,7 +216,6 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcSerializer = new JsonRpcSerializer();
             var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
 
-            Assert.False(jsonRpcData.IsEmpty);
             Assert.False(jsonRpcData.IsBatch);
 
             var jsonRpcItem = jsonRpcData.SingleItem;
@@ -248,7 +234,6 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcSerializer = new JsonRpcSerializer();
             var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample);
 
-            Assert.False(jsonRpcData.IsEmpty);
             Assert.False(jsonRpcData.IsBatch);
 
             var jsonRpcItem = jsonRpcData.SingleItem;
@@ -270,7 +255,6 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
 
-            Assert.False(jsonRpcData.IsEmpty);
             Assert.False(jsonRpcData.IsBatch);
 
             var jsonRpcItem = jsonRpcData.SingleItem;
@@ -289,16 +273,6 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.Throws<ArgumentNullException>(() =>
                 jsonRpcSerializer.DeserializeResponseData(null));
-        }
-
-        [Fact]
-        public void DeserializeResponseDataWhenJsonStringIsEmptyString()
-        {
-            var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(string.Empty);
-
-            Assert.NotNull(jsonRpcData);
-            Assert.True(jsonRpcData.IsEmpty);
         }
 
         [Fact]
@@ -323,7 +297,6 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample);
 
-            Assert.False(jsonRpcData.IsEmpty);
             Assert.False(jsonRpcData.IsBatch);
 
             var jsonRpcItem = jsonRpcData.SingleItem;
@@ -348,7 +321,6 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample);
 
-            Assert.False(jsonRpcData.IsEmpty);
             Assert.False(jsonRpcData.IsBatch);
 
             var jsonRpcItem = jsonRpcData.SingleItem;
@@ -373,7 +345,6 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample);
 
-            Assert.False(jsonRpcData.IsEmpty);
             Assert.False(jsonRpcData.IsBatch);
 
             var jsonRpcItem = jsonRpcData.SingleItem;
@@ -396,7 +367,6 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample);
 
-            Assert.False(jsonRpcData.IsEmpty);
             Assert.False(jsonRpcData.IsBatch);
 
             var jsonRpcItem = jsonRpcData.SingleItem;

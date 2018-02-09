@@ -145,10 +145,6 @@ namespace System.Data.JsonRpc
             {
                 throw new ArgumentNullException(nameof(jsonString));
             }
-            if (jsonString.Length == 0)
-            {
-                return new JsonRpcData<JsonRpcResponse>();
-            }
 
             var jsonToken = default(JToken);
 
@@ -361,10 +357,6 @@ namespace System.Data.JsonRpc
             {
                 throw new ArgumentNullException(nameof(responses));
             }
-            if (responses.Count == 0)
-            {
-                return string.Empty;
-            }
 
             var jsonArray = new JArray();
 
@@ -572,6 +564,8 @@ namespace System.Data.JsonRpc
                     }
                     break;
             }
+
+            // "id" should not be defined in JSON for a notification according to the specification
 
             switch (request.Id.Type)
             {
@@ -795,6 +789,8 @@ namespace System.Data.JsonRpc
 
                 jsonObject.Add("error", errorToken);
             }
+
+            // "id" must be defined in JSON even if is empty according to the specification
 
             switch (response.Id.Type)
             {

@@ -1063,11 +1063,7 @@ namespace System.Data.JsonRpc.Tests
         [Fact]
         public void Spec120DeserializeResponse()
         {
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_12.0_res.json");
-            var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample);
-
-            Assert.True(jsonRpcData.IsEmpty);
+            // N/A
         }
 
         [Fact]

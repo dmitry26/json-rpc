@@ -5,7 +5,7 @@ namespace System.Data.JsonRpc
 {
     /// <summary>Represents deserialized RPC data.</summary>
     /// <typeparam name="T">The type of the message.</typeparam>
-    [DebuggerDisplay("IsEmpty = {IsEmpty}, IsBatch = {IsBatch}")]
+    [DebuggerDisplay("IsBatch = {IsBatch}")]
     public sealed class JsonRpcData<T>
         where T : JsonRpcMessage
     {
@@ -27,12 +27,6 @@ namespace System.Data.JsonRpc
         public bool IsBatch
         {
             get => BatchItems != null;
-        }
-
-        /// <summary>Gets a value indicating whether the data is empty.</summary>
-        public bool IsEmpty
-        {
-            get => !IsSingle && !IsBatch;
         }
 
         /// <summary>Gets a value indicating whether the data is a single item.</summary>
