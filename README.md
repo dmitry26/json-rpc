@@ -1,17 +1,17 @@
 ## System.Data.JsonRpc
 
-Provides support for serialization and deserialization of [JSON-RPC 2.0](http://www.jsonrpc.org/specification) messages.
+Provides support for serializing and deserializing [JSON-RPC 2.0](http://www.jsonrpc.org/specification) messages
 
 [![NuGet package](https://img.shields.io/nuget/v/System.Data.JsonRpc.svg?style=flat-square)](https://www.nuget.org/packages/System.Data.JsonRpc)
 
 ### Features
 
-- The serializer supports dynamic type contracts for responses for the cases, when result data type depends on invocation parameters.
-- A type contract for error data that contains additional information about the error is optional.
+- The serializer supports transparent usage of number and string message identifiers
+- The serializer supports dynamic response type contracts when result data type depends on method parameters
 
 ### Specifics
 
-Due to nuances of JSON-RPC protocol, deserialization of responses requires a bit more information than just specifying strongly-typed contracts for deserialization of result object. Before deserializing of responses a caller must specify bindings of used message identifiers to the corresponding methods (static bindings), or specify direct bindings of used message identifiers to the corresponding response contracts (dynamic bindings) if the type of result object depends on parameters. That's why the serializer implements `IDisposable` interface and must be considered as a steteful serializer.
+The serializer is a stateful serializer. Due to nuances of the JSON-RPC protocol, deserializing a response requires more than only defining a response contract. Before deserializing a caller must specify a request identifier mapping to the corresponding method name (static bindings), or specify a request identifier mapping to the corresponding response contract (dynamic bindings). The serializer implements `IDisposable` interface for clearing all active bindings during disposing.
 
 ### Samples
 
@@ -22,12 +22,10 @@ var serializer = new JsonRpcSerializer();
 
 serializer.ResponseContracts["sum"] = new JsonRpcResponseContract(typeof(int));
 
-var rpcParameters = new[] { 1, 2 };
-var rpcRequest = new JsonRpcRequest("sum", 1L, rpcParameters);
+var rpcRequest = new JsonRpcRequest("sum", 1L, new[] { 1, 2 });
 var jsonRequest = serializer.SerializeRequest(rpcRequest);
 
-// Sending an HTTP request and storing a response string in the "jsonResponse"
-// ...
+// [Sending an HTTP request and storing a response string in the "jsonResponse"]
 
 serializer.StaticResponseBindings[rpcRequest.Id] = "sum";
 
