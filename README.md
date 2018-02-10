@@ -1,13 +1,13 @@
 ## System.Data.JsonRpc
 
-Provides support for serializing and deserializing [JSON-RPC 2.0](http://www.jsonrpc.org/specification) messages
+Provides support for serializing and deserializing [JSON-RPC 2.0](http://www.jsonrpc.org/specification) messages.
 
 [![NuGet package](https://img.shields.io/nuget/v/System.Data.JsonRpc.svg?style=flat-square)](https://www.nuget.org/packages/System.Data.JsonRpc)
 
 ### Features
 
-- The serializer supports transparent usage of number and string message identifiers
-- The serializer supports dynamic response type contracts when result data type depends on method parameters
+- The serializer supports transparent usage of number and string message identifiers.
+- The serializer supports dynamic response type contracts when result data type depends on method parameters.
 
 ### Specifics
 
@@ -19,18 +19,16 @@ Sample of communication with a JSON-RPC server:
 
 ```cs
 var serializer = new JsonRpcSerializer();
+var request = new JsonRpcRequest("sum", 1L, new[] { 1, 2 });
+var requestJson = serializer.SerializeRequest(request);
+
+// [Sending an HTTP request and storing a response string in the "responseJson"]
 
 serializer.ResponseContracts["sum"] = new JsonRpcResponseContract(typeof(int));
+serializer.StaticResponseBindings[request.Id] = "sum";
 
-var rpcRequest = new JsonRpcRequest("sum", 1L, new[] { 1, 2 });
-var jsonRequest = serializer.SerializeRequest(rpcRequest);
-
-// [Sending an HTTP request and storing a response string in the "jsonResponse"]
-
-serializer.StaticResponseBindings[rpcRequest.Id] = "sum";
-
-var rpcData = serializer.DeserializeResponseData(jsonResponse);
-var rpcResult = (int)rpcData.SingleItem.Message.Result;
+var responseData = serializer.DeserializeResponseData(responseJson);
+var result = (int)responseData.SingleItem.Message.Result;
 ```
 
 - Example of client-side usage: [Community.RandomOrg](https://github.com/alexanderkozlenko/random-org)
