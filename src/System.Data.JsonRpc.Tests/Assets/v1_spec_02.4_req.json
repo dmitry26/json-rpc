@@ -1,0 +1,7 @@
+{
+    "method": "userLeft",
+    "params": [
+        "user3"
+    ],
+    "id": null
+}

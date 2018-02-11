@@ -33,6 +33,8 @@ namespace System.Data.JsonRpc
             _responseContracts = responseContracts ?? new Dictionary<string, JsonRpcResponseContract>(StringComparer.Ordinal);
             _staticResponseBindings = staticResponseBindings ?? new Dictionary<JsonRpcId, string>();
             _dynamicResponseBindings = dynamicResponseBindings ?? new Dictionary<JsonRpcId, JsonRpcResponseContract>();
+
+            CompatibilityLevel = JsonRpcCompatibilityLevel.Level2;
         }
 
         /// <summary>Deserializes the JSON string to the request data.</summary>
@@ -391,9 +393,12 @@ namespace System.Data.JsonRpc
 
         private JsonRpcRequest ConvertTokenToRequest(JObject jsonObject)
         {
-            if (!jsonObject.TryGetValue("jsonrpc", out var jsonTokenProtocol) || (jsonTokenProtocol.Type != JTokenType.String) || ((string)jsonTokenProtocol != "2.0"))
+            if (CompatibilityLevel == JsonRpcCompatibilityLevel.Level2)
             {
-                throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, Strings.GetString("core.deserialize.request.protocol.invalid_property"));
+                if (!jsonObject.TryGetValue("jsonrpc", out var jsonTokenProtocol) || (jsonTokenProtocol.Type != JTokenType.String) || ((string)jsonTokenProtocol != "2.0"))
+                {
+                    throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, Strings.GetString("core.deserialize.request.protocol.invalid_property"));
+                }
             }
 
             var requestId = default(JsonRpcId);
@@ -517,11 +522,14 @@ namespace System.Data.JsonRpc
 
         private JObject ConvertRequestToToken(JsonRpcRequest request)
         {
-            var jsonObject = new JObject
+            var jsonObject = new JObject();
+
+            if (CompatibilityLevel == JsonRpcCompatibilityLevel.Level2)
             {
-                { "jsonrpc", "2.0" },
-                { "method", request.Method }
-            };
+                jsonObject["jsonrpc"] = "2.0";
+            }
+
+            jsonObject["method"] = request.Method;
 
             switch (request.ParamsType)
             {
@@ -541,11 +549,16 @@ namespace System.Data.JsonRpc
                             throw new JsonRpcException(Strings.GetString("core.serialize.json_issue"), request.Id, e);
                         }
 
-                        jsonObject.Add("params", jsonTokenParams);
+                        jsonObject["params"] = jsonTokenParams;
                     }
                     break;
                 case JsonRpcParamsType.ByName:
                     {
+                        if (CompatibilityLevel != JsonRpcCompatibilityLevel.Level2)
+                        {
+                            throw new JsonRpcException(Strings.GetString("core.serialize.request.params.unsupported_structure"), request.Id);
+                        }
+
                         var jsonTokenParams = new JObject();
 
                         try
@@ -560,23 +573,37 @@ namespace System.Data.JsonRpc
                             throw new JsonRpcException(Strings.GetString("core.serialize.json_issue"), request.Id, e);
                         }
 
-                        jsonObject.Add("params", jsonTokenParams);
+                        jsonObject["params"] = jsonTokenParams;
+                    }
+                    break;
+                case JsonRpcParamsType.None:
+                    {
+                        if (CompatibilityLevel != JsonRpcCompatibilityLevel.Level2)
+                        {
+                            jsonObject["params"] = new JArray();
+                        }
                     }
                     break;
             }
-
-            // "id" should not be defined in JSON for a notification according to the specification
 
             switch (request.Id.Type)
             {
                 case JsonRpcIdType.Number:
                     {
-                        jsonObject.Add("id", new JValue((long)request.Id));
+                        jsonObject["id"] = new JValue((long)request.Id);
                     }
                     break;
                 case JsonRpcIdType.String:
                     {
-                        jsonObject.Add("id", new JValue((string)request.Id));
+                        jsonObject["id"] = new JValue((string)request.Id);
+                    }
+                    break;
+                case JsonRpcIdType.None:
+                    {
+                        if (CompatibilityLevel != JsonRpcCompatibilityLevel.Level2)
+                        {
+                            jsonObject["id"] = JValue.CreateNull();
+                        }
                     }
                     break;
             }
@@ -586,9 +613,12 @@ namespace System.Data.JsonRpc
 
         private JsonRpcResponse ConvertTokenToResponse(JObject jsonObject)
         {
-            if (!jsonObject.TryGetValue("jsonrpc", out var jsonTokenProtocol) || (jsonTokenProtocol.Type != JTokenType.String) || ((string)jsonTokenProtocol != "2.0"))
+            if (CompatibilityLevel == JsonRpcCompatibilityLevel.Level2)
             {
-                throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, Strings.GetString("core.deserialize.response.protocol.invalid_property"));
+                if (!jsonObject.TryGetValue("jsonrpc", out var jsonTokenProtocol) || (jsonTokenProtocol.Type != JTokenType.String) || ((string)jsonTokenProtocol != "2.0"))
+                {
+                    throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, Strings.GetString("core.deserialize.request.protocol.invalid_property"));
+                }
             }
 
             var responseId = default(JsonRpcId);
@@ -621,12 +651,28 @@ namespace System.Data.JsonRpc
             var jsonTokenResult = jsonObject.GetValue("result");
             var jsonTokenError = jsonObject.GetValue("error");
 
-            if (((jsonTokenResult == null) && (jsonTokenError == null)) || ((jsonTokenResult != null) && (jsonTokenError != null)))
+            var responseSuccess = false;
+
+            if (CompatibilityLevel == JsonRpcCompatibilityLevel.Level2)
             {
-                throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, Strings.GetString("core.deserialize.response.invalid_properties"), responseId);
+                if (((jsonTokenResult == null) && (jsonTokenError == null)) || ((jsonTokenResult != null) && (jsonTokenError != null)))
+                {
+                    throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, Strings.GetString("core.deserialize.response.invalid_properties"), responseId);
+                }
+
+                responseSuccess = jsonTokenError == null;
+            }
+            else
+            {
+                if ((jsonTokenResult == null) || (jsonTokenError == null))
+                {
+                    throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, Strings.GetString("core.deserialize.response.invalid_properties"), responseId);
+                }
+
+                responseSuccess = jsonTokenError.Type == JTokenType.Null;
             }
 
-            if (jsonTokenResult != null)
+            if (responseSuccess)
             {
                 if (responseId == default)
                 {
@@ -652,78 +698,107 @@ namespace System.Data.JsonRpc
             }
             else
             {
-                if (jsonTokenError.Type != JTokenType.Object)
+                if (jsonTokenError.Type == JTokenType.Object)
                 {
-                    throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, Strings.GetString("core.deserialize.response.error.invalid_type"), responseId);
-                }
+                    var jsonObjectError = (JObject)jsonTokenError;
 
-                var jsonObjectError = (JObject)jsonTokenError;
+                    var responseErrorCode = default(long);
 
-                if (!jsonObjectError.TryGetValue("code", out var jsonTokenErrorCode) || (jsonTokenErrorCode.Type != JTokenType.Integer))
-                {
-                    throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, Strings.GetString("core.deserialize.response.error.code.invalid_property"), responseId);
-                }
-
-                var responseErrorCode = (long)jsonTokenErrorCode;
-
-                if (!jsonObjectError.TryGetValue("message", out var jsonTokenErrorMessage) || (jsonTokenErrorMessage.Type != JTokenType.String))
-                {
-                    throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, Strings.GetString("core.deserialize.response.error.message.invalid_property"), responseId);
-                }
-
-                var responseErrorMessage = (string)jsonTokenErrorMessage;
-                var responseErrorData = default(object);
-                var responseError = default(JsonRpcError);
-
-                if (jsonObjectError.TryGetValue("data", out var jsonTokenErrorData))
-                {
-                    var errorDataType = default(Type);
-
-                    if (responseId.Type == default)
+                    if (jsonObjectError.TryGetValue("code", out var jsonTokenErrorCode) && (jsonTokenErrorCode.Type == JTokenType.Integer))
                     {
-                        errorDataType = DefaultErrorDataType;
+                        responseErrorCode = (long)jsonTokenErrorCode;
                     }
                     else
                     {
-                        var contract = GetResponseContract(responseId);
-
-                        errorDataType = contract.ErrorDataType;
+                        if (CompatibilityLevel == JsonRpcCompatibilityLevel.Level2)
+                        {
+                            throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, Strings.GetString("core.deserialize.response.error.code.invalid_property"), responseId);
+                        }
                     }
 
-                    if (errorDataType != null)
+                    var responseErrorMessage = default(string);
+
+                    if (jsonObjectError.TryGetValue("message", out var jsonTokenErrorMessage) && (jsonTokenErrorMessage.Type == JTokenType.String))
+                    {
+                        responseErrorMessage = (string)jsonTokenErrorMessage;
+                    }
+                    else
+                    {
+                        if (CompatibilityLevel == JsonRpcCompatibilityLevel.Level2)
+                        {
+                            throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, Strings.GetString("core.deserialize.response.error.message.invalid_property"), responseId);
+                        }
+                        else
+                        {
+                            responseErrorMessage = string.Empty;
+                        }
+                    }
+
+                    var responseError = default(JsonRpcError);
+
+                    if (jsonObjectError.TryGetValue("data", out var jsonTokenErrorData))
+                    {
+                        var errorDataType = default(Type);
+
+                        if (responseId.Type == default)
+                        {
+                            errorDataType = DefaultErrorDataType;
+                        }
+                        else
+                        {
+                            var contract = GetResponseContract(responseId);
+
+                            errorDataType = contract.ErrorDataType;
+                        }
+
+                        var responseErrorData = default(object);
+
+                        if (errorDataType != null)
+                        {
+                            try
+                            {
+                                responseErrorData = jsonTokenErrorData.ToObject(errorDataType);
+                            }
+                            catch (JsonException e)
+                            {
+                                throw new JsonRpcException(Strings.GetString("core.deserialize.json_issue"), responseId, e);
+                            }
+                        }
+
+                        try
+                        {
+                            responseError = new JsonRpcError(responseErrorCode, responseErrorMessage, responseErrorData);
+                        }
+                        catch (ArgumentOutOfRangeException e)
+                        {
+                            throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, Strings.GetString("core.deserialize.response.error.code.invalid_range"), responseId, e);
+                        }
+                    }
+                    else
                     {
                         try
                         {
-                            responseErrorData = jsonTokenErrorData.ToObject(errorDataType);
+                            responseError = new JsonRpcError(responseErrorCode, responseErrorMessage);
                         }
-                        catch (JsonException e)
+                        catch (ArgumentOutOfRangeException e)
                         {
-                            throw new JsonRpcException(Strings.GetString("core.deserialize.json_issue"), responseId, e);
+                            throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, Strings.GetString("core.deserialize.response.error.code.invalid_range"), responseId, e);
                         }
                     }
 
-                    try
-                    {
-                        responseError = new JsonRpcError(responseErrorCode, responseErrorMessage, responseErrorData);
-                    }
-                    catch (ArgumentOutOfRangeException e)
-                    {
-                        throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, Strings.GetString("core.deserialize.response.error.code.invalid_range"), responseId, e);
-                    }
+                    return new JsonRpcResponse(responseError, responseId);
                 }
                 else
                 {
-                    try
+                    if (CompatibilityLevel == JsonRpcCompatibilityLevel.Level2)
                     {
-                        responseError = new JsonRpcError(responseErrorCode, responseErrorMessage);
+                        throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, Strings.GetString("core.deserialize.response.error.invalid_type"), responseId);
                     }
-                    catch (ArgumentOutOfRangeException e)
+                    else
                     {
-                        throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, Strings.GetString("core.deserialize.response.error.code.invalid_range"), responseId, e);
+                        return new JsonRpcResponse(new JsonRpcError(0L, string.Empty), responseId);
                     }
                 }
-
-                return new JsonRpcResponse(responseError, responseId);
             }
         }
 
@@ -747,10 +822,12 @@ namespace System.Data.JsonRpc
 
         private JObject ConvertResponseToToken(JsonRpcResponse response)
         {
-            var jsonObject = new JObject
+            var jsonObject = new JObject();
+
+            if (CompatibilityLevel == JsonRpcCompatibilityLevel.Level2)
             {
-                { "jsonrpc", "2.0" }
-            };
+                jsonObject["jsonrpc"] = "2.0";
+            }
 
             if (response.Success)
             {
@@ -765,14 +842,19 @@ namespace System.Data.JsonRpc
                     throw new JsonRpcException(Strings.GetString("core.serialize.json_issue"), response.Id, e);
                 }
 
-                jsonObject.Add("result", resultToken);
+                jsonObject["result"] = resultToken;
+
+                if (CompatibilityLevel != JsonRpcCompatibilityLevel.Level2)
+                {
+                    jsonObject["error"] = JValue.CreateNull();
+                }
             }
             else
             {
                 var errorToken = new JObject
                 {
-                    { "code", response.Error.Code },
-                    { "message", response.Error.Message }
+                    ["code"] = response.Error.Code,
+                    ["message"] = response.Error.Message
                 };
 
                 if (response.Error.Data != null)
@@ -788,29 +870,32 @@ namespace System.Data.JsonRpc
                         throw new JsonRpcException(Strings.GetString("core.serialize.json_issue"), response.Id, e);
                     }
 
-                    errorToken.Add("data", responseErrorDataToken);
+                    errorToken["data"] = responseErrorDataToken;
                 }
 
-                jsonObject.Add("error", errorToken);
-            }
+                if (CompatibilityLevel != JsonRpcCompatibilityLevel.Level2)
+                {
+                    jsonObject["result"] = JValue.CreateNull();
+                }
 
-            // "id" must be defined in JSON even if is empty according to the specification
+                jsonObject["error"] = errorToken;
+            }
 
             switch (response.Id.Type)
             {
                 case JsonRpcIdType.None:
                     {
-                        jsonObject.Add("id", JValue.CreateNull());
+                        jsonObject["id"] = JValue.CreateNull();
                     }
                     break;
                 case JsonRpcIdType.Number:
                     {
-                        jsonObject.Add("id", new JValue((long)response.Id));
+                        jsonObject["id"] = new JValue((long)response.Id);
                     }
                     break;
                 case JsonRpcIdType.String:
                     {
-                        jsonObject.Add("id", new JValue((string)response.Id));
+                        jsonObject["id"] = new JValue((string)response.Id);
                     }
                     break;
             }
@@ -851,6 +936,13 @@ namespace System.Data.JsonRpc
 
         /// <summary>Gets or sets a type of error data for deserializing an unsuccessful response with empty identifier.</summary>
         public Type DefaultErrorDataType
+        {
+            get;
+            set;
+        }
+
+        /// <summary>Gets or sets the protocol compatibility level.</summary>
+        public JsonRpcCompatibilityLevel CompatibilityLevel
         {
             get;
             set;

@@ -1,0 +1,7 @@
+{
+    "method": "postMessage",
+    "params": [
+        "Hello all!"
+    ],
+    "id": 99
+}

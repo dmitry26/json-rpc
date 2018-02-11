@@ -189,6 +189,9 @@
   <data name="core.serialize.json_issue" xml:space="preserve">
     <value>An error occurred during serialization to JSON</value>
   </data>
+  <data name="core.serialize.request.params.unsupported_structure" xml:space="preserve">
+    <value>The request has unsupported parameters structure for the current protocol compatibility level</value>
+  </data>
   <data name="error.code.invalid_range" xml:space="preserve">
     <value>The specified value is reserved for future use</value>
   </data>

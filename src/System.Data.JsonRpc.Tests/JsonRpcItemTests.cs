@@ -6,9 +6,9 @@ namespace System.Data.JsonRpc.Tests
     public sealed class JsonRpcItemTests
     {
         [Fact]
-        public void IsValidIsTrue()
+        public void V2IsValidIsTrue()
         {
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.item_valid_true.json");
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_item_valid_true.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
 
             jsonRpcSerializer.RequestContracts["m"] = new JsonRpcRequestContract();
@@ -22,9 +22,9 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void IsValidIsFalse()
+        public void V2IsValidIsFalse()
         {
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.item_valid_false.json");
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_item_valid_false.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
 
             jsonRpcSerializer.RequestContracts["m"] = new JsonRpcRequestContract();
