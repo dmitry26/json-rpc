@@ -674,36 +674,30 @@ namespace System.Data.JsonRpc
                 var responseErrorMessage = (string)jsonTokenErrorMessage;
                 var responseErrorData = default(object);
 
-                if (jsonObjectError.TryGetValue("data", out var jsonTokenErrorData) && (jsonTokenErrorData.Type != JTokenType.Null))
+                if (jsonObjectError.TryGetValue("data", out var jsonTokenErrorData))
                 {
+                    var errorDataType = default(Type);
+
                     if (responseId.Type == default)
                     {
-                        if (DefaultErrorDataType != null)
-                        {
-                            try
-                            {
-                                responseErrorData = jsonTokenErrorData.ToObject(DefaultErrorDataType);
-                            }
-                            catch (JsonException e)
-                            {
-                                throw new JsonRpcException(Strings.GetString("core.deserialize.json_issue"), responseId, e);
-                            }
-                        }
+                        errorDataType = DefaultErrorDataType;
                     }
                     else
                     {
                         var contract = GetResponseContract(responseId);
 
-                        if (contract.ErrorDataType != null)
+                        errorDataType = contract.ErrorDataType;
+                    }
+
+                    if (errorDataType != null)
+                    {
+                        try
                         {
-                            try
-                            {
-                                responseErrorData = jsonTokenErrorData.ToObject(contract.ErrorDataType);
-                            }
-                            catch (JsonException e)
-                            {
-                                throw new JsonRpcException(Strings.GetString("core.deserialize.json_issue"), responseId, e);
-                            }
+                            responseErrorData = jsonTokenErrorData.ToObject(errorDataType);
+                        }
+                        catch (JsonException e)
+                        {
+                            throw new JsonRpcException(Strings.GetString("core.deserialize.json_issue"), responseId, e);
                         }
                     }
                 }
