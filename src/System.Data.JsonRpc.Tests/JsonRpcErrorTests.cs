@@ -24,6 +24,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcError = new JsonRpcError(code, "m");
 
             Assert.Equal(type, jsonRpcError.Type);
+            Assert.False(jsonRpcError.HasData);
         }
 
         [Theory]
@@ -46,6 +47,14 @@ namespace System.Data.JsonRpc.Tests
         public void ConstructorWhenMessageIsEmptyString()
         {
             new JsonRpcError(1L, string.Empty);
+        }
+
+        [Fact]
+        public void HasDataIsTrue()
+        {
+            var jsonRpcError = new JsonRpcError(1L, "m", null);
+
+            Assert.True(jsonRpcError.HasData);
         }
     }
 }

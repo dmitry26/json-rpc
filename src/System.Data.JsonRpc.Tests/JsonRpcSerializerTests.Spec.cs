@@ -455,6 +455,7 @@ namespace System.Data.JsonRpc.Tests
             Assert.Equal(JsonRpcErrorType.InvalidMethod, jsonRpcError.Type);
             Assert.NotNull(jsonRpcError.Message);
             Assert.False(jsonRpcError.Message.Length == 0);
+            Assert.False(jsonRpcError.HasData);
         }
 
         [Fact]
@@ -511,6 +512,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcError = jsonRpcMessage.Error;
 
             Assert.Equal(JsonRpcErrorType.Parsing, jsonRpcError.Type);
+            Assert.False(jsonRpcError.HasData);
         }
 
         [Fact]
@@ -573,6 +575,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcError = jsonRpcMessage.Error;
 
             Assert.Equal(JsonRpcErrorType.InvalidRequest, jsonRpcError.Type);
+            Assert.False(jsonRpcError.HasData);
         }
 
         [Fact]
@@ -629,6 +632,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcError = jsonRpcMessage.Error;
 
             Assert.Equal(JsonRpcErrorType.Parsing, jsonRpcError.Type);
+            Assert.False(jsonRpcError.HasData);
         }
 
         [Fact]
@@ -685,6 +689,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcError = jsonRpcMessage.Error;
 
             Assert.Equal(JsonRpcErrorType.InvalidRequest, jsonRpcError.Type);
+            Assert.False(jsonRpcError.HasData);
         }
 
         [Fact]
@@ -743,9 +748,10 @@ namespace System.Data.JsonRpc.Tests
             Assert.Equal(default, jsonRpcMessage0.Id);
             Assert.False(jsonRpcMessage0.Success);
 
-            var jsonRpcMessage0Error = jsonRpcMessage0.Error;
+            var jsonRpcError0 = jsonRpcMessage0.Error;
 
-            Assert.Equal(JsonRpcErrorType.InvalidRequest, jsonRpcMessage0Error.Type);
+            Assert.Equal(JsonRpcErrorType.InvalidRequest, jsonRpcError0.Type);
+            Assert.False(jsonRpcError0.HasData);
         }
 
         [Fact]
@@ -786,7 +792,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void Spec100ResponsDeserialize()
+        public void Spec100DeserializeResponse()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.spec_10.0_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -807,6 +813,7 @@ namespace System.Data.JsonRpc.Tests
                 var jsonRpcError = jsonRpcMessage.Error;
 
                 Assert.Equal(JsonRpcErrorType.InvalidRequest, jsonRpcError.Type);
+                Assert.False(jsonRpcError.HasData);
             }
         }
 
@@ -957,6 +964,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcError2 = jsonRpcMessage2.Error;
 
             Assert.Equal(JsonRpcErrorType.InvalidRequest, jsonRpcError2.Type);
+            Assert.False(jsonRpcError2.HasData);
 
             var jsonRpcItem3 = jsonRpcData.BatchItems[3];
 
@@ -970,6 +978,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcError3 = jsonRpcMessage3.Error;
 
             Assert.Equal(JsonRpcErrorType.InvalidMethod, jsonRpcError3.Type);
+            Assert.False(jsonRpcError3.HasData);
 
             var jsonRpcItem4 = jsonRpcData.BatchItems[4];
 

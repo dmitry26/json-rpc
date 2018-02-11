@@ -673,6 +673,7 @@ namespace System.Data.JsonRpc
 
                 var responseErrorMessage = (string)jsonTokenErrorMessage;
                 var responseErrorData = default(object);
+                var responseError = default(JsonRpcError);
 
                 if (jsonObjectError.TryGetValue("data", out var jsonTokenErrorData))
                 {
@@ -700,17 +701,26 @@ namespace System.Data.JsonRpc
                             throw new JsonRpcException(Strings.GetString("core.deserialize.json_issue"), responseId, e);
                         }
                     }
-                }
 
-                var responseError = default(JsonRpcError);
-
-                try
-                {
-                    responseError = new JsonRpcError(responseErrorCode, responseErrorMessage, responseErrorData);
+                    try
+                    {
+                        responseError = new JsonRpcError(responseErrorCode, responseErrorMessage, responseErrorData);
+                    }
+                    catch (ArgumentOutOfRangeException e)
+                    {
+                        throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, Strings.GetString("core.deserialize.response.error.code.invalid_range"), responseId, e);
+                    }
                 }
-                catch (ArgumentOutOfRangeException e)
+                else
                 {
-                    throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, Strings.GetString("core.deserialize.response.error.code.invalid_range"), responseId, e);
+                    try
+                    {
+                        responseError = new JsonRpcError(responseErrorCode, responseErrorMessage);
+                    }
+                    catch (ArgumentOutOfRangeException e)
+                    {
+                        throw new JsonRpcException(JsonRpcExceptionType.InvalidMessage, Strings.GetString("core.deserialize.response.error.code.invalid_range"), responseId, e);
+                    }
                 }
 
                 return new JsonRpcResponse(responseError, responseId);
