@@ -857,7 +857,7 @@ namespace System.Data.JsonRpc
                     ["message"] = response.Error.Message
                 };
 
-                if (response.Error.Data != null)
+                if (response.Error.HasData)
                 {
                     var responseErrorDataToken = default(JToken);
 
