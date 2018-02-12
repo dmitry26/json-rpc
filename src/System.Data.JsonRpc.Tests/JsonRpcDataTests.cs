@@ -12,9 +12,8 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcSerializer = new JsonRpcSerializer();
             var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
 
-            Assert.True(jsonRpcData.IsSingle);
             Assert.False(jsonRpcData.IsBatch);
-            Assert.Null(jsonRpcData.BatchItems);
+            Assert.Null(jsonRpcData.Items);
         }
 
         [Fact]
@@ -24,9 +23,8 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcSerializer = new JsonRpcSerializer();
             var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
 
-            Assert.False(jsonRpcData.IsSingle);
             Assert.True(jsonRpcData.IsBatch);
-            Assert.NotNull(jsonRpcData.BatchItems);
+            Assert.NotNull(jsonRpcData.Items);
         }
     }
 }

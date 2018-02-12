@@ -796,13 +796,13 @@ namespace System.Data.JsonRpc
                     }
                     else
                     {
-                        return new JsonRpcResponse(new JsonRpcError(0L, string.Empty), responseId);
+                        return new JsonRpcResponse(new JsonRpcError(default, string.Empty), responseId);
                     }
                 }
             }
         }
 
-        private JsonRpcResponseContract GetResponseContract(JsonRpcId identifier)
+        private JsonRpcResponseContract GetResponseContract(in JsonRpcId identifier)
         {
             if (!_dynamicResponseBindings.TryGetValue(identifier, out var contract))
             {

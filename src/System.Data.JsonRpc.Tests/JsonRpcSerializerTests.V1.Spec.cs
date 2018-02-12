@@ -25,7 +25,7 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.False(jsonRpcData.IsBatch);
 
-            var jsonRpcItem = jsonRpcData.SingleItem;
+            var jsonRpcItem = jsonRpcData.Item;
 
             Assert.True(jsonRpcItem.IsValid);
 
@@ -70,7 +70,7 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.False(jsonRpcData.IsBatch);
 
-            var jsonRpcItem = jsonRpcData.SingleItem;
+            var jsonRpcItem = jsonRpcData.Item;
 
             Assert.True(jsonRpcItem.IsValid);
 
@@ -117,7 +117,7 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.False(jsonRpcData.IsBatch);
 
-            var jsonRpcItem = jsonRpcData.SingleItem;
+            var jsonRpcItem = jsonRpcData.Item;
 
             Assert.True(jsonRpcItem.IsValid);
 
@@ -162,7 +162,7 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.False(jsonRpcData.IsBatch);
 
-            var jsonRpcItem = jsonRpcData.SingleItem;
+            var jsonRpcItem = jsonRpcData.Item;
 
             Assert.True(jsonRpcItem.IsValid);
 
@@ -205,7 +205,7 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.False(jsonRpcData.IsBatch);
 
-            var jsonRpcItem = jsonRpcData.SingleItem;
+            var jsonRpcItem = jsonRpcData.Item;
 
             Assert.True(jsonRpcItem.IsValid);
 
@@ -261,7 +261,7 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.False(jsonRpcData.IsBatch);
 
-            var jsonRpcItem = jsonRpcData.SingleItem;
+            var jsonRpcItem = jsonRpcData.Item;
 
             Assert.True(jsonRpcItem.IsValid);
 
@@ -317,7 +317,7 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.False(jsonRpcData.IsBatch);
 
-            var jsonRpcItem = jsonRpcData.SingleItem;
+            var jsonRpcItem = jsonRpcData.Item;
 
             Assert.True(jsonRpcItem.IsValid);
 
@@ -373,7 +373,7 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.False(jsonRpcData.IsBatch);
 
-            var jsonRpcItem = jsonRpcData.SingleItem;
+            var jsonRpcItem = jsonRpcData.Item;
 
             Assert.True(jsonRpcItem.IsValid);
 
@@ -442,7 +442,7 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.False(jsonRpcData.IsBatch);
 
-            var jsonRpcItem = jsonRpcData.SingleItem;
+            var jsonRpcItem = jsonRpcData.Item;
 
             Assert.True(jsonRpcItem.IsValid);
 

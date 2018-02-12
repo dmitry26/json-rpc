@@ -94,7 +94,7 @@ namespace System.Data.JsonRpc
 
             // Case is not defined explicitly by the specification, and thus is ignored in comparison
 
-            return method.StartsWith("rpc.", StringComparison.OrdinalIgnoreCase);
+            return method.StartsWith("RPC.", StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>Gets a string containing the name of the method to be invoked.</summary>

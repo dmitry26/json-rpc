@@ -32,7 +32,7 @@ serializer.ResponseContracts["sum"] = new JsonRpcResponseContract(typeof(int));
 serializer.StaticResponseBindings[request.Id] = "sum";
 
 var responseData = serializer.DeserializeResponseData(responseString);
-var result = (int)responseData.SingleItem.Message.Result;
+var result = (int)responseData.Item.Message.Result;
 ```
 
 - Example of client-side usage: https://github.com/alexanderkozlenko/random-org

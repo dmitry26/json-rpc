@@ -14,7 +14,7 @@ namespace System.Data.JsonRpc.Tests
             jsonRpcSerializer.RequestContracts["m"] = new JsonRpcRequestContract();
 
             var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
-            var jsonRpcItem = jsonRpcData.SingleItem;
+            var jsonRpcItem = jsonRpcData.Item;
 
             Assert.True(jsonRpcItem.IsValid);
             Assert.NotNull(jsonRpcItem.Message);
@@ -30,7 +30,7 @@ namespace System.Data.JsonRpc.Tests
             jsonRpcSerializer.RequestContracts["m"] = new JsonRpcRequestContract();
 
             var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
-            var jsonRpcItem = jsonRpcData.SingleItem;
+            var jsonRpcItem = jsonRpcData.Item;
 
             Assert.False(jsonRpcItem.IsValid);
             Assert.Null(jsonRpcItem.Message);

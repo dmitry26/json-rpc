@@ -1,48 +1,36 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace System.Data.JsonRpc
 {
     /// <summary>Represents deserialized RPC data.</summary>
     /// <typeparam name="T">The type of the message.</typeparam>
-    [DebuggerDisplay("IsBatch = {IsBatch}")]
     public sealed class JsonRpcData<T>
         where T : JsonRpcMessage
     {
-        internal JsonRpcData()
+        internal JsonRpcData(in JsonRpcItem<T> item)
         {
+            Item = item;
         }
 
-        internal JsonRpcData(in JsonRpcItem<T> singleItem)
+        internal JsonRpcData(IReadOnlyList<JsonRpcItem<T>> items)
         {
-            SingleItem = singleItem;
-        }
-
-        internal JsonRpcData(IReadOnlyList<JsonRpcItem<T>> batchItems)
-        {
-            BatchItems = batchItems;
+            Items = items;
         }
 
         /// <summary>Gets a value indicating whether the data is a batch.</summary>
         public bool IsBatch
         {
-            get => BatchItems != null;
-        }
-
-        /// <summary>Gets a value indicating whether the data is a single item.</summary>
-        public bool IsSingle
-        {
-            get => (SingleItem.Message != null) || (SingleItem.Exception != null);
+            get => Items != null;
         }
 
         /// <summary>Gets an item for non-batch data.</summary>
-        public JsonRpcItem<T> SingleItem
+        public JsonRpcItem<T> Item
         {
             get;
         }
 
         /// <summary>Gets a collection of items for batch data.</summary>
-        public IReadOnlyList<JsonRpcItem<T>> BatchItems
+        public IReadOnlyList<JsonRpcItem<T>> Items
         {
             get;
         }

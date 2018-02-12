@@ -27,13 +27,13 @@ namespace System.Data.JsonRpc.Benchmarks.Suites
             foreach (var s in new[] { "req_num_nam", "req_num_pos", "req_str_nam", "req_str_pos" })
             {
                 _resources[s] = EmbeddedResourceManager.GetString($"Assets.{s}.json");
-                _requests[s] = _serializer.DeserializeRequestData(_resources[s]).BatchItems.Select(i => i.Message).ToArray();
+                _requests[s] = _serializer.DeserializeRequestData(_resources[s]).Items.Select(i => i.Message).ToArray();
             }
 
             foreach (var s in new[] { "res_num_err", "res_num_suc", "res_str_err", "res_str_suc" })
             {
                 _resources[s] = EmbeddedResourceManager.GetString($"Assets.{s}.json");
-                _responses[s] = _serializer.DeserializeResponseData(_resources[s]).BatchItems.Select(i => i.Message).ToArray();
+                _responses[s] = _serializer.DeserializeResponseData(_resources[s]).Items.Select(i => i.Message).ToArray();
             }
         }
 
