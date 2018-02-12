@@ -3,46 +3,23 @@
     /// <summary>Represents errors that occur during RPC message processing.</summary>
     public sealed class JsonRpcException : Exception
     {
-        internal JsonRpcException(string message, in JsonRpcId messageId)
+        internal JsonRpcException(long errorCode, string message)
             : base(message)
         {
+            ErrorCode = errorCode;
+        }
+
+        internal JsonRpcException(long errorCode, string message, in JsonRpcId messageId)
+            : base(message)
+        {
+            ErrorCode = errorCode;
             MessageId = messageId;
         }
 
-        internal JsonRpcException(string message, Exception innerException)
+        internal JsonRpcException(long errorCode, string message, in JsonRpcId messageId, Exception innerException)
             : base(message, innerException)
         {
-        }
-
-        internal JsonRpcException(string message, in JsonRpcId messageId, Exception innerException)
-            : base(message, innerException)
-        {
-            MessageId = messageId;
-        }
-
-        internal JsonRpcException(JsonRpcExceptionType type, string message)
-            : base(message)
-        {
-            Type = type;
-        }
-
-        internal JsonRpcException(JsonRpcExceptionType type, string message, in JsonRpcId messageId)
-            : base(message)
-        {
-            Type = type;
-            MessageId = messageId;
-        }
-
-        internal JsonRpcException(JsonRpcExceptionType type, string message, Exception innerException)
-            : base(message, innerException)
-        {
-            Type = type;
-        }
-
-        internal JsonRpcException(JsonRpcExceptionType type, string message, in JsonRpcId messageId, Exception innerException)
-            : base(message, innerException)
-        {
-            Type = type;
+            ErrorCode = errorCode;
             MessageId = messageId;
         }
 
@@ -52,8 +29,8 @@
             get;
         }
 
-        /// <summary>Gets exception type.</summary>
-        public JsonRpcExceptionType Type
+        /// <summary>Gets the corresponding error code.</summary>
+        public long ErrorCode
         {
             get;
         }

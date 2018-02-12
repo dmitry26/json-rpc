@@ -122,13 +122,13 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void ConstructorWhenTypeIsStringAndEqualsNull()
+        public void TypeIsStringAndEqualsNull()
         {
             Assert.Throws<ArgumentNullException>(() => new JsonRpcId(null));
         }
 
         [Fact]
-        public void ConstructorWhenTypeIsStringAndEqualsEmptyString()
+        public void TypeIsStringAndEqualsEmptyString()
         {
             Assert.Equal(JsonRpcIdType.String, new JsonRpcId("").Type);
         }

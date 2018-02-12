@@ -33,33 +33,33 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void ParamsTypeIsNoneWhenIdIsNone()
+        public void ParametersTypeIsNoneWhenIdIsNone()
         {
             var message = new JsonRpcRequest("m");
 
-            Assert.Equal(JsonRpcParamsType.None, message.ParamsType);
+            Assert.Equal(JsonRpcParametersType.None, message.ParametersType);
         }
 
         [Fact]
-        public void ParamsTypeIsByPositionWhenIdIsNone()
+        public void ParametersTypeIsByPositionWhenIdIsNone()
         {
             var parameters = new object[] { 1L };
             var message = new JsonRpcRequest("m", parameters);
 
-            Assert.Equal(JsonRpcParamsType.ByPosition, message.ParamsType);
+            Assert.Equal(JsonRpcParametersType.ByPosition, message.ParametersType);
         }
 
         [Fact]
-        public void ParamsTypeIsByNameWhenIdIsNone()
+        public void ParametersTypeIsByNameWhenIdIsNone()
         {
             var parameters = new Dictionary<string, object> { ["p"] = 1L };
             var message = new JsonRpcRequest("m", parameters);
 
-            Assert.Equal(JsonRpcParamsType.ByName, message.ParamsType);
+            Assert.Equal(JsonRpcParametersType.ByName, message.ParametersType);
         }
 
         [Fact]
-        public void ParamsTypeIsByPositionWhenCountIsZero()
+        public void ParametersTypeIsByPositionWhenCountIsZero()
         {
             var parameters = new object[] { };
 
@@ -84,14 +84,14 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void ConstructorWithMethodWhenMethodIsNull()
+        public void MethodIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 new JsonRpcRequest((string)null));
         }
 
         [Fact]
-        public void ConstructorWithMethodWhenMethodIsEmptyString()
+        public void MethodIsEmptyString()
         {
             var message = new JsonRpcRequest("");
 

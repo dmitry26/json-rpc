@@ -5,48 +5,56 @@ namespace System.Data.JsonRpc.Tests
     public sealed class JsonRpcErrorTests
     {
         [Theory]
-        [InlineData(-32769L, JsonRpcErrorType.Undefined)]
-        [InlineData(-32700L, JsonRpcErrorType.Parsing)]
-        [InlineData(-32603L, JsonRpcErrorType.Internal)]
-        [InlineData(-32602L, JsonRpcErrorType.InvalidParams)]
-        [InlineData(-32601L, JsonRpcErrorType.InvalidMethod)]
-        [InlineData(-32600L, JsonRpcErrorType.InvalidRequest)]
-        [InlineData(-32099L, JsonRpcErrorType.Server)]
-        [InlineData(-32098L, JsonRpcErrorType.Server)]
-        [InlineData(-32001L, JsonRpcErrorType.Server)]
-        [InlineData(-32000L, JsonRpcErrorType.Server)]
-        [InlineData(-31999L, JsonRpcErrorType.Undefined)]
-        [InlineData(-00001L, JsonRpcErrorType.Undefined)]
-        [InlineData(+00000L, JsonRpcErrorType.Undefined)]
-        [InlineData(+00001L, JsonRpcErrorType.Undefined)]
-        public void ConstructorWhenCodeIsValid(long code, JsonRpcErrorType type)
+        [InlineData(JsonRpcErrorCode.StandardErrorsLowerBoundary - 1L)]
+        [InlineData(JsonRpcErrorCode.InvalidJson)]
+        [InlineData(JsonRpcErrorCode.InvalidOperation)]
+        [InlineData(JsonRpcErrorCode.InvalidParameters)]
+        [InlineData(JsonRpcErrorCode.InvalidMethod)]
+        [InlineData(JsonRpcErrorCode.InvalidMessage)]
+        [InlineData(JsonRpcErrorCode.ServerErrorsLowerBoundary)]
+        [InlineData(JsonRpcErrorCode.ServerErrorsLowerBoundary + 1L)]
+        [InlineData(JsonRpcErrorCode.ServerErrorsUpperBoundary - 1L)]
+        [InlineData(JsonRpcErrorCode.ServerErrorsUpperBoundary)]
+        [InlineData(JsonRpcErrorCode.StandardErrorsUpperBoundary + 1L)]
+        [InlineData(default(long))]
+        public void CodeIsValid(long code)
         {
             var jsonRpcError = new JsonRpcError(code, "m");
 
-            Assert.Equal(type, jsonRpcError.Type);
-            Assert.False(jsonRpcError.HasData);
+            Assert.Equal(code, jsonRpcError.Code);
         }
 
         [Theory]
-        [InlineData(-32768L)]
-        [InlineData(-32101L)]
-        public void ConstructorWhenCodeIsInvalid(long code)
+        [InlineData(JsonRpcErrorCode.StandardErrorsLowerBoundary)]
+        [InlineData(JsonRpcErrorCode.StandardErrorsLowerBoundary + 1L)]
+        [InlineData(JsonRpcErrorCode.ServerErrorsLowerBoundary - 1L)]
+        public void CodeIsInvalid(long code)
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
                 new JsonRpcError(code, "m"));
         }
 
         [Fact]
-        public void ConstructorWhenMessageIsNull()
+        public void MessageIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 new JsonRpcError(1L, null));
         }
 
         [Fact]
-        public void ConstructorWhenMessageIsEmptyString()
+        public void MessageIsEmptyString()
         {
-            new JsonRpcError(1L, string.Empty);
+            var jsonRpcError = new JsonRpcError(1L, string.Empty);
+
+            Assert.Equal(string.Empty, jsonRpcError.Message);
+        }
+
+        [Fact]
+        public void HasDataIsFalse()
+        {
+            var jsonRpcError = new JsonRpcError(1L, "m");
+
+            Assert.False(jsonRpcError.HasData);
         }
 
         [Fact]

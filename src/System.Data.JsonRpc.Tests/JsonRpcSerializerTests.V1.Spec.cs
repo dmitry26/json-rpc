@@ -33,8 +33,8 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.Equal(1L, jsonRpcMessage.Id);
             Assert.Equal("echo", jsonRpcMessage.Method);
-            Assert.Equal(JsonRpcParamsType.ByPosition, jsonRpcMessage.ParamsType);
-            Assert.Equal(new object[] { "Hello JSON-RPC" }, jsonRpcMessage.ParamsByPosition);
+            Assert.Equal(JsonRpcParametersType.ByPosition, jsonRpcMessage.ParametersType);
+            Assert.Equal(new object[] { "Hello JSON-RPC" }, jsonRpcMessage.ParametersByPosition);
         }
 
         [Fact]
@@ -125,8 +125,8 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.Equal(99L, jsonRpcMessage.Id);
             Assert.Equal("postMessage", jsonRpcMessage.Method);
-            Assert.Equal(JsonRpcParamsType.ByPosition, jsonRpcMessage.ParamsType);
-            Assert.Equal(new object[] { "Hello all!" }, jsonRpcMessage.ParamsByPosition);
+            Assert.Equal(JsonRpcParametersType.ByPosition, jsonRpcMessage.ParametersType);
+            Assert.Equal(new object[] { "Hello all!" }, jsonRpcMessage.ParametersByPosition);
         }
 
         [Fact]
@@ -213,8 +213,8 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.Equal(default, jsonRpcMessage.Id);
             Assert.Equal("handleMessage", jsonRpcMessage.Method);
-            Assert.Equal(JsonRpcParamsType.ByPosition, jsonRpcMessage.ParamsType);
-            Assert.Equal(new object[] { "user1", "we were just talking" }, jsonRpcMessage.ParamsByPosition);
+            Assert.Equal(JsonRpcParametersType.ByPosition, jsonRpcMessage.ParametersType);
+            Assert.Equal(new object[] { "user1", "we were just talking" }, jsonRpcMessage.ParametersByPosition);
         }
 
         [Fact]
@@ -269,8 +269,8 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.Equal(default, jsonRpcMessage.Id);
             Assert.Equal("handleMessage", jsonRpcMessage.Method);
-            Assert.Equal(JsonRpcParamsType.ByPosition, jsonRpcMessage.ParamsType);
-            Assert.Equal(new object[] { "user3", "sorry, gotta go now, ttyl" }, jsonRpcMessage.ParamsByPosition);
+            Assert.Equal(JsonRpcParametersType.ByPosition, jsonRpcMessage.ParametersType);
+            Assert.Equal(new object[] { "user3", "sorry, gotta go now, ttyl" }, jsonRpcMessage.ParametersByPosition);
         }
 
         [Fact]
@@ -325,8 +325,8 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.Equal(101L, jsonRpcMessage.Id);
             Assert.Equal("postMessage", jsonRpcMessage.Method);
-            Assert.Equal(JsonRpcParamsType.ByPosition, jsonRpcMessage.ParamsType);
-            Assert.Equal(new object[] { "I have a question:" }, jsonRpcMessage.ParamsByPosition);
+            Assert.Equal(JsonRpcParametersType.ByPosition, jsonRpcMessage.ParametersType);
+            Assert.Equal(new object[] { "I have a question:" }, jsonRpcMessage.ParametersByPosition);
         }
 
         [Fact]
@@ -381,8 +381,8 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.Equal(default, jsonRpcMessage.Id);
             Assert.Equal("userLeft", jsonRpcMessage.Method);
-            Assert.Equal(JsonRpcParamsType.ByPosition, jsonRpcMessage.ParamsType);
-            Assert.Equal(new object[] { "user3" }, jsonRpcMessage.ParamsByPosition);
+            Assert.Equal(JsonRpcParametersType.ByPosition, jsonRpcMessage.ParametersType);
+            Assert.Equal(new object[] { "user3" }, jsonRpcMessage.ParametersByPosition);
         }
 
         [Fact]

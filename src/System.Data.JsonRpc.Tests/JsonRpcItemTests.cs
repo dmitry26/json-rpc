@@ -6,7 +6,7 @@ namespace System.Data.JsonRpc.Tests
     public sealed class JsonRpcItemTests
     {
         [Fact]
-        public void V2IsValidIsTrue()
+        public void IsValidIsTrue()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_item_valid_true.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -22,7 +22,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void V2IsValidIsFalse()
+        public void IsValidIsFalse()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_item_valid_false.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -38,7 +38,7 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcException = jsonRpcItem.Exception;
 
-            Assert.Equal(JsonRpcExceptionType.InvalidMessage, jsonRpcException.Type);
+            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcException.ErrorCode);
         }
     }
 }

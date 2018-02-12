@@ -34,8 +34,8 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.Equal("foo", jsonRpcMessage.Id);
             Assert.Equal("getblockhash", jsonRpcMessage.Method);
-            Assert.Equal(JsonRpcParamsType.ByPosition, jsonRpcMessage.ParamsType);
-            Assert.Equal(new object[] { 0L }, jsonRpcMessage.ParamsByPosition);
+            Assert.Equal(JsonRpcParametersType.ByPosition, jsonRpcMessage.ParametersType);
+            Assert.Equal(new object[] { 0L }, jsonRpcMessage.ParametersByPosition);
         }
 
         [Fact]
@@ -126,8 +126,8 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.Equal("foo", jsonRpcMessage.Id);
             Assert.Equal("getblockhash", jsonRpcMessage.Method);
-            Assert.Equal(JsonRpcParamsType.ByPosition, jsonRpcMessage.ParamsType);
-            Assert.Equal(new object[] { -1L }, jsonRpcMessage.ParamsByPosition);
+            Assert.Equal(JsonRpcParametersType.ByPosition, jsonRpcMessage.ParametersType);
+            Assert.Equal(new object[] { -1L }, jsonRpcMessage.ParametersByPosition);
         }
 
         [Fact]
@@ -174,7 +174,6 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcError = jsonRpcMessage.Error;
 
-            Assert.Equal(JsonRpcErrorType.Undefined, jsonRpcError.Type);
             Assert.Equal(-8L, jsonRpcError.Code);
             Assert.Equal("Block height out of range", jsonRpcError.Message);
         }
@@ -200,7 +199,7 @@ namespace System.Data.JsonRpc.Tests
         // Core tests
 
         [Fact]
-        public void V1CoreSerializeRequestWithParamsByName()
+        public void V1CoreSerializeRequestWithParametersByName()
         {
             var jsonRpcSerializer = new JsonRpcSerializer
             {
@@ -219,7 +218,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void V1DeserializeResponseWithInvalidErrorType()
+        public void V1CoreDeserializeResponseWithInvalidErrorType()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.v1_core_error_invalid_type.json");
 
@@ -248,13 +247,13 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcError = jsonRpcMessage.Error;
 
-            Assert.Equal(JsonRpcErrorType.Undefined, jsonRpcError.Type);
+            Assert.Equal(default, jsonRpcError.Code);
             Assert.Equal(string.Empty, jsonRpcError.Message);
             Assert.False(jsonRpcError.HasData);
         }
 
         [Fact]
-        public void V1DeserializeResponseWithResultWithInvalidPropertiesSetWithError()
+        public void V1CoreDeserializeResponseWithInvalidPropertiesSetWithError()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.v1_core_invalid_set_w_error.json");
 
@@ -276,11 +275,11 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcException = jsonRpcItem.Exception;
 
-            Assert.Equal(JsonRpcExceptionType.InvalidMessage, jsonRpcException.Type);
+            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcException.ErrorCode);
         }
 
         [Fact]
-        public void V1DeserializeResponseWithResultWithInvalidPropertiesSetWithResult()
+        public void V1CoreDeserializeResponseWithInvalidPropertiesSetWithResult()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.v1_core_invalid_set_w_result.json");
 
@@ -302,7 +301,7 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcException = jsonRpcItem.Exception;
 
-            Assert.Equal(JsonRpcExceptionType.InvalidMessage, jsonRpcException.Type);
+            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcException.ErrorCode);
         }
     }
 }

@@ -6,47 +6,47 @@ namespace System.Data.JsonRpc.Tests
     public sealed class JsonRpcRequestContractTests
     {
         [Fact]
-        public void ConstructorWhenParamsByPositionSchemeIsNull()
+        public void ParametersTypeIsByPositionWhenIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 new JsonRpcRequestContract(default(IReadOnlyList<Type>)));
         }
 
         [Fact]
-        public void ConstructorWhenParamsByNameSchemeIsNull()
+        public void ParametersTypeIsByNameWhenIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 new JsonRpcRequestContract(default(IReadOnlyDictionary<string, Type>)));
         }
 
         [Fact]
-        public void ParamsTypeIsNone()
+        public void ParametersTypeIsNone()
         {
             var contract = new JsonRpcRequestContract();
 
-            Assert.Equal(JsonRpcParamsType.None, contract.ParamsType);
+            Assert.Equal(JsonRpcParametersType.None, contract.ParametersType);
         }
 
         [Fact]
-        public void ParamsTypeIsByPosition()
+        public void ParametersTypeIsByPosition()
         {
             var parameters = new[] { typeof(long) };
             var contract = new JsonRpcRequestContract(parameters);
 
-            Assert.Equal(JsonRpcParamsType.ByPosition, contract.ParamsType);
+            Assert.Equal(JsonRpcParametersType.ByPosition, contract.ParametersType);
         }
 
         [Fact]
-        public void ParamsTypeIsByName()
+        public void ParametersTypeIsByName()
         {
             var parameters = new Dictionary<string, Type> { ["p"] = typeof(long) };
             var contract = new JsonRpcRequestContract(parameters);
 
-            Assert.Equal(JsonRpcParamsType.ByName, contract.ParamsType);
+            Assert.Equal(JsonRpcParametersType.ByName, contract.ParametersType);
         }
 
         [Fact]
-        public void ParamsTypeIsByPositionWhenCountIsZero()
+        public void ParametersTypeIsByPositionWhenCountIsZero()
         {
             var parameters = new Type[] { };
 
@@ -55,7 +55,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void ParamsTypeIsByNameWhenCountIsZero()
+        public void ParametersTypeIsByNameWhenCountIsZero()
         {
             var parameters = new Dictionary<string, Type> { };
 

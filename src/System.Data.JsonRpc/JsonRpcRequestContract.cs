@@ -12,57 +12,57 @@ namespace System.Data.JsonRpc
         }
 
         /// <summary>Initializes a new instance of the <see cref="JsonRpcRequestContract" /> class.</summary>
-        /// <param name="params">The contract for parameters, provided by position.</param>
-        /// <exception cref="ArgumentException"><paramref name="params" /> is empty.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="params" /> is <see langword="null" />.</exception>
-        public JsonRpcRequestContract(IReadOnlyList<Type> @params)
+        /// <param name="parameters">The contract for parameters, provided by position.</param>
+        /// <exception cref="ArgumentException"><paramref name="parameters" /> is empty.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="parameters" /> is <see langword="null" />.</exception>
+        public JsonRpcRequestContract(IReadOnlyList<Type> parameters)
         {
-            if (@params == null)
+            if (parameters == null)
             {
-                throw new ArgumentNullException(nameof(@params));
+                throw new ArgumentNullException(nameof(parameters));
             }
-            if (@params.Count == 0)
+            if (parameters.Count == 0)
             {
-                throw new ArgumentException(Strings.GetString("request.params.invalid_count"), nameof(@params));
+                throw new ArgumentException(Strings.GetString("request.params.invalid_count"), nameof(parameters));
             }
 
-            ParamsByPosition = @params;
-            ParamsType = JsonRpcParamsType.ByPosition;
+            ParametersByPosition = parameters;
+            ParametersType = JsonRpcParametersType.ByPosition;
         }
 
         /// <summary>Initializes a new instance of the <see cref="JsonRpcRequestContract" /> class.</summary>
-        /// <param name="params">The contract for parameters, provided by name.</param>
-        /// <exception cref="ArgumentException"><paramref name="params" /> is empty.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="params" /> is <see langword="null" />.</exception>
-        public JsonRpcRequestContract(IReadOnlyDictionary<string, Type> @params)
+        /// <param name="parameters">The contract for parameters, provided by name.</param>
+        /// <exception cref="ArgumentException"><paramref name="parameters" /> is empty.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="parameters" /> is <see langword="null" />.</exception>
+        public JsonRpcRequestContract(IReadOnlyDictionary<string, Type> parameters)
         {
-            if (@params == null)
+            if (parameters == null)
             {
-                throw new ArgumentNullException(nameof(@params));
+                throw new ArgumentNullException(nameof(parameters));
             }
-            if (@params.Count == 0)
+            if (parameters.Count == 0)
             {
-                throw new ArgumentException(Strings.GetString("request.params.invalid_count"), nameof(@params));
+                throw new ArgumentException(Strings.GetString("request.params.invalid_count"), nameof(parameters));
             }
 
-            ParamsByName = @params;
-            ParamsType = JsonRpcParamsType.ByName;
+            ParametersByName = parameters;
+            ParametersType = JsonRpcParametersType.ByName;
         }
 
         /// <summary>Gets a contract for parameters, provided by position.</summary>
-        public IReadOnlyList<Type> ParamsByPosition
+        public IReadOnlyList<Type> ParametersByPosition
         {
             get;
         }
 
         /// <summary>Gets a contract for parameters, provided by name.</summary>
-        public IReadOnlyDictionary<string, Type> ParamsByName
+        public IReadOnlyDictionary<string, Type> ParametersByName
         {
             get;
         }
 
         /// <summary>Gets parameters type.</summary>
-        public JsonRpcParamsType ParamsType
+        public JsonRpcParametersType ParametersType
         {
             get;
         }

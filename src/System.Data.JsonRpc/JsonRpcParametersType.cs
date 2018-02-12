@@ -1,9 +1,9 @@
 ﻿namespace System.Data.JsonRpc
 {
     /// <summary>Represents RPC method parameters type.</summary>
-    public enum JsonRpcParamsType
+    public enum JsonRpcParametersType
     {
-        /// <summary>No parameters provided.</summary>
+        /// <summary>Parameters are not provided.</summary>
         None,
 
         /// <summary>Parameters are provided by position.</summary>

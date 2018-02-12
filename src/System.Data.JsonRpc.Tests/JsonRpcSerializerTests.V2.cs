@@ -33,7 +33,7 @@ namespace System.Data.JsonRpc.Tests
             var exception = Assert.Throws<JsonRpcException>(() =>
                 jsonRpcSerializer.SerializeRequests(new JsonRpcRequest[] { }));
 
-            Assert.Equal(JsonRpcExceptionType.InvalidMessage, exception.Type);
+            Assert.Equal(JsonRpcErrorCode.InvalidMessage, exception.ErrorCode);
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace System.Data.JsonRpc.Tests
             var exception = Assert.Throws<JsonRpcException>(() =>
                 jsonRpcSerializer.SerializeRequests(new JsonRpcRequest[] { null }));
 
-            Assert.Equal(JsonRpcExceptionType.InvalidMessage, exception.Type);
+            Assert.Equal(JsonRpcErrorCode.InvalidMessage, exception.ErrorCode);
         }
 
         [Fact]
@@ -84,7 +84,7 @@ namespace System.Data.JsonRpc.Tests
             var exception = Assert.Throws<JsonRpcException>(() =>
                 jsonRpcSerializer.SerializeResponses(new JsonRpcResponse[] { null }));
 
-            Assert.Equal(JsonRpcExceptionType.InvalidMessage, exception.Type);
+            Assert.Equal(JsonRpcErrorCode.InvalidMessage, exception.ErrorCode);
         }
 
         [Fact]
@@ -104,7 +104,7 @@ namespace System.Data.JsonRpc.Tests
             var exception = Assert.Throws<JsonRpcException>(() =>
                 jsonRpcSerializer.DeserializeRequestData(string.Empty));
 
-            Assert.Equal(JsonRpcExceptionType.Parsing, exception.Type);
+            Assert.Equal(JsonRpcErrorCode.InvalidJson, exception.ErrorCode);
         }
 
         [Fact]
@@ -116,11 +116,11 @@ namespace System.Data.JsonRpc.Tests
             var exception = Assert.Throws<JsonRpcException>(() =>
                 jsonRpcSerializer.DeserializeRequestData(jsonSample));
 
-            Assert.Equal(JsonRpcExceptionType.Parsing, exception.Type);
+            Assert.Equal(JsonRpcErrorCode.InvalidJson, exception.ErrorCode);
         }
 
         [Fact]
-        public void V2CoreDeserializeRequestDataWhenJsonProtocolIsAbsent()
+        public void V2CoreDeserializeRequestDataWhenProtocolIsAbsent()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_protocol_undefined_req.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -134,11 +134,11 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcException = jsonRpcItem.Exception;
 
-            Assert.Equal(JsonRpcExceptionType.InvalidMessage, jsonRpcException.Type);
+            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcException.ErrorCode);
         }
 
         [Fact]
-        public void V2CoreDeserializeResponseDataWhenJsonProtocolIsAbsent()
+        public void V2CoreDeserializeResponseDataWhenProtocolIsAbsent()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_protocol_undefined_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -152,11 +152,11 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcException = jsonRpcItem.Exception;
 
-            Assert.Equal(JsonRpcExceptionType.InvalidMessage, jsonRpcException.Type);
+            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcException.ErrorCode);
         }
 
         [Fact]
-        public void V2CoreDeserializeRequestDataWhenJsonProtocolHasInvalidType()
+        public void V2CoreDeserializeRequestDataWhenProtocolHasInvalidType()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_protocol_invalid_type_req.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -170,11 +170,11 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcException = jsonRpcItem.Exception;
 
-            Assert.Equal(JsonRpcExceptionType.InvalidMessage, jsonRpcException.Type);
+            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcException.ErrorCode);
         }
 
         [Fact]
-        public void V2CoreDeserializeResponseDataWhenJsonProtocolHasInvalidType()
+        public void V2CoreDeserializeResponseDataWhenProtocolHasInvalidType()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_protocol_invalid_type_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -188,11 +188,11 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcException = jsonRpcItem.Exception;
 
-            Assert.Equal(JsonRpcExceptionType.InvalidMessage, jsonRpcException.Type);
+            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcException.ErrorCode);
         }
 
         [Fact]
-        public void V2CoreDeserializeRequestDataWhenJsonProtocolHasInvalidValue()
+        public void V2CoreDeserializeRequestDataWhenProtocolHasInvalidValue()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_protocol_invalid_value_req.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -206,11 +206,11 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcException = jsonRpcItem.Exception;
 
-            Assert.Equal(JsonRpcExceptionType.InvalidMessage, jsonRpcException.Type);
+            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcException.ErrorCode);
         }
 
         [Fact]
-        public void V2CoreDeserializeResponseDataWhenJsonProtocolHasInvalidValue()
+        public void V2CoreDeserializeResponseDataWhenProtocolHasInvalidValue()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_protocol_invalid_value_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -224,11 +224,11 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcException = jsonRpcItem.Exception;
 
-            Assert.Equal(JsonRpcExceptionType.InvalidMessage, jsonRpcException.Type);
+            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcException.ErrorCode);
         }
 
         [Fact]
-        public void V2CoreDeserializeRequestDataWhenParamsHasInvalidType()
+        public void V2CoreDeserializeRequestDataWhenParametersHasInvalidType()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_params_invalid_type.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -245,7 +245,7 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcException = jsonRpcItem.Exception;
 
-            Assert.Equal(JsonRpcExceptionType.InvalidMessage, jsonRpcException.Type);
+            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcException.ErrorCode);
         }
 
         [Fact]
@@ -266,7 +266,7 @@ namespace System.Data.JsonRpc.Tests
             var exception = Assert.Throws<JsonRpcException>(() =>
                 jsonRpcSerializer.DeserializeResponseData(jsonSample));
 
-            Assert.Equal(JsonRpcExceptionType.Parsing, exception.Type);
+            Assert.Equal(JsonRpcErrorCode.InvalidJson, exception.ErrorCode);
         }
 
         [Fact]
@@ -335,7 +335,7 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcException = jsonRpcItem.Exception;
 
-            Assert.Equal(JsonRpcExceptionType.InvalidMessage, jsonRpcException.Type);
+            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcException.ErrorCode);
         }
 
         [Fact]
@@ -357,7 +357,7 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcException = jsonRpcItem.Exception;
 
-            Assert.Equal(JsonRpcExceptionType.InvalidMessage, jsonRpcException.Type);
+            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcException.ErrorCode);
         }
     }
 }

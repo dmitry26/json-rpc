@@ -60,14 +60,14 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void ConstructorWithResultWhenIdIsNone()
+        public void SuccessIsTrueWhenIdIsNone()
         {
             Assert.Throws<ArgumentException>(() =>
                 new JsonRpcResponse(1L, default(JsonRpcId)));
         }
 
         [Fact]
-        public void ConstructorWithErrorWhenErrorIsNull()
+        public void SuccessIsFalseWhenErrorIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 new JsonRpcResponse(default(JsonRpcError)));
