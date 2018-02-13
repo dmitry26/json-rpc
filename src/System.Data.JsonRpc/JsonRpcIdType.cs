@@ -3,13 +3,16 @@
     /// <summary>Represents RPC message identifier type.</summary>
     public enum JsonRpcIdType
     {
-        /// <summary>Identifier is empty.</summary>
+        /// <summary>Empty identifier.</summary>
         None,
 
-        /// <summary>Identifier is a number.</summary>
-        Number,
+        /// <summary>Identifier of string type.</summary>
+        String,
 
-        /// <summary>Identifier is a string.</summary>
-        String
+        /// <summary>Identifier of integer type.</summary>
+        Integer,
+
+        /// <summary>Identifier of float type.</summary>
+        Float
     }
 }

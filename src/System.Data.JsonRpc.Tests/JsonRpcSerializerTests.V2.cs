@@ -261,5 +261,74 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcException.ErrorCode);
         }
+
+        [Fact]
+        public void V2CoreSerializeRequestWithFloatId()
+        {
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_id_float_req.json");
+            var jsonRpcSerializer = new JsonRpcSerializer();
+            var jsonRpcMessage = new JsonRpcRequest("m", 1D);
+            var jsonResult = jsonRpcSerializer.SerializeRequest(jsonRpcMessage);
+
+            CompareJsonStrings(jsonSample, jsonResult);
+        }
+
+        [Fact]
+        public void V2CoreDeserializeRequestDataWithFloatId()
+        {
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_id_float_req.json");
+            var jsonRpcSerializer = new JsonRpcSerializer();
+
+            jsonRpcSerializer.RequestContracts["m"] = new JsonRpcRequestContract();
+
+            var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
+
+            Assert.False(jsonRpcData.IsBatch);
+
+            var jsonRpcItem = jsonRpcData.Item;
+
+            Assert.True(jsonRpcItem.IsValid);
+
+            var jsonRpcMessage = jsonRpcItem.Message;
+            var jsonRpcId = jsonRpcMessage.Id;
+
+            Assert.Equal(JsonRpcIdType.Float, jsonRpcId.Type);
+            Assert.Equal(1D, (double)jsonRpcId);
+        }
+
+        [Fact]
+        public void V2CoreSerializeResponseWithFloatId()
+        {
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_id_float_res.json");
+            var jsonRpcSerializer = new JsonRpcSerializer();
+            var jsonRpcMessage = new JsonRpcResponse(string.Empty, 1D);
+            var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcMessage);
+
+            CompareJsonStrings(jsonSample, jsonResult);
+        }
+
+        [Fact]
+        public void V2CoreDeserializeResponseDataWithFloatId()
+        {
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_id_float_res.json");
+            var jsonRpcSerializer = new JsonRpcSerializer();
+
+            jsonRpcSerializer.ResponseContracts["m"] = new JsonRpcResponseContract(typeof(string));
+            jsonRpcSerializer.StaticResponseBindings[1D] = "m";
+
+            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample);
+
+            Assert.False(jsonRpcData.IsBatch);
+
+            var jsonRpcItem = jsonRpcData.Item;
+
+            Assert.True(jsonRpcItem.IsValid);
+
+            var jsonRpcMessage = jsonRpcItem.Message;
+            var jsonRpcId = jsonRpcMessage.Id;
+
+            Assert.Equal(JsonRpcIdType.Float, jsonRpcId.Type);
+            Assert.Equal(1D, (double)jsonRpcId);
+        }
     }
 }

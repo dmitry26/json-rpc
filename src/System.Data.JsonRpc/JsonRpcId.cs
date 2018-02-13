@@ -6,18 +6,9 @@ namespace System.Data.JsonRpc
     /// <summary>Represents RPC message identifier.</summary>
     public readonly struct JsonRpcId : IEquatable<JsonRpcId>, IComparable<JsonRpcId>
     {
-        private readonly long _valueNumber;
         private readonly string _valueString;
-
-        /// <summary>Initializes a new instance of the <see cref="JsonRpcId" /> structure.</summary>
-        /// <param name="value">The identifier value.</param>
-        public JsonRpcId(long value)
-        {
-            _valueNumber = value;
-            _valueString = default;
-
-            Type = JsonRpcIdType.Number;
-        }
+        private readonly long _valueInteger;
+        private readonly double _valueFloat;
 
         /// <summary>Initializes a new instance of the <see cref="JsonRpcId" /> structure.</summary>
         /// <param name="value">The identifier value.</param>
@@ -29,10 +20,33 @@ namespace System.Data.JsonRpc
                 throw new ArgumentNullException(nameof(value));
             }
 
-            _valueNumber = default;
             _valueString = value;
+            _valueInteger = default;
+            _valueFloat = default;
 
             Type = JsonRpcIdType.String;
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="JsonRpcId" /> structure.</summary>
+        /// <param name="value">The identifier value.</param>
+        public JsonRpcId(long value)
+        {
+            _valueString = default;
+            _valueInteger = value;
+            _valueFloat = default;
+
+            Type = JsonRpcIdType.Integer;
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="JsonRpcId" /> structure.</summary>
+        /// <param name="value">The identifier value.</param>
+        public JsonRpcId(double value)
+        {
+            _valueString = default;
+            _valueInteger = default;
+            _valueFloat = value;
+
+            Type = JsonRpcIdType.Float;
         }
 
         /// <summary>Gets the identifier type.</summary>
@@ -48,15 +62,19 @@ namespace System.Data.JsonRpc
         {
             switch (other.Type)
             {
-                case JsonRpcIdType.Number:
+                case JsonRpcIdType.String:
                     {
                         switch (Type)
                         {
-                            case JsonRpcIdType.Number:
-                                {
-                                    return _valueNumber.CompareTo(other._valueNumber);
-                                }
                             case JsonRpcIdType.String:
+                                {
+                                    return _valueString.CompareTo(other._valueString);
+                                }
+                            case JsonRpcIdType.Integer:
+                                {
+                                    return +1;
+                                }
+                            case JsonRpcIdType.Float:
                                 {
                                     return +1;
                                 }
@@ -66,17 +84,43 @@ namespace System.Data.JsonRpc
                                 }
                         }
                     }
-                case JsonRpcIdType.String:
+                case JsonRpcIdType.Integer:
                     {
                         switch (Type)
                         {
-                            case JsonRpcIdType.Number:
+                            case JsonRpcIdType.String:
                                 {
                                     return -1;
                                 }
+                            case JsonRpcIdType.Integer:
+                                {
+                                    return _valueInteger.CompareTo(other._valueInteger);
+                                }
+                            case JsonRpcIdType.Float:
+                                {
+                                    return +1;
+                                }
+                            default:
+                                {
+                                    return -1;
+                                }
+                        }
+                    }
+                case JsonRpcIdType.Float:
+                    {
+                        switch (Type)
+                        {
                             case JsonRpcIdType.String:
                                 {
-                                    return _valueString.CompareTo(other._valueString);
+                                    return -1;
+                                }
+                            case JsonRpcIdType.Integer:
+                                {
+                                    return -1;
+                                }
+                            case JsonRpcIdType.Float:
+                                {
+                                    return _valueFloat.CompareTo(other._valueFloat);
                                 }
                             default:
                                 {
@@ -108,13 +152,17 @@ namespace System.Data.JsonRpc
         {
             switch (other.Type)
             {
-                case JsonRpcIdType.Number:
-                    {
-                        return (Type == JsonRpcIdType.Number) && _valueNumber.Equals(other._valueNumber);
-                    }
                 case JsonRpcIdType.String:
                     {
                         return (Type == JsonRpcIdType.String) && _valueString.Equals(other._valueString);
+                    }
+                case JsonRpcIdType.Integer:
+                    {
+                        return (Type == JsonRpcIdType.Integer) && _valueInteger.Equals(other._valueInteger);
+                    }
+                case JsonRpcIdType.Float:
+                    {
+                        return (Type == JsonRpcIdType.Float) && _valueFloat.Equals(other._valueFloat);
                     }
                 default:
                     {
@@ -134,13 +182,17 @@ namespace System.Data.JsonRpc
                     {
                         return Equals(other);
                     }
-                case long other:
-                    {
-                        return (Type == JsonRpcIdType.Number) && _valueNumber.Equals(other);
-                    }
                 case string other:
                     {
                         return (Type == JsonRpcIdType.String) && _valueString.Equals(other);
+                    }
+                case long other:
+                    {
+                        return (Type == JsonRpcIdType.Integer) && _valueInteger.Equals(other);
+                    }
+                case double other:
+                    {
+                        return (Type == JsonRpcIdType.Float) && _valueFloat.Equals(other);
                     }
                 default:
                     {
@@ -159,14 +211,19 @@ namespace System.Data.JsonRpc
 
                 switch (Type)
                 {
-                    case JsonRpcIdType.Number:
-                        {
-                            result = (result * 16777619) ^ _valueNumber.GetHashCode();
-                        }
-                        break;
                     case JsonRpcIdType.String:
                         {
                             result = (result * 16777619) ^ _valueString.GetHashCode();
+                        }
+                        break;
+                    case JsonRpcIdType.Integer:
+                        {
+                            result = (result * 16777619) ^ _valueInteger.GetHashCode();
+                        }
+                        break;
+                    case JsonRpcIdType.Float:
+                        {
+                            result = (result * 16777619) ^ _valueFloat.GetHashCode();
                         }
                         break;
                 }
@@ -181,13 +238,19 @@ namespace System.Data.JsonRpc
         {
             switch (Type)
             {
-                case JsonRpcIdType.Number:
-                    {
-                        return _valueNumber.ToString(CultureInfo.InvariantCulture);
-                    }
                 case JsonRpcIdType.String:
                     {
                         return _valueString;
+                    }
+                case JsonRpcIdType.Integer:
+                    {
+                        return _valueInteger.ToString(CultureInfo.InvariantCulture);
+                    }
+                case JsonRpcIdType.Float:
+                    {
+                        // Writes at least 1 precision digit out of 16 possible
+
+                        return _valueFloat.ToString("0.0###############", CultureInfo.InvariantCulture);
                     }
                 default:
                     {
@@ -214,13 +277,6 @@ namespace System.Data.JsonRpc
             return !obj1.Equals(obj2);
         }
 
-        /// <summary>Performs an implicit conversion from <see cref="ulong" /> to <see cref="JsonRpcId" />.</summary>
-        /// <param name="value">The value to create a <see cref="JsonRpcId" /> from.</param>
-        public static implicit operator JsonRpcId(long value)
-        {
-            return new JsonRpcId(value);
-        }
-
         /// <summary>Performs an implicit conversion from <see cref="string" /> to <see cref="JsonRpcId" />.</summary>
         /// <param name="value">The value to create a <see cref="JsonRpcId" /> from.</param>
         public static implicit operator JsonRpcId(string value)
@@ -228,17 +284,18 @@ namespace System.Data.JsonRpc
             return new JsonRpcId(value);
         }
 
-        /// <summary>Performs an implicit conversion from <see cref="JsonRpcId" /> to <see cref="long" />.</summary>
-        /// <param name="value">The identifier to get a <see cref="long" /> value from.</param>
-        /// <exception cref="InvalidCastException">The underlying value is not of type <see cref="long" />.</exception>
-        public static explicit operator long(JsonRpcId value)
+        /// <summary>Performs an implicit conversion from <see cref="ulong" /> to <see cref="JsonRpcId" />.</summary>
+        /// <param name="value">The value to create a <see cref="JsonRpcId" /> from.</param>
+        public static implicit operator JsonRpcId(long value)
         {
-            if (value.Type != JsonRpcIdType.Number)
-            {
-                throw new InvalidCastException(string.Format(CultureInfo.InvariantCulture, Strings.GetString("id.invalid_cast"), typeof(JsonRpcId), typeof(long)));
-            }
+            return new JsonRpcId(value);
+        }
 
-            return value._valueNumber;
+        /// <summary>Performs an implicit conversion from <see cref="double" /> to <see cref="JsonRpcId" />.</summary>
+        /// <param name="value">The value to create a <see cref="JsonRpcId" /> from.</param>
+        public static implicit operator JsonRpcId(double value)
+        {
+            return new JsonRpcId(value);
         }
 
         /// <summary>Performs an implicit conversion from <see cref="JsonRpcId" /> to <see cref="string" />.</summary>
@@ -252,6 +309,32 @@ namespace System.Data.JsonRpc
             }
 
             return value._valueString;
+        }
+
+        /// <summary>Performs an implicit conversion from <see cref="JsonRpcId" /> to <see cref="long" />.</summary>
+        /// <param name="value">The identifier to get a <see cref="long" /> value from.</param>
+        /// <exception cref="InvalidCastException">The underlying value is not of type <see cref="long" />.</exception>
+        public static explicit operator long(JsonRpcId value)
+        {
+            if (value.Type != JsonRpcIdType.Integer)
+            {
+                throw new InvalidCastException(string.Format(CultureInfo.InvariantCulture, Strings.GetString("id.invalid_cast"), typeof(JsonRpcId), typeof(long)));
+            }
+
+            return value._valueInteger;
+        }
+
+        /// <summary>Performs an implicit conversion from <see cref="JsonRpcId" /> to <see cref="double" />.</summary>
+        /// <param name="value">The identifier to get a <see cref="double" /> value from.</param>
+        /// <exception cref="InvalidCastException">The underlying value is not of type <see cref="double" />.</exception>
+        public static explicit operator double(JsonRpcId value)
+        {
+            if (value.Type != JsonRpcIdType.Float)
+            {
+                throw new InvalidCastException(string.Format(CultureInfo.InvariantCulture, Strings.GetString("id.invalid_cast"), typeof(JsonRpcId), typeof(double)));
+            }
+
+            return value._valueFloat;
         }
     }
 }

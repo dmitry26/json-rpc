@@ -411,6 +411,10 @@ namespace System.Data.JsonRpc
             {
                 switch (jsonValueId.Type)
                 {
+                    case JTokenType.Null:
+                        {
+                        }
+                        break;
                     case JTokenType.String:
                         {
                             requestId = (string)jsonValueId;
@@ -418,11 +422,26 @@ namespace System.Data.JsonRpc
                         break;
                     case JTokenType.Integer:
                         {
-                            requestId = (long)jsonValueId;
+                            try
+                            {
+                                requestId = (long)jsonValueId;
+                            }
+                            catch (OverflowException e)
+                            {
+                                throw new JsonRpcException(JsonRpcErrorCode.InvalidMessage, Strings.GetString("core.deserialize.message.id.large_number"), default, e);
+                            }
                         }
                         break;
-                    case JTokenType.Null:
+                    case JTokenType.Float:
                         {
+                            try
+                            {
+                                requestId = (double)jsonValueId;
+                            }
+                            catch (OverflowException e)
+                            {
+                                throw new JsonRpcException(JsonRpcErrorCode.InvalidMessage, Strings.GetString("core.deserialize.message.id.large_number"), default, e);
+                            }
                         }
                         break;
                     default:
@@ -592,9 +611,12 @@ namespace System.Data.JsonRpc
 
             switch (request.Id.Type)
             {
-                case JsonRpcIdType.Number:
+                case JsonRpcIdType.None:
                     {
-                        jsonObject["id"] = new JValue((long)request.Id);
+                        if (CompatibilityLevel != JsonRpcCompatibilityLevel.Level2)
+                        {
+                            jsonObject["id"] = JValue.CreateNull();
+                        }
                     }
                     break;
                 case JsonRpcIdType.String:
@@ -602,12 +624,14 @@ namespace System.Data.JsonRpc
                         jsonObject["id"] = new JValue((string)request.Id);
                     }
                     break;
-                case JsonRpcIdType.None:
+                case JsonRpcIdType.Integer:
                     {
-                        if (CompatibilityLevel != JsonRpcCompatibilityLevel.Level2)
-                        {
-                            jsonObject["id"] = JValue.CreateNull();
-                        }
+                        jsonObject["id"] = new JValue((long)request.Id);
+                    }
+                    break;
+                case JsonRpcIdType.Float:
+                    {
+                        jsonObject["id"] = new JValue((double)request.Id);
                     }
                     break;
             }
@@ -631,9 +655,8 @@ namespace System.Data.JsonRpc
             {
                 switch (jsonValueId.Type)
                 {
-                    case JTokenType.Integer:
+                    case JTokenType.Null:
                         {
-                            responseId = (long)jsonValueId;
                         }
                         break;
                     case JTokenType.String:
@@ -641,8 +664,28 @@ namespace System.Data.JsonRpc
                             responseId = (string)jsonValueId;
                         }
                         break;
-                    case JTokenType.Null:
+                    case JTokenType.Integer:
                         {
+                            try
+                            {
+                                responseId = (long)jsonValueId;
+                            }
+                            catch (OverflowException e)
+                            {
+                                throw new JsonRpcException(JsonRpcErrorCode.InvalidMessage, Strings.GetString("core.deserialize.message.id.large_number"), default, e);
+                            }
+                        }
+                        break;
+                    case JTokenType.Float:
+                        {
+                            try
+                            {
+                                responseId = (double)jsonValueId;
+                            }
+                            catch (OverflowException e)
+                            {
+                                throw new JsonRpcException(JsonRpcErrorCode.InvalidMessage, Strings.GetString("core.deserialize.message.id.large_number"), default, e);
+                            }
                         }
                         break;
                     default:
@@ -710,7 +753,14 @@ namespace System.Data.JsonRpc
 
                     if (jsonObjectError.TryGetValue("code", out var jsonTokenErrorCode) && (jsonTokenErrorCode.Type == JTokenType.Integer))
                     {
-                        responseErrorCode = (long)jsonTokenErrorCode;
+                        try
+                        {
+                            responseErrorCode = (long)jsonTokenErrorCode;
+                        }
+                        catch (OverflowException e)
+                        {
+                            throw new JsonRpcException(JsonRpcErrorCode.InvalidMessage, Strings.GetString("core.deserialize.response.error.code.large_number"), responseId, e);
+                        }
                     }
                     else
                     {
@@ -892,14 +942,19 @@ namespace System.Data.JsonRpc
                         jsonObject["id"] = JValue.CreateNull();
                     }
                     break;
-                case JsonRpcIdType.Number:
+                case JsonRpcIdType.String:
+                    {
+                        jsonObject["id"] = new JValue((string)response.Id);
+                    }
+                    break;
+                case JsonRpcIdType.Integer:
                     {
                         jsonObject["id"] = new JValue((long)response.Id);
                     }
                     break;
-                case JsonRpcIdType.String:
+                case JsonRpcIdType.Float:
                     {
-                        jsonObject["id"] = new JValue((string)response.Id);
+                        jsonObject["id"] = new JValue((double)response.Id);
                     }
                     break;
             }
