@@ -1,10 +1,12 @@
 ﻿using System.Data.JsonRpc.Benchmarks.Framework;
 using System.Linq;
+using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Diagnosers;
 using BenchmarkDotNet.Engines;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Loggers;
+using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Validators;
 
 namespace System.Data.JsonRpc.Benchmarks
@@ -15,6 +17,7 @@ namespace System.Data.JsonRpc.Benchmarks
         {
             var configuration = ManualConfig.CreateEmpty();
 
+            configuration.Set(SummaryStyle.Default.WithSizeUnit(SizeUnit.B));
             configuration.Add(DefaultConfig.Instance.GetColumnProviders().ToArray());
             configuration.Add(Job.Dry.With(RunStrategy.Throughput).WithTargetCount(5));
             configuration.Add(ConsoleLogger.Default);

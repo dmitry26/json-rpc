@@ -117,13 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="core.deserialize.batch.duplicate_id" xml:space="preserve">
-    <value>The batch contains messages with the same identifier: "{0}"</value>
-  </data>
-  <data name="core.deserialize.batch.empty" xml:space="preserve">
+  <data name="core.batch.empty" xml:space="preserve">
     <value>The batch is empty</value>
   </data>
-  <data name="core.deserialize.batch.invalid_item" xml:space="preserve">
+  <data name="core.batch.invalid_item" xml:space="preserve">
     <value>The batch item at position {0} is not a valid message</value>
   </data>
   <data name="core.deserialize.input.invalid_structure" xml:space="preserve">
@@ -180,12 +177,6 @@
   <data name="core.deserialize.response.protocol.invalid_property" xml:space="preserve">
     <value>The response does not have a valid protocol property</value>
   </data>
-  <data name="core.serialize.batch.empty" xml:space="preserve">
-    <value>The batch is empty</value>
-  </data>
-  <data name="core.serialize.batch.invalid_item" xml:space="preserve">
-    <value>The batch item at position {0} is not a valid message</value>
-  </data>
   <data name="core.serialize.json_issue" xml:space="preserve">
     <value>An error occurred during serialization to JSON</value>
   </data>
@@ -193,7 +184,7 @@
     <value>The request has unsupported parameters structure for the current protocol compatibility level</value>
   </data>
   <data name="error.code.invalid_range" xml:space="preserve">
-    <value>The specified value is reserved for future use</value>
+    <value>The specified code is outside the allowable range</value>
   </data>
   <data name="id.invalid_cast" xml:space="preserve">
     <value>Unable to cast object of type {0} to type {1}</value>
@@ -201,7 +192,7 @@
   <data name="request.params.invalid_count" xml:space="preserve">
     <value>The parameters count equals zero</value>
   </data>
-  <data name="response.invalid_id" xml:space="preserve">
-    <value>The identifier is not valid</value>
+  <data name="response.empty_id" xml:space="preserve">
+    <value>The specified identifier has empty value</value>
   </data>
 </root>

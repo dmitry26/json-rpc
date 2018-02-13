@@ -5,47 +5,7 @@ namespace System.Data.JsonRpc.Tests
 {
     public partial class JsonRpcSerializerTests
     {
-        // Core tests
-
-        [Fact]
-        public void V2CoreSerializeRequestWhenRequestIsNull()
-        {
-            var jsonRpcSerializer = new JsonRpcSerializer();
-
-            Assert.Throws<ArgumentNullException>(() =>
-                jsonRpcSerializer.SerializeRequest(null));
-        }
-
-        [Fact]
-        public void V2CoreSerializeRequestsWhenCollectionIsNull()
-        {
-            var jsonRpcSerializer = new JsonRpcSerializer();
-
-            Assert.Throws<ArgumentNullException>(() =>
-                jsonRpcSerializer.SerializeRequests(null));
-        }
-
-        [Fact]
-        public void V2CoreSerializeRequestsWhenCollectionIsEmptyCollection()
-        {
-            var jsonRpcSerializer = new JsonRpcSerializer();
-
-            var exception = Assert.Throws<JsonRpcException>(() =>
-                jsonRpcSerializer.SerializeRequests(new JsonRpcRequest[] { }));
-
-            Assert.Equal(JsonRpcErrorCode.InvalidMessage, exception.ErrorCode);
-        }
-
-        [Fact]
-        public void V2CoreSerializeRequestsWhenCollectionContainsNull()
-        {
-            var jsonRpcSerializer = new JsonRpcSerializer();
-
-            var exception = Assert.Throws<JsonRpcException>(() =>
-                jsonRpcSerializer.SerializeRequests(new JsonRpcRequest[] { null }));
-
-            Assert.Equal(JsonRpcErrorCode.InvalidMessage, exception.ErrorCode);
-        }
+        // 2.0 Core tests
 
         [Fact]
         public void V2CoreSerializeRequestWithParameterEqualsNull()
@@ -56,55 +16,6 @@ namespace System.Data.JsonRpc.Tests
             var jsonResult = jsonRpcSerializer.SerializeRequest(jsonRpcMessage);
 
             CompareJsonStrings(jsonSample, jsonResult);
-        }
-
-        [Fact]
-        public void V2CoreSerializeResponseWhenResponseIsNull()
-        {
-            var jsonRpcSerializer = new JsonRpcSerializer();
-
-            Assert.Throws<ArgumentNullException>(() =>
-                jsonRpcSerializer.SerializeResponse(null));
-        }
-
-        [Fact]
-        public void V2CoreSerializeResponsesWhenCollectionIsNull()
-        {
-            var jsonRpcSerializer = new JsonRpcSerializer();
-
-            Assert.Throws<ArgumentNullException>(() =>
-                jsonRpcSerializer.SerializeResponses(null));
-        }
-
-        [Fact]
-        public void V2CoreSerializeResponsesWhenCollectionContainsNull()
-        {
-            var jsonRpcSerializer = new JsonRpcSerializer();
-
-            var exception = Assert.Throws<JsonRpcException>(() =>
-                jsonRpcSerializer.SerializeResponses(new JsonRpcResponse[] { null }));
-
-            Assert.Equal(JsonRpcErrorCode.InvalidMessage, exception.ErrorCode);
-        }
-
-        [Fact]
-        public void V2CoreDeserializeRequestDataWhenJsonStringIsNull()
-        {
-            var jsonRpcSerializer = new JsonRpcSerializer();
-
-            Assert.Throws<ArgumentNullException>(() =>
-                jsonRpcSerializer.DeserializeRequestData(null));
-        }
-
-        [Fact]
-        public void V2CoreDeserializeRequestDataWhenJsonStringIsEmptyString()
-        {
-            var jsonRpcSerializer = new JsonRpcSerializer();
-
-            var exception = Assert.Throws<JsonRpcException>(() =>
-                jsonRpcSerializer.DeserializeRequestData(string.Empty));
-
-            Assert.Equal(JsonRpcErrorCode.InvalidJson, exception.ErrorCode);
         }
 
         [Fact]
@@ -249,15 +160,6 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void V2CoreDeserializeResponseDataWhenJsonStringIsNull()
-        {
-            var jsonRpcSerializer = new JsonRpcSerializer();
-
-            Assert.Throws<ArgumentNullException>(() =>
-                jsonRpcSerializer.DeserializeResponseData(null));
-        }
-
-        [Fact]
         public void V2CoreDeserializeResponseDataWhenJsonIsInvalid()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_json_invalid_res.json");
@@ -270,7 +172,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void V2CoreDeserializeResponseDataWhenMethodSchemeBindingIsDynamic()
+        public void V2CoreDeserializeResponseDataWhenBindingsAreDynamic()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_binding_dynamic.json");
             var jsonRpcSerializer = new JsonRpcSerializer();

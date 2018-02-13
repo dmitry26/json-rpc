@@ -92,7 +92,7 @@ namespace System.Data.JsonRpc
 
                         if (jsonArray.Count == 0)
                         {
-                            throw new JsonRpcException(JsonRpcErrorCode.InvalidMessage, Strings.GetString("core.deserialize.batch.empty"));
+                            throw new JsonRpcException(JsonRpcErrorCode.InvalidMessage, Strings.GetString("core.batch.empty"));
                         }
 
                         var items = new JsonRpcItem<JsonRpcRequest>[jsonArray.Count];
@@ -103,7 +103,7 @@ namespace System.Data.JsonRpc
 
                             if (jsonObject.Type != JTokenType.Object)
                             {
-                                var exception = new JsonRpcException(JsonRpcErrorCode.InvalidMessage, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.deserialize.batch.invalid_item"), i));
+                                var exception = new JsonRpcException(JsonRpcErrorCode.InvalidMessage, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.batch.invalid_item"), i));
 
                                 items[i] = new JsonRpcItem<JsonRpcRequest>(exception);
 
@@ -191,7 +191,7 @@ namespace System.Data.JsonRpc
 
                         if (jsonArray.Count == 0)
                         {
-                            throw new JsonRpcException(JsonRpcErrorCode.InvalidMessage, Strings.GetString("core.deserialize.batch.empty"));
+                            throw new JsonRpcException(JsonRpcErrorCode.InvalidMessage, Strings.GetString("core.batch.empty"));
                         }
 
                         var items = new JsonRpcItem<JsonRpcResponse>[jsonArray.Count];
@@ -202,7 +202,7 @@ namespace System.Data.JsonRpc
 
                             if (jsonObject.Type != JTokenType.Object)
                             {
-                                var exception = new JsonRpcException(JsonRpcErrorCode.InvalidMessage, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.deserialize.batch.invalid_item"), i));
+                                var exception = new JsonRpcException(JsonRpcErrorCode.InvalidMessage, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.batch.invalid_item"), i));
 
                                 items[i] = new JsonRpcItem<JsonRpcResponse>(exception);
 
@@ -281,7 +281,7 @@ namespace System.Data.JsonRpc
             }
             if (requests.Count == 0)
             {
-                throw new JsonRpcException(JsonRpcErrorCode.InvalidMessage, Strings.GetString("core.serialize.batch.empty"));
+                throw new JsonRpcException(JsonRpcErrorCode.InvalidMessage, Strings.GetString("core.batch.empty"));
             }
 
             var jsonArray = new JArray();
@@ -290,7 +290,7 @@ namespace System.Data.JsonRpc
             {
                 if (requests[i] == null)
                 {
-                    throw new JsonRpcException(JsonRpcErrorCode.InvalidMessage, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.serialize.batch.invalid_item"), i));
+                    throw new JsonRpcException(JsonRpcErrorCode.InvalidMessage, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.batch.invalid_item"), i));
                 }
 
                 jsonArray.Add(ConvertRequestToToken(requests[i]));
@@ -359,6 +359,10 @@ namespace System.Data.JsonRpc
             {
                 throw new ArgumentNullException(nameof(responses));
             }
+            if (responses.Count == 0)
+            {
+                throw new JsonRpcException(JsonRpcErrorCode.InvalidMessage, Strings.GetString("core.batch.empty"));
+            }
 
             var jsonArray = new JArray();
 
@@ -366,7 +370,7 @@ namespace System.Data.JsonRpc
             {
                 if (responses[i] == null)
                 {
-                    throw new JsonRpcException(JsonRpcErrorCode.InvalidMessage, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.serialize.batch.invalid_item"), i));
+                    throw new JsonRpcException(JsonRpcErrorCode.InvalidMessage, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.batch.invalid_item"), i));
                 }
 
                 jsonArray.Add(ConvertResponseToToken(responses[i]));
@@ -674,7 +678,7 @@ namespace System.Data.JsonRpc
 
             if (responseSuccess)
             {
-                if (responseId == default)
+                if (responseId.Type == JsonRpcIdType.None)
                 {
                     throw new JsonRpcException(JsonRpcErrorCode.InvalidMessage, Strings.GetString("core.deserialize.response.invalid_properties"), responseId);
                 }
@@ -740,7 +744,7 @@ namespace System.Data.JsonRpc
                     {
                         var errorDataType = default(Type);
 
-                        if (responseId.Type == default)
+                        if (responseId.Type == JsonRpcIdType.None)
                         {
                             errorDataType = DefaultErrorDataType;
                         }

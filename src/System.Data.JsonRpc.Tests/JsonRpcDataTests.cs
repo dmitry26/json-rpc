@@ -6,7 +6,7 @@ namespace System.Data.JsonRpc.Tests
     public sealed class JsonRpcDataTests
     {
         [Fact]
-        public void GetItemAndItemsWhenIsSingle()
+        public void ItemAndItemsWhenIsSingle()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_data_single.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -17,7 +17,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void GetItemAndItemsWhenIsBatch()
+        public void ItemAndItemsWhenIsBatch()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_data_batch.json");
             var jsonRpcSerializer = new JsonRpcSerializer();

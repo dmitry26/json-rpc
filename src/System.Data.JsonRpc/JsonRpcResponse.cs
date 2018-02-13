@@ -14,9 +14,9 @@ namespace System.Data.JsonRpc
         public JsonRpcResponse(object result, in JsonRpcId id)
             : base(id)
         {
-            if (id == default)
+            if (id.Type == JsonRpcIdType.None)
             {
-                throw new ArgumentException(Strings.GetString("response.invalid_id"), nameof(id));
+                throw new ArgumentException(Strings.GetString("response.empty_id"), nameof(id));
             }
 
             Result = result;

@@ -196,7 +196,7 @@ namespace System.Data.JsonRpc.Tests
 
         #endregion
 
-        // Core tests
+        // 1.0 Core tests
 
         [Fact]
         public void V1CoreSerializeRequestWithParametersByName()
@@ -253,7 +253,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void V1CoreDeserializeResponseWithInvalidPropertiesSetWithError()
+        public void V1CoreDeserializeResponseWithInvalidPropertiesSetAndError()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.v1_core_invalid_set_w_error.json");
 
@@ -279,7 +279,7 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void V1CoreDeserializeResponseWithInvalidPropertiesSetWithResult()
+        public void V1CoreDeserializeResponseWithInvalidPropertiesSetAndResult()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.v1_core_invalid_set_w_result.json");
 
