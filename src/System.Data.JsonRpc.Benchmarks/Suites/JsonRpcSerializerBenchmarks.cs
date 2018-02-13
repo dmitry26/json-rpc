@@ -19,22 +19,34 @@ namespace System.Data.JsonRpc.Benchmarks.Suites
             _serializer.RequestContracts["mn"] = new JsonRpcRequestContract(new Dictionary<string, Type> { ["p1"] = typeof(long), ["p2"] = typeof(long) });
             _serializer.RequestContracts["mp"] = new JsonRpcRequestContract(new[] { typeof(long), typeof(long) });
 
-            foreach (var identifier in new JsonRpcId[] { "1", "2", 1, 2, 1D, 2D })
+            foreach (var identifier in new JsonRpcId[] { "1", "2", 1L, 2L, 1D, 2D })
             {
                 _serializer.DynamicResponseBindings[identifier] = new JsonRpcResponseContract(typeof(long), typeof(long));
             }
 
-            foreach (var name in new[] { "req_str_nam", "req_str_pos", "req_int_nam", "req_int_pos", "req_flt_nam", "req_flt_pos" })
+            foreach (var name in new[] { "req_nul_nam", "req_nul_pos", "req_str_nam", "req_str_pos", "req_int_nam", "req_int_pos", "req_flt_nam", "req_flt_pos" })
             {
                 _resources[name] = EmbeddedResourceManager.GetString($"Assets.{name}.json");
                 _requests[name] = _serializer.DeserializeRequestData(_resources[name]).Items.Select(i => i.Message).ToArray();
             }
 
-            foreach (var name in new[] { "res_str_err", "res_str_scs", "res_int_err", "res_int_scs", "res_flt_err", "res_flt_scs" })
+            foreach (var name in new[] { "res_nul_err", "res_str_err", "res_str_scs", "res_int_err", "res_int_scs", "res_flt_err", "res_flt_scs" })
             {
                 _resources[name] = EmbeddedResourceManager.GetString($"Assets.{name}.json");
                 _responses[name] = _serializer.DeserializeResponseData(_resources[name]).Items.Select(i => i.Message).ToArray();
             }
+        }
+
+        [Benchmark(Description = "json -> clro / req-nul-nam")]
+        public void DeserializeRequestsWhenIdIsEmptyAndParametersAreByName()
+        {
+            _serializer.DeserializeRequestData(_resources["req_nul_nam"]);
+        }
+
+        [Benchmark(Description = "json -> clro / req-nul-pos")]
+        public void DeserializeRequestsWhenIdIsEmptyAndParametersAreByPosition()
+        {
+            _serializer.DeserializeRequestData(_resources["req_nul_pos"]);
         }
 
         [Benchmark(Description = "json -> clro / req-str-nam")]
@@ -73,40 +85,58 @@ namespace System.Data.JsonRpc.Benchmarks.Suites
             _serializer.DeserializeRequestData(_resources["req_flt_pos"]);
         }
 
+        [Benchmark(Description = "json -> clro / res-nul-err")]
+        public void DeserializeResponsesWhenIdIsEmptyAndSuccessIsFalse()
+        {
+            _serializer.DeserializeResponseData(_resources["res_nul_err"]);
+        }
+
         [Benchmark(Description = "json -> clro / res-str-err")]
-        public void DeserializeResponsesWhenIdIsStringAndParametersAreByName()
+        public void DeserializeResponsesWhenIdIsStringAndSuccessIsFalse()
         {
             _serializer.DeserializeResponseData(_resources["res_str_err"]);
         }
 
         [Benchmark(Description = "json -> clro / res-str-scs")]
-        public void DeserializeResponsesWhenIdIsStringAndParametersAreByPosition()
+        public void DeserializeResponsesWhenIdIsStringAndSuccessIsTrue()
         {
             _serializer.DeserializeResponseData(_resources["res_str_scs"]);
         }
 
         [Benchmark(Description = "json -> clro / res-int-err")]
-        public void DeserializeResponsesWhenIdIsIntegerAndParametersAreByName()
+        public void DeserializeResponsesWhenIdIsIntegerAndSuccessIsFalse()
         {
             _serializer.DeserializeResponseData(_resources["res_int_err"]);
         }
 
         [Benchmark(Description = "json -> clro / res-int-scs")]
-        public void DeserializeResponsesWhenIdIsIntegerAndParametersAreByPosition()
+        public void DeserializeResponsesWhenIdIsIntegerAndSuccessIsTrue()
         {
             _serializer.DeserializeResponseData(_resources["res_int_scs"]);
         }
 
         [Benchmark(Description = "json -> clro / res-flt-err")]
-        public void DeserializeResponsesWhenIdIsFloatAndParametersAreByName()
+        public void DeserializeResponsesWhenIdIsFloatAndSuccessIsFalse()
         {
             _serializer.DeserializeResponseData(_resources["res_flt_err"]);
         }
 
         [Benchmark(Description = "json -> clro / res-flt-scs")]
-        public void DeserializeResponsesWhenIdIsFloatAndParametersAreByPosition()
+        public void DeserializeResponsesWhenIdIsFloatAndSuccessIsTrue()
         {
             _serializer.DeserializeResponseData(_resources["res_flt_scs"]);
+        }
+
+        [Benchmark(Description = "clro -> json / req-nul-nam")]
+        public void SerializeRequestsWhenIdIsEmptyAndParametersAreByName()
+        {
+            _serializer.SerializeRequests(_requests["req_nul_nam"]);
+        }
+
+        [Benchmark(Description = "clro -> json / req-nul-pos")]
+        public void SerializeRequestsWhenIdIsEmptyAndParametersAreByPosition()
+        {
+            _serializer.SerializeRequests(_requests["req_nul_pos"]);
         }
 
         [Benchmark(Description = "clro -> json / req-str-nam")]
@@ -145,38 +175,44 @@ namespace System.Data.JsonRpc.Benchmarks.Suites
             _serializer.SerializeRequests(_requests["req_flt_pos"]);
         }
 
+        [Benchmark(Description = "clro -> json / res-nul-err")]
+        public void SerializeResponsesWhenIdIsEmptyAndSuccessIsFalse()
+        {
+            _serializer.SerializeResponses(_responses["res_nul_err"]);
+        }
+
         [Benchmark(Description = "clro -> json / res-str-err")]
-        public void SerializeResponsesWhenIdIsStringAndParametersAreByName()
+        public void SerializeResponsesWhenIdIsStringAndSuccessIsFalse()
         {
             _serializer.SerializeResponses(_responses["res_str_err"]);
         }
 
         [Benchmark(Description = "clro -> json / res-str-scs")]
-        public void SerializeResponsesWhenIdIsStringAndParametersAreByPosition()
+        public void SerializeResponsesWhenIdIsStringAndSuccessIsTrue()
         {
             _serializer.SerializeResponses(_responses["res_str_scs"]);
         }
 
         [Benchmark(Description = "clro -> json / res-int-err")]
-        public void SerializeResponsesWhenIdIsIntegerAndParametersAreByName()
+        public void SerializeResponsesWhenIdIsIntegerAndSuccessIsFalse()
         {
             _serializer.SerializeResponses(_responses["res_int_err"]);
         }
 
         [Benchmark(Description = "clro -> json / res-int-scs")]
-        public void SerializeResponsesWhenIdIsIntegerAndParametersAreByPosition()
+        public void SerializeResponsesWhenIdIsIntegerAndSuccessIsTrue()
         {
             _serializer.SerializeResponses(_responses["res_int_scs"]);
         }
 
         [Benchmark(Description = "clro -> json / res-flt-err")]
-        public void SerializeResponsesWhenIdIsFloatAndParametersAreByName()
+        public void SerializeResponsesWhenIdIsFloatAndSuccessIsFalse()
         {
             _serializer.SerializeResponses(_responses["res_flt_err"]);
         }
 
         [Benchmark(Description = "clro -> json / res-flt-scs")]
-        public void SerializeResponsesWhenIdIsFloatAndParametersAreByPosition()
+        public void SerializeResponsesWhenIdIsFloatAndSuccessIsTrue()
         {
             _serializer.SerializeResponses(_responses["res_flt_scs"]);
         }

@@ -917,7 +917,7 @@ namespace System.Data.JsonRpc
 
                     try
                     {
-                        responseErrorDataToken = JToken.FromObject(response.Error.Data);
+                        responseErrorDataToken = response.Error.Data != null ? JToken.FromObject(response.Error.Data) : JValue.CreateNull();
                     }
                     catch (JsonException e)
                     {

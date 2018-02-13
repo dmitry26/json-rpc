@@ -1,5 +1,5 @@
 {
     "jsonrpc": "2.0",
-    "result": 42,
+    "error": 1,
     "id": 1
 }

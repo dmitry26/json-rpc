@@ -199,7 +199,7 @@ namespace System.Data.JsonRpc.Tests
         // 1.0 Core tests
 
         [Fact]
-        public void V1CoreSerializeRequestWithParametersByName()
+        public void V1CoreSerializeRequestWhenParametersAreByName()
         {
             var jsonRpcSerializer = new JsonRpcSerializer
             {
@@ -218,9 +218,9 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void V1CoreDeserializeResponseWithInvalidErrorType()
+        public void V1CoreDeserializeResponseWhenErrorTypeIsInvali()
         {
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.v1_core_error_invalid_type.json");
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.v1_core_error_type_invalid.json");
 
             var jsonRpcSerializer = new JsonRpcSerializer
             {
@@ -253,9 +253,9 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void V1CoreDeserializeResponseWithInvalidPropertiesSetAndError()
+        public void V1CoreDeserializeResponseWhenStructureIsInvalidAndSuccessIsFalse()
         {
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.v1_core_invalid_set_w_error.json");
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.v1_core_struct_invalid_success_false.json");
 
             var jsonRpcSerializer = new JsonRpcSerializer
             {
@@ -279,9 +279,9 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void V1CoreDeserializeResponseWithInvalidPropertiesSetAndResult()
+        public void V1CoreDeserializeResponseWhenStructureIsInvalidAndSuccessIsTrue()
         {
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.v1_core_invalid_set_w_result.json");
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.v1_core_struct_invalid_success_true.json");
 
             var jsonRpcSerializer = new JsonRpcSerializer
             {

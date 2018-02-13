@@ -8,140 +8,9 @@ namespace System.Data.JsonRpc.Tests
         // 2.0 Core tests
 
         [Fact]
-        public void V2CoreSerializeRequestWithParameterEqualsNull()
-        {
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_param_null.json");
-            var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcMessage = new JsonRpcRequest("m", 1L, new object[] { null });
-            var jsonResult = jsonRpcSerializer.SerializeRequest(jsonRpcMessage);
-
-            CompareJsonStrings(jsonSample, jsonResult);
-        }
-
-        [Fact]
-        public void V2CoreDeserializeRequestDataWhenJsonIsInvalid()
-        {
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_json_invalid_req.json");
-            var jsonRpcSerializer = new JsonRpcSerializer();
-
-            var exception = Assert.Throws<JsonRpcException>(() =>
-                jsonRpcSerializer.DeserializeRequestData(jsonSample));
-
-            Assert.Equal(JsonRpcErrorCode.InvalidJson, exception.ErrorCode);
-        }
-
-        [Fact]
-        public void V2CoreDeserializeRequestDataWhenProtocolIsAbsent()
-        {
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_protocol_undefined_req.json");
-            var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
-
-            Assert.False(jsonRpcData.IsBatch);
-
-            var jsonRpcItem = jsonRpcData.Item;
-
-            Assert.False(jsonRpcItem.IsValid);
-
-            var jsonRpcException = jsonRpcItem.Exception;
-
-            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcException.ErrorCode);
-        }
-
-        [Fact]
-        public void V2CoreDeserializeResponseDataWhenProtocolIsAbsent()
-        {
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_protocol_undefined_res.json");
-            var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample);
-
-            Assert.False(jsonRpcData.IsBatch);
-
-            var jsonRpcItem = jsonRpcData.Item;
-
-            Assert.False(jsonRpcItem.IsValid);
-
-            var jsonRpcException = jsonRpcItem.Exception;
-
-            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcException.ErrorCode);
-        }
-
-        [Fact]
-        public void V2CoreDeserializeRequestDataWhenProtocolHasInvalidType()
-        {
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_protocol_invalid_type_req.json");
-            var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
-
-            Assert.False(jsonRpcData.IsBatch);
-
-            var jsonRpcItem = jsonRpcData.Item;
-
-            Assert.False(jsonRpcItem.IsValid);
-
-            var jsonRpcException = jsonRpcItem.Exception;
-
-            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcException.ErrorCode);
-        }
-
-        [Fact]
-        public void V2CoreDeserializeResponseDataWhenProtocolHasInvalidType()
-        {
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_protocol_invalid_type_res.json");
-            var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample);
-
-            Assert.False(jsonRpcData.IsBatch);
-
-            var jsonRpcItem = jsonRpcData.Item;
-
-            Assert.False(jsonRpcItem.IsValid);
-
-            var jsonRpcException = jsonRpcItem.Exception;
-
-            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcException.ErrorCode);
-        }
-
-        [Fact]
-        public void V2CoreDeserializeRequestDataWhenProtocolHasInvalidValue()
-        {
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_protocol_invalid_value_req.json");
-            var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
-
-            Assert.False(jsonRpcData.IsBatch);
-
-            var jsonRpcItem = jsonRpcData.Item;
-
-            Assert.False(jsonRpcItem.IsValid);
-
-            var jsonRpcException = jsonRpcItem.Exception;
-
-            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcException.ErrorCode);
-        }
-
-        [Fact]
-        public void V2CoreDeserializeResponseDataWhenProtocolHasInvalidValue()
-        {
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_protocol_invalid_value_res.json");
-            var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample);
-
-            Assert.False(jsonRpcData.IsBatch);
-
-            var jsonRpcItem = jsonRpcData.Item;
-
-            Assert.False(jsonRpcItem.IsValid);
-
-            var jsonRpcException = jsonRpcItem.Exception;
-
-            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcException.ErrorCode);
-        }
-
-        [Fact]
         public void V2CoreDeserializeRequestDataWhenParametersHasInvalidType()
         {
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_params_invalid_type.json");
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_params_type_invalid.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
 
             jsonRpcSerializer.RequestContracts["m"] = new JsonRpcRequestContract(new[] { typeof(object) });
@@ -160,68 +29,9 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void V2CoreDeserializeResponseDataWhenJsonIsInvalid()
+        public void V2CoreDeserializeResponseDataWhenErrorTypeIsInvalid()
         {
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_json_invalid_res.json");
-            var jsonRpcSerializer = new JsonRpcSerializer();
-
-            var exception = Assert.Throws<JsonRpcException>(() =>
-                jsonRpcSerializer.DeserializeResponseData(jsonSample));
-
-            Assert.Equal(JsonRpcErrorCode.InvalidJson, exception.ErrorCode);
-        }
-
-        [Fact]
-        public void V2CoreDeserializeResponseDataWhenBindingsAreDynamic()
-        {
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_binding_dynamic.json");
-            var jsonRpcSerializer = new JsonRpcSerializer();
-
-            jsonRpcSerializer.DynamicResponseBindings[1L] = new JsonRpcResponseContract(typeof(int));
-
-            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample);
-
-            Assert.False(jsonRpcData.IsBatch);
-
-            var jsonRpcItem = jsonRpcData.Item;
-
-            Assert.True(jsonRpcItem.IsValid);
-
-            var jsonRpcMessage = jsonRpcItem.Message;
-
-            Assert.Equal(1, jsonRpcMessage.Id);
-            Assert.True(jsonRpcMessage.Success);
-            Assert.Equal(42, jsonRpcMessage.Result);
-        }
-
-        [Fact]
-        public void V2CoreDeserializeResponseDataWhenResultIsNull()
-        {
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_result_null.json");
-            var jsonRpcSerializer = new JsonRpcSerializer();
-
-            jsonRpcSerializer.ResponseContracts["m"] = new JsonRpcResponseContract(typeof(string));
-            jsonRpcSerializer.StaticResponseBindings[1L] = "m";
-
-            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample);
-
-            Assert.False(jsonRpcData.IsBatch);
-
-            var jsonRpcItem = jsonRpcData.Item;
-
-            Assert.True(jsonRpcItem.IsValid);
-
-            var jsonRpcMessage = jsonRpcItem.Message;
-
-            Assert.Equal(1, jsonRpcMessage.Id);
-            Assert.True(jsonRpcMessage.Success);
-            Assert.Null(jsonRpcMessage.Result);
-        }
-
-        [Fact]
-        public void V2CoreDeserializeResponseDataWhenResultHasNoId()
-        {
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_result_wo_id.json");
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_error_type_invalid.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
 
             jsonRpcSerializer.ResponseContracts["m"] = new JsonRpcResponseContract(typeof(string));
@@ -241,9 +51,9 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void V2CoreDeserializeResponseDataWhenErrorCodeIsInvalid()
+        public void V2CoreDeserializeResponseDataWhenErrorCodeIsReserved()
         {
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_error_invalid_code.json");
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_error_code_reserved.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
 
             jsonRpcSerializer.ResponseContracts["m"] = new JsonRpcResponseContract(typeof(string));
@@ -263,9 +73,148 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void V2CoreSerializeRequestWithFloatId()
+        public void V2CoreDeserializeResponseDataWhenErrorMessageIsNull()
         {
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_id_float_req.json");
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_error_message_null.json");
+            var jsonRpcSerializer = new JsonRpcSerializer();
+
+            jsonRpcSerializer.ResponseContracts["m"] = new JsonRpcResponseContract(typeof(string));
+            jsonRpcSerializer.StaticResponseBindings[1L] = "m";
+
+            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample);
+
+            Assert.False(jsonRpcData.IsBatch);
+
+            var jsonRpcItem = jsonRpcData.Item;
+
+            Assert.False(jsonRpcItem.IsValid);
+
+            var jsonRpcException = jsonRpcItem.Exception;
+
+            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcException.ErrorCode);
+        }
+
+        [Fact]
+        public void V2CoreDeserializeResponseDataWhenHasDataIsFalse()
+        {
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_error_has_data_false.json");
+            var jsonRpcSerializer = new JsonRpcSerializer();
+
+            jsonRpcSerializer.ResponseContracts["m"] = new JsonRpcResponseContract(typeof(string));
+            jsonRpcSerializer.StaticResponseBindings[1L] = "m";
+
+            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample);
+
+            Assert.False(jsonRpcData.IsBatch);
+
+            var jsonRpcItem = jsonRpcData.Item;
+
+            Assert.True(jsonRpcItem.IsValid);
+
+            var jsonRpcMessage = jsonRpcItem.Message;
+
+            Assert.False(jsonRpcMessage.Success);
+
+            var jsonRpcError = jsonRpcMessage.Error;
+
+            Assert.False(jsonRpcError.HasData);
+            Assert.Null(jsonRpcError.Data);
+        }
+
+        [Fact]
+        public void V2CoreSerializeResponseDataWhenHasDataIsFalse()
+        {
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_error_has_data_false.json");
+            var jsonRpcSerializer = new JsonRpcSerializer();
+            var jsonRpcError = new JsonRpcError(0L, "m");
+            var jsonRpcMessage = new JsonRpcResponse(jsonRpcError, 1L);
+            var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcMessage);
+
+            CompareJsonStrings(jsonSample, jsonResult);
+        }
+
+        [Fact]
+        public void V2CoreDeserializeResponseDataWhenHasDataIsTrue()
+        {
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_error_has_data_true.json");
+            var jsonRpcSerializer = new JsonRpcSerializer();
+
+            jsonRpcSerializer.ResponseContracts["m"] = new JsonRpcResponseContract(typeof(string), typeof(long));
+            jsonRpcSerializer.StaticResponseBindings[1L] = "m";
+
+            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample);
+
+            Assert.False(jsonRpcData.IsBatch);
+
+            var jsonRpcItem = jsonRpcData.Item;
+
+            Assert.True(jsonRpcItem.IsValid);
+
+            var jsonRpcMessage = jsonRpcItem.Message;
+
+            Assert.False(jsonRpcMessage.Success);
+
+            var jsonRpcError = jsonRpcMessage.Error;
+
+            Assert.True(jsonRpcError.HasData);
+            Assert.Equal(0L, jsonRpcError.Data);
+        }
+
+        [Fact]
+        public void V2CoreSerializeResponseDataWhenHasDataIsTrue()
+        {
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_error_has_data_true.json");
+            var jsonRpcSerializer = new JsonRpcSerializer();
+            var jsonRpcError = new JsonRpcError(0L, "m", 0L);
+            var jsonRpcMessage = new JsonRpcResponse(jsonRpcError, 1L);
+            var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcMessage);
+
+            CompareJsonStrings(jsonSample, jsonResult);
+        }
+
+        [Fact]
+        public void V2CoreDeserializeResponseDataWhenHasDataIsTrueAnsIsNull()
+        {
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_error_has_data_true_null.json");
+            var jsonRpcSerializer = new JsonRpcSerializer();
+
+            jsonRpcSerializer.ResponseContracts["m"] = new JsonRpcResponseContract(typeof(string), typeof(string));
+            jsonRpcSerializer.StaticResponseBindings[1L] = "m";
+
+            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample);
+
+            Assert.False(jsonRpcData.IsBatch);
+
+            var jsonRpcItem = jsonRpcData.Item;
+
+            Assert.True(jsonRpcItem.IsValid);
+
+            var jsonRpcMessage = jsonRpcItem.Message;
+
+            Assert.False(jsonRpcMessage.Success);
+
+            var jsonRpcError = jsonRpcMessage.Error;
+
+            Assert.True(jsonRpcError.HasData);
+            Assert.Null(jsonRpcError.Data);
+        }
+
+        [Fact]
+        public void V2CoreSerializeResponseDataWhenHasDataIsTrueAnsIsNull()
+        {
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_error_has_data_true_null.json");
+            var jsonRpcSerializer = new JsonRpcSerializer();
+            var jsonRpcError = new JsonRpcError(0L, "m", null);
+            var jsonRpcMessage = new JsonRpcResponse(jsonRpcError, 1L);
+            var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcMessage);
+
+            CompareJsonStrings(jsonSample, jsonResult);
+        }
+
+        [Fact]
+        public void V2CoreSerializeRequestWhenIdIsFloat()
+        {
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_id_float_req.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
             var jsonRpcMessage = new JsonRpcRequest("m", 1D);
             var jsonResult = jsonRpcSerializer.SerializeRequest(jsonRpcMessage);
@@ -274,9 +223,9 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void V2CoreDeserializeRequestDataWithFloatId()
+        public void V2CoreDeserializeRequestDataWhenIdIsFloat()
         {
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_id_float_req.json");
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_id_float_req.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
 
             jsonRpcSerializer.RequestContracts["m"] = new JsonRpcRequestContract();
@@ -297,9 +246,9 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void V2CoreSerializeResponseWithFloatId()
+        public void V2CoreSerializeResponseWhenIdIsFloat()
         {
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_id_float_res.json");
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_id_float_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
             var jsonRpcMessage = new JsonRpcResponse(string.Empty, 1D);
             var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcMessage);
@@ -308,9 +257,9 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void V2CoreDeserializeResponseDataWithFloatId()
+        public void V2CoreDeserializeResponseDataWhenIdIsFloat()
         {
-            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_id_float_res.json");
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_id_float_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
 
             jsonRpcSerializer.ResponseContracts["m"] = new JsonRpcResponseContract(typeof(string));
