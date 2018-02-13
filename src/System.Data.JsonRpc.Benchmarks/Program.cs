@@ -19,7 +19,7 @@ namespace System.Data.JsonRpc.Benchmarks
 
             configuration.Set(SummaryStyle.Default.WithSizeUnit(SizeUnit.B));
             configuration.Add(DefaultConfig.Instance.GetColumnProviders().ToArray());
-            configuration.Add(Job.Dry.With(RunStrategy.Throughput).WithTargetCount(5));
+            configuration.Add(Job.Dry.With(RunStrategy.Throughput).WithTargetCount(2));
             configuration.Add(ConsoleLogger.Default);
             configuration.Add(MemoryDiagnoser.Default);
             configuration.Add(JitOptimizationsValidator.DontFailOnError);
