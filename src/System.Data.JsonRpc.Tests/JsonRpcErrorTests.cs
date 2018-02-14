@@ -5,17 +5,17 @@ namespace System.Data.JsonRpc.Tests
     public sealed class JsonRpcErrorTests
     {
         [Theory]
-        [InlineData(JsonRpcErrorCode.StandardErrorsLowerBoundary - 1L)]
-        [InlineData(JsonRpcErrorCode.InvalidJson)]
-        [InlineData(JsonRpcErrorCode.InvalidOperation)]
-        [InlineData(JsonRpcErrorCode.InvalidParameters)]
-        [InlineData(JsonRpcErrorCode.InvalidMethod)]
-        [InlineData(JsonRpcErrorCode.InvalidMessage)]
-        [InlineData(JsonRpcErrorCode.ServerErrorsLowerBoundary)]
-        [InlineData(JsonRpcErrorCode.ServerErrorsLowerBoundary + 1L)]
-        [InlineData(JsonRpcErrorCode.ServerErrorsUpperBoundary - 1L)]
-        [InlineData(JsonRpcErrorCode.ServerErrorsUpperBoundary)]
-        [InlineData(JsonRpcErrorCode.StandardErrorsUpperBoundary + 1L)]
+        [InlineData(JsonRpcErrorCodes.StandardErrorsLowerBoundary - 1L)]
+        [InlineData(JsonRpcErrorCodes.InvalidJson)]
+        [InlineData(JsonRpcErrorCodes.InvalidOperation)]
+        [InlineData(JsonRpcErrorCodes.InvalidParameters)]
+        [InlineData(JsonRpcErrorCodes.InvalidMethod)]
+        [InlineData(JsonRpcErrorCodes.InvalidMessage)]
+        [InlineData(JsonRpcErrorCodes.ServerErrorsLowerBoundary)]
+        [InlineData(JsonRpcErrorCodes.ServerErrorsLowerBoundary + 1L)]
+        [InlineData(JsonRpcErrorCodes.ServerErrorsUpperBoundary - 1L)]
+        [InlineData(JsonRpcErrorCodes.ServerErrorsUpperBoundary)]
+        [InlineData(JsonRpcErrorCodes.StandardErrorsUpperBoundary + 1L)]
         [InlineData(default(long))]
         public void CodeIsValid(long code)
         {
@@ -25,9 +25,9 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Theory]
-        [InlineData(JsonRpcErrorCode.StandardErrorsLowerBoundary)]
-        [InlineData(JsonRpcErrorCode.StandardErrorsLowerBoundary + 1L)]
-        [InlineData(JsonRpcErrorCode.ServerErrorsLowerBoundary - 1L)]
+        [InlineData(JsonRpcErrorCodes.StandardErrorsLowerBoundary)]
+        [InlineData(JsonRpcErrorCodes.StandardErrorsLowerBoundary + 1L)]
+        [InlineData(JsonRpcErrorCodes.ServerErrorsLowerBoundary - 1L)]
         public void CodeIsInvalid(long code)
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>

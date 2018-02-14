@@ -27,15 +27,15 @@ namespace System.Data.JsonRpc
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="code" /> is outside the allowable range.</exception>
         public JsonRpcError(long code, string message)
         {
-            if ((code >= JsonRpcErrorCode.StandardErrorsLowerBoundary) && (code <= JsonRpcErrorCode.StandardErrorsUpperBoundary))
+            if ((code >= JsonRpcErrorCodes.StandardErrorsLowerBoundary) && (code <= JsonRpcErrorCodes.StandardErrorsUpperBoundary))
             {
-                if ((code < JsonRpcErrorCode.ServerErrorsLowerBoundary) || (code > JsonRpcErrorCode.ServerErrorsUpperBoundary))
+                if ((code < JsonRpcErrorCodes.ServerErrorsLowerBoundary) || (code > JsonRpcErrorCodes.ServerErrorsUpperBoundary))
                 {
-                    if ((code != JsonRpcErrorCode.InvalidJson) &&
-                        (code != JsonRpcErrorCode.InvalidOperation) &&
-                        (code != JsonRpcErrorCode.InvalidParameters) &&
-                        (code != JsonRpcErrorCode.InvalidMethod) &&
-                        (code != JsonRpcErrorCode.InvalidMessage))
+                    if ((code != JsonRpcErrorCodes.InvalidJson) &&
+                        (code != JsonRpcErrorCodes.InvalidOperation) &&
+                        (code != JsonRpcErrorCodes.InvalidParameters) &&
+                        (code != JsonRpcErrorCodes.InvalidMethod) &&
+                        (code != JsonRpcErrorCodes.InvalidMessage))
                     {
                         throw new ArgumentOutOfRangeException(nameof(code), code, Strings.GetString("error.code.invalid_range"));
                     }

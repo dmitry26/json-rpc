@@ -454,7 +454,7 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcError = jsonRpcMessage.Error;
 
-            Assert.Equal(JsonRpcErrorCode.InvalidMethod, jsonRpcError.Code);
+            Assert.Equal(JsonRpcErrorCodes.InvalidMethod, jsonRpcError.Code);
             Assert.NotNull(jsonRpcError.Message);
             Assert.Equal("Method not found", jsonRpcError.Message);
             Assert.False(jsonRpcError.HasData);
@@ -465,7 +465,7 @@ namespace System.Data.JsonRpc.Tests
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_spec_04.0_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcMessage = new JsonRpcResponse(new JsonRpcError(JsonRpcErrorCode.InvalidMethod, "Method not found"), "1");
+            var jsonRpcMessage = new JsonRpcResponse(new JsonRpcError(JsonRpcErrorCodes.InvalidMethod, "Method not found"), "1");
             var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcMessage);
 
             CompareJsonStrings(jsonSample, jsonResult);
@@ -484,7 +484,7 @@ namespace System.Data.JsonRpc.Tests
             var exception = Assert.Throws<JsonRpcException>(() =>
                 jsonRpcSerializer.DeserializeRequestData(jsonSample));
 
-            Assert.Equal(JsonRpcErrorCode.InvalidJson, exception.ErrorCode);
+            Assert.Equal(JsonRpcErrorCodes.InvalidJson, exception.ErrorCode);
         }
 
         [Fact]
@@ -513,7 +513,7 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcError = jsonRpcMessage.Error;
 
-            Assert.Equal(JsonRpcErrorCode.InvalidJson, jsonRpcError.Code);
+            Assert.Equal(JsonRpcErrorCodes.InvalidJson, jsonRpcError.Code);
             Assert.False(jsonRpcError.HasData);
         }
 
@@ -522,7 +522,7 @@ namespace System.Data.JsonRpc.Tests
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_spec_05.0_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcMessage = new JsonRpcResponse(new JsonRpcError(JsonRpcErrorCode.InvalidJson, "Parse error"));
+            var jsonRpcMessage = new JsonRpcResponse(new JsonRpcError(JsonRpcErrorCodes.InvalidJson, "Parse error"));
             var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcMessage);
 
             CompareJsonStrings(jsonSample, jsonResult);
@@ -547,7 +547,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcItem = jsonRpcData.Item;
 
             Assert.False(jsonRpcItem.IsValid);
-            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcItem.Exception.ErrorCode);
+            Assert.Equal(JsonRpcErrorCodes.InvalidMessage, jsonRpcItem.Exception.ErrorCode);
         }
 
         [Fact]
@@ -576,7 +576,7 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcError = jsonRpcMessage.Error;
 
-            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcError.Code);
+            Assert.Equal(JsonRpcErrorCodes.InvalidMessage, jsonRpcError.Code);
             Assert.False(jsonRpcError.HasData);
         }
 
@@ -585,7 +585,7 @@ namespace System.Data.JsonRpc.Tests
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_spec_06.0_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcMessage = new JsonRpcResponse(new JsonRpcError(JsonRpcErrorCode.InvalidMessage, "Invalid Request"));
+            var jsonRpcMessage = new JsonRpcResponse(new JsonRpcError(JsonRpcErrorCodes.InvalidMessage, "Invalid Request"));
             var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcMessage);
 
             CompareJsonStrings(jsonSample, jsonResult);
@@ -604,7 +604,7 @@ namespace System.Data.JsonRpc.Tests
             var exception = Assert.Throws<JsonRpcException>(() =>
                 jsonRpcSerializer.DeserializeRequestData(jsonSample));
 
-            Assert.Equal(JsonRpcErrorCode.InvalidJson, exception.ErrorCode);
+            Assert.Equal(JsonRpcErrorCodes.InvalidJson, exception.ErrorCode);
         }
 
         [Fact]
@@ -633,7 +633,7 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcError = jsonRpcMessage.Error;
 
-            Assert.Equal(JsonRpcErrorCode.InvalidJson, jsonRpcError.Code);
+            Assert.Equal(JsonRpcErrorCodes.InvalidJson, jsonRpcError.Code);
             Assert.False(jsonRpcError.HasData);
         }
 
@@ -642,7 +642,7 @@ namespace System.Data.JsonRpc.Tests
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_spec_07.0_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcMessage = new JsonRpcResponse(new JsonRpcError(JsonRpcErrorCode.InvalidJson, "Parse error"));
+            var jsonRpcMessage = new JsonRpcResponse(new JsonRpcError(JsonRpcErrorCodes.InvalidJson, "Parse error"));
             var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcMessage);
 
             CompareJsonStrings(jsonSample, jsonResult);
@@ -661,7 +661,7 @@ namespace System.Data.JsonRpc.Tests
             var exception = Assert.Throws<JsonRpcException>(() =>
                 jsonRpcSerializer.DeserializeRequestData(jsonSample));
 
-            Assert.Equal(JsonRpcErrorCode.InvalidMessage, exception.ErrorCode);
+            Assert.Equal(JsonRpcErrorCodes.InvalidMessage, exception.ErrorCode);
         }
 
         [Fact]
@@ -690,7 +690,7 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcError = jsonRpcMessage.Error;
 
-            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcError.Code);
+            Assert.Equal(JsonRpcErrorCodes.InvalidMessage, jsonRpcError.Code);
             Assert.False(jsonRpcError.HasData);
         }
 
@@ -699,7 +699,7 @@ namespace System.Data.JsonRpc.Tests
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_spec_08.0_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcMessage = new JsonRpcResponse(new JsonRpcError(JsonRpcErrorCode.InvalidMessage, "Invalid Request"));
+            var jsonRpcMessage = new JsonRpcResponse(new JsonRpcError(JsonRpcErrorCodes.InvalidMessage, "Invalid Request"));
             var jsonResult = jsonRpcSerializer.SerializeResponse(jsonRpcMessage);
 
             CompareJsonStrings(jsonSample, jsonResult);
@@ -722,7 +722,7 @@ namespace System.Data.JsonRpc.Tests
             var jsonRpcItem0 = jsonRpcData.Items[0];
 
             Assert.False(jsonRpcItem0.IsValid);
-            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcItem0.Exception.ErrorCode);
+            Assert.Equal(JsonRpcErrorCodes.InvalidMessage, jsonRpcItem0.Exception.ErrorCode);
         }
 
         [Fact]
@@ -752,7 +752,7 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcError0 = jsonRpcMessage0.Error;
 
-            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcError0.Code);
+            Assert.Equal(JsonRpcErrorCodes.InvalidMessage, jsonRpcError0.Code);
             Assert.False(jsonRpcError0.HasData);
         }
 
@@ -761,7 +761,7 @@ namespace System.Data.JsonRpc.Tests
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_spec_09.0_res.json");
             var jsonRpcSerializer = new JsonRpcSerializer();
-            var jsonRpcMessage = new JsonRpcResponse(new JsonRpcError(JsonRpcErrorCode.InvalidMessage, "Invalid Request"));
+            var jsonRpcMessage = new JsonRpcResponse(new JsonRpcError(JsonRpcErrorCodes.InvalidMessage, "Invalid Request"));
             var jsonResult = jsonRpcSerializer.SerializeResponses(new[] { jsonRpcMessage });
 
             CompareJsonStrings(jsonSample, jsonResult);
@@ -814,7 +814,7 @@ namespace System.Data.JsonRpc.Tests
 
                 var jsonRpcError = jsonRpcMessage.Error;
 
-                Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcError.Code);
+                Assert.Equal(JsonRpcErrorCodes.InvalidMessage, jsonRpcError.Code);
                 Assert.False(jsonRpcError.HasData);
             }
         }
@@ -827,9 +827,9 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcMessages = new[]
             {
-                new JsonRpcResponse(new JsonRpcError(JsonRpcErrorCode.InvalidMessage, "Invalid Request")),
-                new JsonRpcResponse(new JsonRpcError(JsonRpcErrorCode.InvalidMessage, "Invalid Request")),
-                new JsonRpcResponse(new JsonRpcError(JsonRpcErrorCode.InvalidMessage, "Invalid Request"))
+                new JsonRpcResponse(new JsonRpcError(JsonRpcErrorCodes.InvalidMessage, "Invalid Request")),
+                new JsonRpcResponse(new JsonRpcError(JsonRpcErrorCodes.InvalidMessage, "Invalid Request")),
+                new JsonRpcResponse(new JsonRpcError(JsonRpcErrorCodes.InvalidMessage, "Invalid Request"))
             };
 
             var jsonResult = jsonRpcSerializer.SerializeResponses(jsonRpcMessages);
@@ -965,7 +965,7 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcError2 = jsonRpcMessage2.Error;
 
-            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcError2.Code);
+            Assert.Equal(JsonRpcErrorCodes.InvalidMessage, jsonRpcError2.Code);
             Assert.False(jsonRpcError2.HasData);
 
             var jsonRpcItem3 = jsonRpcData.Items[3];
@@ -979,7 +979,7 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcError3 = jsonRpcMessage3.Error;
 
-            Assert.Equal(JsonRpcErrorCode.InvalidMethod, jsonRpcError3.Code);
+            Assert.Equal(JsonRpcErrorCodes.InvalidMethod, jsonRpcError3.Code);
             Assert.False(jsonRpcError3.HasData);
 
             var jsonRpcItem4 = jsonRpcData.Items[4];
@@ -1003,8 +1003,8 @@ namespace System.Data.JsonRpc.Tests
             {
                 new JsonRpcResponse(7L, "1"),
                 new JsonRpcResponse(19L, "2"),
-                new JsonRpcResponse(new JsonRpcError(JsonRpcErrorCode.InvalidMessage, "Invalid Request")),
-                new JsonRpcResponse(new JsonRpcError(JsonRpcErrorCode.InvalidMethod, "Method not found"), "5"),
+                new JsonRpcResponse(new JsonRpcError(JsonRpcErrorCodes.InvalidMessage, "Invalid Request")),
+                new JsonRpcResponse(new JsonRpcError(JsonRpcErrorCodes.InvalidMethod, "Method not found"), "5"),
                 new JsonRpcResponse(new object[] { "hello", 5L }, "9")
             };
 

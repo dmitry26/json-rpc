@@ -50,7 +50,7 @@ namespace System.Data.JsonRpc.Tests
             var exception = Assert.Throws<JsonRpcException>(() =>
                 jsonRpcSerializer.SerializeRequests(new JsonRpcRequest[] { }));
 
-            Assert.Equal(JsonRpcErrorCode.InvalidMessage, exception.ErrorCode);
+            Assert.Equal(JsonRpcErrorCodes.InvalidMessage, exception.ErrorCode);
         }
 
         [Fact]
@@ -61,7 +61,7 @@ namespace System.Data.JsonRpc.Tests
             var exception = Assert.Throws<JsonRpcException>(() =>
                 jsonRpcSerializer.SerializeRequests(new JsonRpcRequest[] { null }));
 
-            Assert.Equal(JsonRpcErrorCode.InvalidMessage, exception.ErrorCode);
+            Assert.Equal(JsonRpcErrorCodes.InvalidMessage, exception.ErrorCode);
         }
 
         [Fact]
@@ -90,7 +90,7 @@ namespace System.Data.JsonRpc.Tests
             var exception = Assert.Throws<JsonRpcException>(() =>
                 jsonRpcSerializer.SerializeResponses(new JsonRpcResponse[] { }));
 
-            Assert.Equal(JsonRpcErrorCode.InvalidMessage, exception.ErrorCode);
+            Assert.Equal(JsonRpcErrorCodes.InvalidMessage, exception.ErrorCode);
         }
 
         [Fact]
@@ -101,7 +101,7 @@ namespace System.Data.JsonRpc.Tests
             var exception = Assert.Throws<JsonRpcException>(() =>
                 jsonRpcSerializer.SerializeResponses(new JsonRpcResponse[] { null }));
 
-            Assert.Equal(JsonRpcErrorCode.InvalidMessage, exception.ErrorCode);
+            Assert.Equal(JsonRpcErrorCodes.InvalidMessage, exception.ErrorCode);
         }
 
         [Fact]
@@ -121,7 +121,7 @@ namespace System.Data.JsonRpc.Tests
             var exception = Assert.Throws<JsonRpcException>(() =>
                 jsonRpcSerializer.DeserializeRequestData(string.Empty));
 
-            Assert.Equal(JsonRpcErrorCode.InvalidJson, exception.ErrorCode);
+            Assert.Equal(JsonRpcErrorCodes.InvalidJson, exception.ErrorCode);
         }
 
         [Fact]
@@ -141,7 +141,7 @@ namespace System.Data.JsonRpc.Tests
             var exception = Assert.Throws<JsonRpcException>(() =>
                 jsonRpcSerializer.DeserializeResponseData(string.Empty));
 
-            Assert.Equal(JsonRpcErrorCode.InvalidJson, exception.ErrorCode);
+            Assert.Equal(JsonRpcErrorCodes.InvalidJson, exception.ErrorCode);
         }
     }
 }

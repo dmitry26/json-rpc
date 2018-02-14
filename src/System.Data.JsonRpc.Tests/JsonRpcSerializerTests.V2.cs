@@ -25,7 +25,7 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcException = jsonRpcItem.Exception;
 
-            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcException.ErrorCode);
+            Assert.Equal(JsonRpcErrorCodes.InvalidMessage, jsonRpcException.ErrorCode);
         }
 
         [Fact]
@@ -47,7 +47,7 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcException = jsonRpcItem.Exception;
 
-            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcException.ErrorCode);
+            Assert.Equal(JsonRpcErrorCodes.InvalidMessage, jsonRpcException.ErrorCode);
         }
 
         [Fact]
@@ -69,7 +69,7 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcException = jsonRpcItem.Exception;
 
-            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcException.ErrorCode);
+            Assert.Equal(JsonRpcErrorCodes.InvalidMessage, jsonRpcException.ErrorCode);
         }
 
         [Fact]
@@ -91,7 +91,7 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcException = jsonRpcItem.Exception;
 
-            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcException.ErrorCode);
+            Assert.Equal(JsonRpcErrorCodes.InvalidMessage, jsonRpcException.ErrorCode);
         }
 
         [Fact]
@@ -229,7 +229,7 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcException = jsonRpcItem.Exception;
 
-            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcException.ErrorCode);
+            Assert.Equal(JsonRpcErrorCodes.InvalidMessage, jsonRpcException.ErrorCode);
         }
 
         [Fact]
@@ -251,7 +251,7 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcException = jsonRpcItem.Exception;
 
-            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcException.ErrorCode);
+            Assert.Equal(JsonRpcErrorCodes.InvalidMessage, jsonRpcException.ErrorCode);
         }
 
         [Fact]
@@ -342,7 +342,7 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcException = jsonRpcItem.Exception;
 
-            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcException.ErrorCode);
+            Assert.Equal(JsonRpcErrorCodes.InvalidMessage, jsonRpcException.ErrorCode);
         }
 
         [Fact]
@@ -364,7 +364,7 @@ namespace System.Data.JsonRpc.Tests
 
             var jsonRpcException = jsonRpcItem.Exception;
 
-            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcException.ErrorCode);
+            Assert.Equal(JsonRpcErrorCodes.InvalidMessage, jsonRpcException.ErrorCode);
         }
     }
 }
