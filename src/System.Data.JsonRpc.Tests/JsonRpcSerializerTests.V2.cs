@@ -212,6 +212,49 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
+        public void V2CoreDeserializeRequestDataWhenIdTypeIsInvalid()
+        {
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_id_type_invalid_req.json");
+            var jsonRpcSerializer = new JsonRpcSerializer();
+
+            jsonRpcSerializer.RequestContracts["m"] = new JsonRpcRequestContract();
+
+            var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
+
+            Assert.False(jsonRpcData.IsBatch);
+
+            var jsonRpcItem = jsonRpcData.Item;
+
+            Assert.False(jsonRpcItem.IsValid);
+
+            var jsonRpcException = jsonRpcItem.Exception;
+
+            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcException.ErrorCode);
+        }
+
+        [Fact]
+        public void V2CoreDeserializeResponseDataWhenIdTypeIsInvalid()
+        {
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_id_type_invalid_res.json");
+            var jsonRpcSerializer = new JsonRpcSerializer();
+
+            jsonRpcSerializer.ResponseContracts["m"] = new JsonRpcResponseContract(typeof(string));
+            jsonRpcSerializer.StaticResponseBindings[1D] = "m";
+
+            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample);
+
+            Assert.False(jsonRpcData.IsBatch);
+
+            var jsonRpcItem = jsonRpcData.Item;
+
+            Assert.False(jsonRpcItem.IsValid);
+
+            var jsonRpcException = jsonRpcItem.Exception;
+
+            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcException.ErrorCode);
+        }
+
+        [Fact]
         public void V2CoreSerializeRequestWhenIdIsFloat()
         {
             var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_id_float_req.json");
@@ -278,6 +321,50 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.Equal(JsonRpcIdType.Float, jsonRpcId.Type);
             Assert.Equal(1D, (double)jsonRpcId);
+        }
+
+        [Fact]
+        public void V2CoreDeserializeResponseWhenStructureIsInvalidAndSuccessIsFalse()
+        {
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_struct_invalid_success_false.json");
+            var jsonRpcSerializer = new JsonRpcSerializer();
+
+            jsonRpcSerializer.ResponseContracts["m"] = new JsonRpcResponseContract(typeof(string));
+            jsonRpcSerializer.StaticResponseBindings[1L] = "m";
+
+            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample);
+
+            Assert.False(jsonRpcData.IsBatch);
+
+            var jsonRpcItem = jsonRpcData.Item;
+
+            Assert.False(jsonRpcItem.IsValid);
+
+            var jsonRpcException = jsonRpcItem.Exception;
+
+            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcException.ErrorCode);
+        }
+
+        [Fact]
+        public void V2CoreDeserializeResponseWhenStructureIsInvalidAndSuccessIsTrue()
+        {
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_struct_invalid_success_true.json");
+            var jsonRpcSerializer = new JsonRpcSerializer();
+
+            jsonRpcSerializer.ResponseContracts["m"] = new JsonRpcResponseContract(typeof(string));
+            jsonRpcSerializer.StaticResponseBindings[1L] = "m";
+
+            var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample);
+
+            Assert.False(jsonRpcData.IsBatch);
+
+            var jsonRpcItem = jsonRpcData.Item;
+
+            Assert.False(jsonRpcItem.IsValid);
+
+            var jsonRpcException = jsonRpcItem.Exception;
+
+            Assert.Equal(JsonRpcErrorCode.InvalidMessage, jsonRpcException.ErrorCode);
         }
     }
 }
