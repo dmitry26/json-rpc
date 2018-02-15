@@ -17,7 +17,7 @@ The serializer is used as a stateful instance. Due to the JSON-RPC protocol nuan
 
 As recommended in the specification, the serializer provides backward compatibility for [JSON-RPC 1.0](http://www.jsonrpc.org/specification_v1) messages, limited to the intersection of JSON-RPC 1.0 and JSON-RPC 2.0 requirements and the API. As an example, the serializer can be used for serializing and deserializing Bitcoin protocol messages, according to the ["Bitcoin Core APIs - Remote Procedure Calls"](https://bitcoin.org/en/developer-reference#remote-procedure-calls-rpcs) documentation. To enable JSON-RPC 1.0 compatibility, a caller must change the compatibility level on a serializer instance.
 
-### Samples
+### Examples
 
 - Communication with a JSON-RPC 2.0 server:
 
