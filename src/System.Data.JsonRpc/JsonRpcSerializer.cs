@@ -496,7 +496,7 @@ namespace System.Data.JsonRpc
                                 requestParameters[i] = jsonArrayParameters[i].ToObject(contract.ParametersByPosition[i]);
                             }
                         }
-                        catch (JsonException e)
+                        catch (Exception e)
                         {
                             throw new JsonRpcException(JsonRpcErrorCodes.InvalidOperation, Strings.GetString("core.deserialize.json_issue"), requestId, e);
                         }
@@ -529,7 +529,7 @@ namespace System.Data.JsonRpc
                                 requestParameters[kvp.Key] = jsonObjectParam.ToObject(kvp.Value);
                             }
                         }
-                        catch (JsonException e)
+                        catch (Exception e)
                         {
                             throw new JsonRpcException(JsonRpcErrorCodes.InvalidOperation, Strings.GetString("core.deserialize.json_issue"), requestId, e);
                         }
@@ -735,7 +735,7 @@ namespace System.Data.JsonRpc
                     {
                         responseResult = jsonTokenResult.ToObject(contract.ResultType);
                     }
-                    catch (JsonException e)
+                    catch (Exception e)
                     {
                         throw new JsonRpcException(JsonRpcErrorCodes.InvalidOperation, Strings.GetString("core.deserialize.json_issue"), responseId, e);
                     }
@@ -813,7 +813,7 @@ namespace System.Data.JsonRpc
                             {
                                 responseErrorData = jsonTokenErrorData.ToObject(errorDataType);
                             }
-                            catch (JsonException e)
+                            catch (Exception e)
                             {
                                 throw new JsonRpcException(JsonRpcErrorCodes.InvalidOperation, Strings.GetString("core.deserialize.json_issue"), responseId, e);
                             }
