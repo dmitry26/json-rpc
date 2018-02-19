@@ -35,5 +35,5 @@ var responseData = serializer.DeserializeResponseData(responseString);
 var result = (int)responseData.Item.Message.Result;
 ```
 
-- Example of client-side usage: https://github.com/alexanderkozlenko/random-org
+- Example of client-side usage: https://github.com/alexanderkozlenko/json-rpc-client
 - Example of server-side usage: https://github.com/alexanderkozlenko/aspnetcore-json-rpc
