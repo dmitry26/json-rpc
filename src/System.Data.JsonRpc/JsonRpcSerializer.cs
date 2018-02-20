@@ -12,6 +12,10 @@ namespace System.Data.JsonRpc
     /// <summary>Serializes and deserializes JSON-RPC messages into and from the JSON format.</summary>
     public sealed class JsonRpcSerializer : IDisposable
     {
+        private const int _messageBufferSize = 32;
+
+        private static readonly JValue _nullToken = JValue.CreateNull();
+
         private readonly IArrayPool<char> _jsonBufferPool = new JsonBufferPool();
         private readonly IDictionary<string, JsonRpcRequestContract> _requestContracts;
         private readonly IDictionary<string, JsonRpcResponseContract> _responseContracts;
@@ -251,7 +255,7 @@ namespace System.Data.JsonRpc
             {
                 var jsonToken = ConvertRequestToToken(request);
 
-                using (var stringWriter = new StringWriter(new StringBuilder(32), CultureInfo.InvariantCulture))
+                using (var stringWriter = new StringWriter(new StringBuilder(_messageBufferSize), CultureInfo.InvariantCulture))
                 {
                     using (var jsonWriter = new JsonTextWriter(stringWriter))
                     {
@@ -298,7 +302,7 @@ namespace System.Data.JsonRpc
 
             try
             {
-                using (var stringWriter = new StringWriter(new StringBuilder(32 * requests.Count), CultureInfo.InvariantCulture))
+                using (var stringWriter = new StringWriter(new StringBuilder(_messageBufferSize * requests.Count), CultureInfo.InvariantCulture))
                 {
                     using (var jsonWriter = new JsonTextWriter(stringWriter))
                     {
@@ -331,7 +335,7 @@ namespace System.Data.JsonRpc
             {
                 var jsonToken = ConvertResponseToToken(response);
 
-                using (var stringWriter = new StringWriter(new StringBuilder(32), CultureInfo.InvariantCulture))
+                using (var stringWriter = new StringWriter(new StringBuilder(_messageBufferSize), CultureInfo.InvariantCulture))
                 {
                     using (var jsonWriter = new JsonTextWriter(stringWriter))
                     {
@@ -378,7 +382,7 @@ namespace System.Data.JsonRpc
 
             try
             {
-                using (var stringWriter = new StringWriter(new StringBuilder(32 * responses.Count), CultureInfo.InvariantCulture))
+                using (var stringWriter = new StringWriter(new StringBuilder(_messageBufferSize * responses.Count), CultureInfo.InvariantCulture))
                 {
                     using (var jsonWriter = new JsonTextWriter(stringWriter))
                     {
@@ -564,7 +568,7 @@ namespace System.Data.JsonRpc
                         {
                             for (var i = 0; i < request.ParametersByPosition.Count; i++)
                             {
-                                jsonTokenParameters.Add(request.ParametersByPosition[i] != null ? JToken.FromObject(request.ParametersByPosition[i]) : JValue.CreateNull());
+                                jsonTokenParameters.Add(request.ParametersByPosition[i] != null ? JToken.FromObject(request.ParametersByPosition[i]) : _nullToken);
                             }
                         }
                         catch (JsonException e)
@@ -588,7 +592,7 @@ namespace System.Data.JsonRpc
                         {
                             foreach (var kvp in request.ParametersByName)
                             {
-                                jsonTokenParameters.Add(kvp.Key, kvp.Value != null ? JToken.FromObject(kvp.Value) : JValue.CreateNull());
+                                jsonTokenParameters.Add(kvp.Key, kvp.Value != null ? JToken.FromObject(kvp.Value) : _nullToken);
                             }
                         }
                         catch (JsonException e)
@@ -615,7 +619,7 @@ namespace System.Data.JsonRpc
                     {
                         if (CompatibilityLevel != JsonRpcCompatibilityLevel.Level2)
                         {
-                            jsonObject["id"] = JValue.CreateNull();
+                            jsonObject["id"] = _nullToken;
                         }
                     }
                     break;
@@ -900,7 +904,7 @@ namespace System.Data.JsonRpc
 
                 if (CompatibilityLevel != JsonRpcCompatibilityLevel.Level2)
                 {
-                    jsonObject["error"] = JValue.CreateNull();
+                    jsonObject["error"] = _nullToken;
                 }
             }
             else
@@ -917,7 +921,7 @@ namespace System.Data.JsonRpc
 
                     try
                     {
-                        responseErrorDataToken = response.Error.Data != null ? JToken.FromObject(response.Error.Data) : JValue.CreateNull();
+                        responseErrorDataToken = response.Error.Data != null ? JToken.FromObject(response.Error.Data) : _nullToken;
                     }
                     catch (JsonException e)
                     {
@@ -929,7 +933,7 @@ namespace System.Data.JsonRpc
 
                 if (CompatibilityLevel != JsonRpcCompatibilityLevel.Level2)
                 {
-                    jsonObject["result"] = JValue.CreateNull();
+                    jsonObject["result"] = _nullToken;
                 }
 
                 jsonObject["error"] = errorToken;
@@ -939,7 +943,7 @@ namespace System.Data.JsonRpc
             {
                 case JsonRpcIdType.None:
                     {
-                        jsonObject["id"] = JValue.CreateNull();
+                        jsonObject["id"] = _nullToken;
                     }
                     break;
                 case JsonRpcIdType.String:
