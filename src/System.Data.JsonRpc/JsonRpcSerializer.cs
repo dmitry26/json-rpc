@@ -23,10 +23,10 @@ namespace System.Data.JsonRpc
         private readonly IDictionary<JsonRpcId, JsonRpcResponseContract> _dynamicResponseBindings;
 
         /// <summary>Initializes a new instance of the <see cref="JsonRpcSerializer" /> class.</summary>
-        /// <param name="requestContracts">The request contracts scheme instance.</param>
-        /// <param name="responseContracts">The response contracts scheme instance.</param>
-        /// <param name="staticResponseBindings">The static response bindings instance.</param>
-        /// <param name="dynamicResponseBindings">The dynamic response bindings instance.</param>
+        /// <param name="requestContracts">The request contracts.</param>
+        /// <param name="responseContracts">The response contracts.</param>
+        /// <param name="staticResponseBindings">The static response bindings.</param>
+        /// <param name="dynamicResponseBindings">The dynamic response bindings.</param>
         public JsonRpcSerializer(
             IDictionary<string, JsonRpcRequestContract> requestContracts = null,
             IDictionary<string, JsonRpcResponseContract> responseContracts = null,
@@ -42,27 +42,27 @@ namespace System.Data.JsonRpc
         }
 
         /// <summary>Deserializes the JSON string to the request data.</summary>
-        /// <param name="jsonString">The JSON string to deserialize.</param>
+        /// <param name="json">The JSON string to deserialize.</param>
         /// <returns>RPC information about requests.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="jsonString" /> is <see langword="null" />.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="json" /> is <see langword="null" />.</exception>
         /// <exception cref="JsonRpcException">An error occurred during request(s) deserialization.</exception>
-        public JsonRpcData<JsonRpcRequest> DeserializeRequestData(string jsonString)
+        public JsonRpcData<JsonRpcRequest> DeserializeRequestData(string json)
         {
-            if (jsonString == null)
+            if (json == null)
             {
-                throw new ArgumentNullException(nameof(jsonString));
+                throw new ArgumentNullException(nameof(json));
             }
 
-            var jsonToken = default(JToken);
+            var requestDataToken = default(JToken);
 
             try
             {
-                using (var stringReader = new StringReader(jsonString))
+                using (var stringReader = new StringReader(json))
                 {
                     using (var jsonReader = new JsonTextReader(stringReader))
                     {
                         jsonReader.ArrayPool = _jsonBufferPool;
-                        jsonToken = JToken.ReadFrom(jsonReader);
+                        requestDataToken = JToken.ReadFrom(jsonReader);
                     }
                 }
             }
@@ -71,45 +71,45 @@ namespace System.Data.JsonRpc
                 throw new JsonRpcException(JsonRpcErrorCodes.InvalidJson, Strings.GetString("core.deserialize.json_issue"), default, e);
             }
 
-            switch (jsonToken.Type)
+            switch (requestDataToken.Type)
             {
                 case JTokenType.Object:
                     {
-                        var jsonObject = (JObject)jsonToken;
-                        var item = default(JsonRpcItem<JsonRpcRequest>);
+                        var requestToken = (JObject)requestDataToken;
+                        var requestItem = default(JsonRpcItem<JsonRpcRequest>);
 
                         try
                         {
-                            item = new JsonRpcItem<JsonRpcRequest>(ConvertTokenToRequest(jsonObject));
+                            requestItem = new JsonRpcItem<JsonRpcRequest>(ConvertTokenToRequest(requestToken));
                         }
                         catch (JsonRpcException e)
                             when (e.ErrorCode != JsonRpcErrorCodes.InvalidOperation)
                         {
-                            item = new JsonRpcItem<JsonRpcRequest>(e);
+                            requestItem = new JsonRpcItem<JsonRpcRequest>(e);
                         }
 
-                        return new JsonRpcData<JsonRpcRequest>(item);
+                        return new JsonRpcData<JsonRpcRequest>(requestItem);
                     }
                 case JTokenType.Array:
                     {
-                        var jsonArray = (JArray)jsonToken;
+                        var requestArrayToken = (JArray)requestDataToken;
 
-                        if (jsonArray.Count == 0)
+                        if (requestArrayToken.Count == 0)
                         {
                             throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.batch.empty"));
                         }
 
-                        var items = new JsonRpcItem<JsonRpcRequest>[jsonArray.Count];
+                        var requestItems = new JsonRpcItem<JsonRpcRequest>[requestArrayToken.Count];
 
-                        for (var i = 0; i < items.Length; i++)
+                        for (var i = 0; i < requestItems.Length; i++)
                         {
-                            var jsonObject = jsonArray[i];
+                            var requestToken = requestArrayToken[i];
 
-                            if (jsonObject.Type != JTokenType.Object)
+                            if (requestToken.Type != JTokenType.Object)
                             {
                                 var exception = new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.batch.invalid_item"), i));
 
-                                items[i] = new JsonRpcItem<JsonRpcRequest>(exception);
+                                requestItems[i] = new JsonRpcItem<JsonRpcRequest>(exception);
 
                                 continue;
                             }
@@ -118,20 +118,20 @@ namespace System.Data.JsonRpc
 
                             try
                             {
-                                request = ConvertTokenToRequest((JObject)jsonObject);
+                                request = ConvertTokenToRequest((JObject)requestToken);
                             }
                             catch (JsonRpcException e)
                                 when (e.ErrorCode != JsonRpcErrorCodes.InvalidOperation)
                             {
-                                items[i] = new JsonRpcItem<JsonRpcRequest>(e);
+                                requestItems[i] = new JsonRpcItem<JsonRpcRequest>(e);
 
                                 continue;
                             }
 
-                            items[i] = new JsonRpcItem<JsonRpcRequest>(request);
+                            requestItems[i] = new JsonRpcItem<JsonRpcRequest>(request);
                         }
 
-                        return new JsonRpcData<JsonRpcRequest>(items);
+                        return new JsonRpcData<JsonRpcRequest>(requestItems);
                     }
                 default:
                     {
@@ -141,27 +141,27 @@ namespace System.Data.JsonRpc
         }
 
         /// <summary>Deserializes the JSON string to the response data.</summary>
-        /// <param name="jsonString">The JSON string to deserialize.</param>
+        /// <param name="json">The JSON string to deserialize.</param>
         /// <returns>RPC information about responses.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="jsonString" /> is <see langword="null" />.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="json" /> is <see langword="null" />.</exception>
         /// <exception cref="JsonRpcException">An error occurred during response(s) deserialization.</exception>
-        public JsonRpcData<JsonRpcResponse> DeserializeResponseData(string jsonString)
+        public JsonRpcData<JsonRpcResponse> DeserializeResponseData(string json)
         {
-            if (jsonString == null)
+            if (json == null)
             {
-                throw new ArgumentNullException(nameof(jsonString));
+                throw new ArgumentNullException(nameof(json));
             }
 
-            var jsonToken = default(JToken);
+            var responseDataToken = default(JToken);
 
             try
             {
-                using (var stringReader = new StringReader(jsonString))
+                using (var stringReader = new StringReader(json))
                 {
                     using (var jsonReader = new JsonTextReader(stringReader))
                     {
                         jsonReader.ArrayPool = _jsonBufferPool;
-                        jsonToken = JToken.ReadFrom(jsonReader);
+                        responseDataToken = JToken.ReadFrom(jsonReader);
                     }
                 }
             }
@@ -170,45 +170,45 @@ namespace System.Data.JsonRpc
                 throw new JsonRpcException(JsonRpcErrorCodes.InvalidJson, Strings.GetString("core.deserialize.json_issue"), default, e);
             }
 
-            switch (jsonToken.Type)
+            switch (responseDataToken.Type)
             {
                 case JTokenType.Object:
                     {
-                        var jsonObject = (JObject)jsonToken;
-                        var item = default(JsonRpcItem<JsonRpcResponse>);
+                        var responseToken = (JObject)responseDataToken;
+                        var responseItem = default(JsonRpcItem<JsonRpcResponse>);
 
                         try
                         {
-                            item = new JsonRpcItem<JsonRpcResponse>(ConvertTokenToResponse(jsonObject));
+                            responseItem = new JsonRpcItem<JsonRpcResponse>(ConvertTokenToResponse(responseToken));
                         }
                         catch (JsonRpcException e)
                             when (e.ErrorCode != JsonRpcErrorCodes.InvalidOperation)
                         {
-                            item = new JsonRpcItem<JsonRpcResponse>(e);
+                            responseItem = new JsonRpcItem<JsonRpcResponse>(e);
                         }
 
-                        return new JsonRpcData<JsonRpcResponse>(item);
+                        return new JsonRpcData<JsonRpcResponse>(responseItem);
                     }
                 case JTokenType.Array:
                     {
-                        var jsonArray = (JArray)jsonToken;
+                        var responseArrayToken = (JArray)responseDataToken;
 
-                        if (jsonArray.Count == 0)
+                        if (responseArrayToken.Count == 0)
                         {
                             throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.batch.empty"));
                         }
 
-                        var items = new JsonRpcItem<JsonRpcResponse>[jsonArray.Count];
+                        var responseItems = new JsonRpcItem<JsonRpcResponse>[responseArrayToken.Count];
 
-                        for (var i = 0; i < items.Length; i++)
+                        for (var i = 0; i < responseItems.Length; i++)
                         {
-                            var jsonObject = jsonArray[i];
+                            var responseToken = responseArrayToken[i];
 
-                            if (jsonObject.Type != JTokenType.Object)
+                            if (responseToken.Type != JTokenType.Object)
                             {
                                 var exception = new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.batch.invalid_item"), i));
 
-                                items[i] = new JsonRpcItem<JsonRpcResponse>(exception);
+                                responseItems[i] = new JsonRpcItem<JsonRpcResponse>(exception);
 
                                 continue;
                             }
@@ -217,20 +217,20 @@ namespace System.Data.JsonRpc
 
                             try
                             {
-                                response = ConvertTokenToResponse((JObject)jsonObject);
+                                response = ConvertTokenToResponse((JObject)responseToken);
                             }
                             catch (JsonRpcException e)
                                 when (e.ErrorCode != JsonRpcErrorCodes.InvalidOperation)
                             {
-                                items[i] = new JsonRpcItem<JsonRpcResponse>(e);
+                                responseItems[i] = new JsonRpcItem<JsonRpcResponse>(e);
 
                                 continue;
                             }
 
-                            items[i] = new JsonRpcItem<JsonRpcResponse>(response);
+                            responseItems[i] = new JsonRpcItem<JsonRpcResponse>(response);
                         }
 
-                        return new JsonRpcData<JsonRpcResponse>(items);
+                        return new JsonRpcData<JsonRpcResponse>(responseItems);
                     }
                 default:
                     {
@@ -251,16 +251,16 @@ namespace System.Data.JsonRpc
                 throw new ArgumentNullException(nameof(request));
             }
 
+            var requestToken = ConvertRequestToToken(request);
+
             try
             {
-                var jsonToken = ConvertRequestToToken(request);
-
                 using (var stringWriter = new StringWriter(new StringBuilder(_messageBufferSize), CultureInfo.InvariantCulture))
                 {
                     using (var jsonWriter = new JsonTextWriter(stringWriter))
                     {
                         jsonWriter.ArrayPool = _jsonBufferPool;
-                        jsonToken.WriteTo(jsonWriter);
+                        requestToken.WriteTo(jsonWriter);
                     }
 
                     return stringWriter.ToString();
@@ -288,7 +288,7 @@ namespace System.Data.JsonRpc
                 throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.batch.empty"));
             }
 
-            var jsonArray = new JArray();
+            var requestArrayToken = new JArray();
 
             for (var i = 0; i < requests.Count; i++)
             {
@@ -297,7 +297,7 @@ namespace System.Data.JsonRpc
                     throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.batch.invalid_item"), i));
                 }
 
-                jsonArray.Add(ConvertRequestToToken(requests[i]));
+                requestArrayToken.Add(ConvertRequestToToken(requests[i]));
             }
 
             try
@@ -307,7 +307,7 @@ namespace System.Data.JsonRpc
                     using (var jsonWriter = new JsonTextWriter(stringWriter))
                     {
                         jsonWriter.ArrayPool = _jsonBufferPool;
-                        jsonArray.WriteTo(jsonWriter);
+                        requestArrayToken.WriteTo(jsonWriter);
                     }
 
                     return stringWriter.ToString();
@@ -331,16 +331,16 @@ namespace System.Data.JsonRpc
                 throw new ArgumentNullException(nameof(response));
             }
 
+            var responseToken = ConvertResponseToToken(response);
+
             try
             {
-                var jsonToken = ConvertResponseToToken(response);
-
                 using (var stringWriter = new StringWriter(new StringBuilder(_messageBufferSize), CultureInfo.InvariantCulture))
                 {
                     using (var jsonWriter = new JsonTextWriter(stringWriter))
                     {
                         jsonWriter.ArrayPool = _jsonBufferPool;
-                        jsonToken.WriteTo(jsonWriter);
+                        responseToken.WriteTo(jsonWriter);
                     }
 
                     return stringWriter.ToString();
@@ -368,7 +368,7 @@ namespace System.Data.JsonRpc
                 throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.batch.empty"));
             }
 
-            var jsonArray = new JArray();
+            var responseArrayToken = new JArray();
 
             for (var i = 0; i < responses.Count; i++)
             {
@@ -377,7 +377,7 @@ namespace System.Data.JsonRpc
                     throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.batch.invalid_item"), i));
                 }
 
-                jsonArray.Add(ConvertResponseToToken(responses[i]));
+                responseArrayToken.Add(ConvertResponseToToken(responses[i]));
             }
 
             try
@@ -387,7 +387,7 @@ namespace System.Data.JsonRpc
                     using (var jsonWriter = new JsonTextWriter(stringWriter))
                     {
                         jsonWriter.ArrayPool = _jsonBufferPool;
-                        jsonArray.WriteTo(jsonWriter);
+                        responseArrayToken.WriteTo(jsonWriter);
                     }
 
                     return stringWriter.ToString();
@@ -399,11 +399,11 @@ namespace System.Data.JsonRpc
             }
         }
 
-        private JsonRpcRequest ConvertTokenToRequest(JObject jsonObject)
+        private JsonRpcRequest ConvertTokenToRequest(JObject requestToken)
         {
             if (CompatibilityLevel == JsonRpcCompatibilityLevel.Level2)
             {
-                if (!jsonObject.TryGetValue("jsonrpc", out var jsonTokenProtocol) || (jsonTokenProtocol.Type != JTokenType.String) || ((string)jsonTokenProtocol != "2.0"))
+                if (!requestToken.TryGetValue("jsonrpc", out var protocolToken) || (protocolToken.Type != JTokenType.String) || ((string)protocolToken != "2.0"))
                 {
                     throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.deserialize.request.protocol.invalid_property"));
                 }
@@ -411,9 +411,9 @@ namespace System.Data.JsonRpc
 
             var requestId = default(JsonRpcId);
 
-            if (jsonObject.TryGetValue("id", out var jsonValueId))
+            if (requestToken.TryGetValue("id", out var requestIdToken))
             {
-                switch (jsonValueId.Type)
+                switch (requestIdToken.Type)
                 {
                     case JTokenType.Null:
                         {
@@ -421,14 +421,14 @@ namespace System.Data.JsonRpc
                         break;
                     case JTokenType.String:
                         {
-                            requestId = (string)jsonValueId;
+                            requestId = (string)requestIdToken;
                         }
                         break;
                     case JTokenType.Integer:
                         {
                             try
                             {
-                                requestId = (long)jsonValueId;
+                                requestId = (long)requestIdToken;
                             }
                             catch (OverflowException e)
                             {
@@ -440,7 +440,7 @@ namespace System.Data.JsonRpc
                         {
                             try
                             {
-                                requestId = (double)jsonValueId;
+                                requestId = (double)requestIdToken;
                             }
                             catch (OverflowException e)
                             {
@@ -455,12 +455,12 @@ namespace System.Data.JsonRpc
                 }
             }
 
-            if (!jsonObject.TryGetValue("method", out var jsonValueMethod) || (jsonValueMethod.Type != JTokenType.String))
+            if (!requestToken.TryGetValue("method", out var requestMethodToken) || (requestMethodToken.Type != JTokenType.String))
             {
                 throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.deserialize.request.method.invalid_property"), requestId);
             }
 
-            var requestMethod = (string)jsonValueMethod;
+            var requestMethod = (string)requestMethodToken;
 
             if (!_requestContracts.TryGetValue(requestMethod, out var contract))
             {
@@ -475,20 +475,20 @@ namespace System.Data.JsonRpc
             {
                 case JsonRpcParametersType.ByPosition:
                     {
-                        if (!jsonObject.TryGetValue("params", out var jsonTokenParameters) || ((jsonTokenParameters.Type != JTokenType.Array) && (jsonTokenParameters.Type != JTokenType.Object)))
+                        if (!requestToken.TryGetValue("params", out var requestParametersToken) || ((requestParametersToken.Type != JTokenType.Array) && (requestParametersToken.Type != JTokenType.Object)))
                         {
                             throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.deserialize.request.params.invalid_property"), requestId);
                         }
-                        if (jsonTokenParameters.Type != JTokenType.Array)
+                        if (requestParametersToken.Type != JTokenType.Array)
                         {
                             throw new JsonRpcException(JsonRpcErrorCodes.InvalidParameters, Strings.GetString("core.deserialize.request.params.invalid_structure"), requestId);
                         }
 
-                        var jsonArrayParameters = (JArray)jsonTokenParameters;
+                        var requestParametersArrayToken = (JArray)requestParametersToken;
 
-                        if (jsonArrayParameters.Count < contract.ParametersByPosition.Count)
+                        if (requestParametersArrayToken.Count < contract.ParametersByPosition.Count)
                         {
-                            throw new JsonRpcException(JsonRpcErrorCodes.InvalidParameters, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.deserialize.request.params.invalid_count"), jsonArrayParameters.Count), requestId);
+                            throw new JsonRpcException(JsonRpcErrorCodes.InvalidParameters, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.deserialize.request.params.invalid_count"), requestParametersArrayToken.Count), requestId);
                         }
 
                         var requestParameters = new object[contract.ParametersByPosition.Count];
@@ -497,7 +497,7 @@ namespace System.Data.JsonRpc
                         {
                             for (var i = 0; i < requestParameters.Length; i++)
                             {
-                                requestParameters[i] = jsonArrayParameters[i].ToObject(contract.ParametersByPosition[i]);
+                                requestParameters[i] = requestParametersArrayToken[i].ToObject(contract.ParametersByPosition[i]);
                             }
                         }
                         catch (Exception e)
@@ -509,28 +509,28 @@ namespace System.Data.JsonRpc
                     }
                 case JsonRpcParametersType.ByName:
                     {
-                        if (!jsonObject.TryGetValue("params", out var jsonTokenParameters) || ((jsonTokenParameters.Type != JTokenType.Array) && (jsonTokenParameters.Type != JTokenType.Object)))
+                        if (!requestToken.TryGetValue("params", out var requestParametersToken) || ((requestParametersToken.Type != JTokenType.Array) && (requestParametersToken.Type != JTokenType.Object)))
                         {
                             throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.deserialize.request.params.invalid_property"), requestId);
                         }
-                        if (jsonTokenParameters.Type != JTokenType.Object)
+                        if (requestParametersToken.Type != JTokenType.Object)
                         {
                             throw new JsonRpcException(JsonRpcErrorCodes.InvalidParameters, Strings.GetString("core.deserialize.request.params.invalid_structure"), requestId);
                         }
 
-                        var jsonObjectParameters = (JObject)jsonTokenParameters;
+                        var requestParametersObjectToken = (JObject)requestParametersToken;
                         var requestParameters = new Dictionary<string, object>(contract.ParametersByName.Count, StringComparer.Ordinal);
 
                         try
                         {
                             foreach (var kvp in contract.ParametersByName)
                             {
-                                if (!jsonObjectParameters.TryGetValue(kvp.Key, StringComparison.Ordinal, out var jsonObjectParam))
+                                if (!requestParametersObjectToken.TryGetValue(kvp.Key, StringComparison.Ordinal, out var requestParameterToken))
                                 {
                                     continue;
                                 }
 
-                                requestParameters[kvp.Key] = jsonObjectParam.ToObject(kvp.Value);
+                                requestParameters[kvp.Key] = requestParameterToken.ToObject(kvp.Value);
                             }
                         }
                         catch (Exception e)
@@ -549,26 +549,26 @@ namespace System.Data.JsonRpc
 
         private JObject ConvertRequestToToken(JsonRpcRequest request)
         {
-            var jsonObject = new JObject();
+            var requestToken = new JObject();
 
             if (CompatibilityLevel == JsonRpcCompatibilityLevel.Level2)
             {
-                jsonObject["jsonrpc"] = "2.0";
+                requestToken["jsonrpc"] = "2.0";
             }
 
-            jsonObject["method"] = request.Method;
+            requestToken["method"] = request.Method;
 
             switch (request.ParametersType)
             {
                 case JsonRpcParametersType.ByPosition:
                     {
-                        var jsonTokenParameters = new JArray();
+                        var requestParametersArrayToken = new JArray();
 
                         try
                         {
                             for (var i = 0; i < request.ParametersByPosition.Count; i++)
                             {
-                                jsonTokenParameters.Add(request.ParametersByPosition[i] != null ? JToken.FromObject(request.ParametersByPosition[i]) : _nullToken);
+                                requestParametersArrayToken.Add(request.ParametersByPosition[i] != null ? JToken.FromObject(request.ParametersByPosition[i]) : _nullToken);
                             }
                         }
                         catch (JsonException e)
@@ -576,7 +576,7 @@ namespace System.Data.JsonRpc
                             throw new JsonRpcException(JsonRpcErrorCodes.InvalidOperation, Strings.GetString("core.serialize.json_issue"), request.Id, e);
                         }
 
-                        jsonObject["params"] = jsonTokenParameters;
+                        requestToken["params"] = requestParametersArrayToken;
                     }
                     break;
                 case JsonRpcParametersType.ByName:
@@ -586,13 +586,13 @@ namespace System.Data.JsonRpc
                             throw new JsonRpcException(JsonRpcErrorCodes.InvalidOperation, Strings.GetString("core.serialize.request.params.unsupported_structure"), request.Id);
                         }
 
-                        var jsonTokenParameters = new JObject();
+                        var requestParametersObjectToken = new JObject();
 
                         try
                         {
                             foreach (var kvp in request.ParametersByName)
                             {
-                                jsonTokenParameters.Add(kvp.Key, kvp.Value != null ? JToken.FromObject(kvp.Value) : _nullToken);
+                                requestParametersObjectToken.Add(kvp.Key, kvp.Value != null ? JToken.FromObject(kvp.Value) : _nullToken);
                             }
                         }
                         catch (JsonException e)
@@ -600,14 +600,14 @@ namespace System.Data.JsonRpc
                             throw new JsonRpcException(JsonRpcErrorCodes.InvalidOperation, Strings.GetString("core.serialize.json_issue"), request.Id, e);
                         }
 
-                        jsonObject["params"] = jsonTokenParameters;
+                        requestToken["params"] = requestParametersObjectToken;
                     }
                     break;
                 case JsonRpcParametersType.None:
                     {
                         if (CompatibilityLevel != JsonRpcCompatibilityLevel.Level2)
                         {
-                            jsonObject["params"] = new JArray();
+                            requestToken["params"] = new JArray();
                         }
                     }
                     break;
@@ -619,35 +619,35 @@ namespace System.Data.JsonRpc
                     {
                         if (CompatibilityLevel != JsonRpcCompatibilityLevel.Level2)
                         {
-                            jsonObject["id"] = _nullToken;
+                            requestToken["id"] = _nullToken;
                         }
                     }
                     break;
                 case JsonRpcIdType.String:
                     {
-                        jsonObject["id"] = new JValue((string)request.Id);
+                        requestToken["id"] = new JValue((string)request.Id);
                     }
                     break;
                 case JsonRpcIdType.Integer:
                     {
-                        jsonObject["id"] = new JValue((long)request.Id);
+                        requestToken["id"] = new JValue((long)request.Id);
                     }
                     break;
                 case JsonRpcIdType.Float:
                     {
-                        jsonObject["id"] = new JValue((double)request.Id);
+                        requestToken["id"] = new JValue((double)request.Id);
                     }
                     break;
             }
 
-            return jsonObject;
+            return requestToken;
         }
 
-        private JsonRpcResponse ConvertTokenToResponse(JObject jsonObject)
+        private JsonRpcResponse ConvertTokenToResponse(JObject responseObject)
         {
             if (CompatibilityLevel == JsonRpcCompatibilityLevel.Level2)
             {
-                if (!jsonObject.TryGetValue("jsonrpc", out var jsonTokenProtocol) || (jsonTokenProtocol.Type != JTokenType.String) || ((string)jsonTokenProtocol != "2.0"))
+                if (!responseObject.TryGetValue("jsonrpc", out var protocolToken) || (protocolToken.Type != JTokenType.String) || ((string)protocolToken != "2.0"))
                 {
                     throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.deserialize.request.protocol.invalid_property"));
                 }
@@ -655,9 +655,9 @@ namespace System.Data.JsonRpc
 
             var responseId = default(JsonRpcId);
 
-            if (jsonObject.TryGetValue("id", out var jsonValueId))
+            if (responseObject.TryGetValue("id", out var responseIdToken))
             {
-                switch (jsonValueId.Type)
+                switch (responseIdToken.Type)
                 {
                     case JTokenType.Null:
                         {
@@ -665,14 +665,14 @@ namespace System.Data.JsonRpc
                         break;
                     case JTokenType.String:
                         {
-                            responseId = (string)jsonValueId;
+                            responseId = (string)responseIdToken;
                         }
                         break;
                     case JTokenType.Integer:
                         {
                             try
                             {
-                                responseId = (long)jsonValueId;
+                                responseId = (long)responseIdToken;
                             }
                             catch (OverflowException e)
                             {
@@ -684,7 +684,7 @@ namespace System.Data.JsonRpc
                         {
                             try
                             {
-                                responseId = (double)jsonValueId;
+                                responseId = (double)responseIdToken;
                             }
                             catch (OverflowException e)
                             {
@@ -699,28 +699,28 @@ namespace System.Data.JsonRpc
                 }
             }
 
-            var jsonTokenResult = jsonObject.GetValue("result");
-            var jsonTokenError = jsonObject.GetValue("error");
+            var responseResultToken = responseObject.GetValue("result");
+            var responseErrorToken = responseObject.GetValue("error");
 
             var responseSuccess = false;
 
             if (CompatibilityLevel == JsonRpcCompatibilityLevel.Level2)
             {
-                if (((jsonTokenResult == null) && (jsonTokenError == null)) || ((jsonTokenResult != null) && (jsonTokenError != null)))
+                if (((responseResultToken == null) && (responseErrorToken == null)) || ((responseResultToken != null) && (responseErrorToken != null)))
                 {
                     throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.deserialize.response.invalid_properties"), responseId);
                 }
 
-                responseSuccess = jsonTokenError == null;
+                responseSuccess = responseErrorToken == null;
             }
             else
             {
-                if ((jsonTokenResult == null) || (jsonTokenError == null))
+                if ((responseResultToken == null) || (responseErrorToken == null))
                 {
                     throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.deserialize.response.invalid_properties"), responseId);
                 }
 
-                responseSuccess = jsonTokenError.Type == JTokenType.Null;
+                responseSuccess = responseErrorToken.Type == JTokenType.Null;
             }
 
             if (responseSuccess)
@@ -737,7 +737,7 @@ namespace System.Data.JsonRpc
                 {
                     try
                     {
-                        responseResult = jsonTokenResult.ToObject(contract.ResultType);
+                        responseResult = responseResultToken.ToObject(contract.ResultType);
                     }
                     catch (Exception e)
                     {
@@ -749,17 +749,17 @@ namespace System.Data.JsonRpc
             }
             else
             {
-                if (jsonTokenError.Type == JTokenType.Object)
+                if (responseErrorToken.Type == JTokenType.Object)
                 {
-                    var jsonObjectError = (JObject)jsonTokenError;
+                    var responseErrorObjectToken = (JObject)responseErrorToken;
 
                     var responseErrorCode = default(long);
 
-                    if (jsonObjectError.TryGetValue("code", out var jsonTokenErrorCode) && (jsonTokenErrorCode.Type == JTokenType.Integer))
+                    if (responseErrorObjectToken.TryGetValue("code", out var responseErrorCodeToken) && (responseErrorCodeToken.Type == JTokenType.Integer))
                     {
                         try
                         {
-                            responseErrorCode = (long)jsonTokenErrorCode;
+                            responseErrorCode = (long)responseErrorCodeToken;
                         }
                         catch (OverflowException e)
                         {
@@ -776,9 +776,9 @@ namespace System.Data.JsonRpc
 
                     var responseErrorMessage = default(string);
 
-                    if (jsonObjectError.TryGetValue("message", out var jsonTokenErrorMessage) && (jsonTokenErrorMessage.Type == JTokenType.String))
+                    if (responseErrorObjectToken.TryGetValue("message", out var responseErrorMessageToken) && (responseErrorMessageToken.Type == JTokenType.String))
                     {
-                        responseErrorMessage = (string)jsonTokenErrorMessage;
+                        responseErrorMessage = (string)responseErrorMessageToken;
                     }
                     else
                     {
@@ -794,28 +794,28 @@ namespace System.Data.JsonRpc
 
                     var responseError = default(JsonRpcError);
 
-                    if (jsonObjectError.TryGetValue("data", out var jsonTokenErrorData))
+                    if (responseErrorObjectToken.TryGetValue("data", out var responseErrorDataToken))
                     {
-                        var errorDataType = default(Type);
+                        var responseErrorDataType = default(Type);
 
                         if (responseId.Type == JsonRpcIdType.None)
                         {
-                            errorDataType = DefaultErrorDataType;
+                            responseErrorDataType = DefaultErrorDataType;
                         }
                         else
                         {
                             var contract = GetResponseContract(responseId);
 
-                            errorDataType = contract.ErrorDataType;
+                            responseErrorDataType = contract.ErrorDataType;
                         }
 
                         var responseErrorData = default(object);
 
-                        if (errorDataType != null)
+                        if (responseErrorDataType != null)
                         {
                             try
                             {
-                                responseErrorData = jsonTokenErrorData.ToObject(errorDataType);
+                                responseErrorData = responseErrorDataToken.ToObject(responseErrorDataType);
                             }
                             catch (Exception e)
                             {
@@ -880,11 +880,11 @@ namespace System.Data.JsonRpc
 
         private JObject ConvertResponseToToken(JsonRpcResponse response)
         {
-            var jsonObject = new JObject();
+            var responseToken = new JObject();
 
             if (CompatibilityLevel == JsonRpcCompatibilityLevel.Level2)
             {
-                jsonObject["jsonrpc"] = "2.0";
+                responseToken["jsonrpc"] = "2.0";
             }
 
             if (response.Success)
@@ -900,16 +900,16 @@ namespace System.Data.JsonRpc
                     throw new JsonRpcException(JsonRpcErrorCodes.InvalidOperation, Strings.GetString("core.serialize.json_issue"), response.Id, e);
                 }
 
-                jsonObject["result"] = resultToken;
+                responseToken["result"] = resultToken;
 
                 if (CompatibilityLevel != JsonRpcCompatibilityLevel.Level2)
                 {
-                    jsonObject["error"] = _nullToken;
+                    responseToken["error"] = _nullToken;
                 }
             }
             else
             {
-                var errorToken = new JObject
+                var responseErrorToken = new JObject
                 {
                     ["code"] = response.Error.Code,
                     ["message"] = response.Error.Message
@@ -928,58 +928,58 @@ namespace System.Data.JsonRpc
                         throw new JsonRpcException(JsonRpcErrorCodes.InvalidOperation, Strings.GetString("core.serialize.json_issue"), response.Id, e);
                     }
 
-                    errorToken["data"] = responseErrorDataToken;
+                    responseErrorToken["data"] = responseErrorDataToken;
                 }
 
                 if (CompatibilityLevel != JsonRpcCompatibilityLevel.Level2)
                 {
-                    jsonObject["result"] = _nullToken;
+                    responseToken["result"] = _nullToken;
                 }
 
-                jsonObject["error"] = errorToken;
+                responseToken["error"] = responseErrorToken;
             }
 
             switch (response.Id.Type)
             {
                 case JsonRpcIdType.None:
                     {
-                        jsonObject["id"] = _nullToken;
+                        responseToken["id"] = _nullToken;
                     }
                     break;
                 case JsonRpcIdType.String:
                     {
-                        jsonObject["id"] = new JValue((string)response.Id);
+                        responseToken["id"] = new JValue((string)response.Id);
                     }
                     break;
                 case JsonRpcIdType.Integer:
                     {
-                        jsonObject["id"] = new JValue((long)response.Id);
+                        responseToken["id"] = new JValue((long)response.Id);
                     }
                     break;
                 case JsonRpcIdType.Float:
                     {
-                        jsonObject["id"] = new JValue((double)response.Id);
+                        responseToken["id"] = new JValue((double)response.Id);
                     }
                     break;
             }
 
-            return jsonObject;
+            return responseToken;
         }
 
-        /// <summary>Clears static and dynamic response bindings.</summary>
+        /// <summary>Clears response bindings of the current instance.</summary>
         public void Dispose()
         {
             _dynamicResponseBindings.Clear();
             _staticResponseBindings.Clear();
         }
 
-        /// <summary>Gets the request contracts scheme.</summary>
+        /// <summary>Gets the request contracts.</summary>
         public IDictionary<string, JsonRpcRequestContract> RequestContracts
         {
             get => _requestContracts;
         }
 
-        /// <summary>Gets the response contracts scheme.</summary>
+        /// <summary>Gets the response contracts.</summary>
         public IDictionary<string, JsonRpcResponseContract> ResponseContracts
         {
             get => _responseContracts;
