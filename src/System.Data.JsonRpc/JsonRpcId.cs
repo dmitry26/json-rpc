@@ -263,7 +263,7 @@ namespace System.Data.JsonRpc
         /// <param name="obj1">The left <see cref="JsonRpcId" /> operand.</param>
         /// <param name="obj2">The right <see cref="JsonRpcId" /> operand.</param>
         /// <returns><see langword="true" /> if the left <see cref="JsonRpcId" /> is equal to the right <see cref="JsonRpcId" />; otherwise, <see langword="false" />.</returns>
-        public static bool operator ==(JsonRpcId obj1, JsonRpcId obj2)
+        public static bool operator ==(in JsonRpcId obj1, in JsonRpcId obj2)
         {
             return obj1.Equals(obj2);
         }
@@ -272,7 +272,7 @@ namespace System.Data.JsonRpc
         /// <param name="obj1">The left <see cref="JsonRpcId" /> operand.</param>
         /// <param name="obj2">The right <see cref="JsonRpcId" /> operand.</param>
         /// <returns><see langword="true" /> if the left <see cref="JsonRpcId" /> is not equal to the right <see cref="JsonRpcId" />; otherwise, <see langword="false" />.</returns>
-        public static bool operator !=(JsonRpcId obj1, JsonRpcId obj2)
+        public static bool operator !=(in JsonRpcId obj1, in JsonRpcId obj2)
         {
             return !obj1.Equals(obj2);
         }
@@ -301,7 +301,7 @@ namespace System.Data.JsonRpc
         /// <summary>Performs an implicit conversion from <see cref="JsonRpcId" /> to <see cref="string" />.</summary>
         /// <param name="value">The identifier to get a <see cref="string" /> value from.</param>
         /// <exception cref="InvalidCastException">The underlying value is not of type <see cref="string" />.</exception>
-        public static explicit operator string(JsonRpcId value)
+        public static explicit operator string(in JsonRpcId value)
         {
             if (value.Type != JsonRpcIdType.String)
             {
@@ -314,7 +314,7 @@ namespace System.Data.JsonRpc
         /// <summary>Performs an implicit conversion from <see cref="JsonRpcId" /> to <see cref="long" />.</summary>
         /// <param name="value">The identifier to get a <see cref="long" /> value from.</param>
         /// <exception cref="InvalidCastException">The underlying value is not of type <see cref="long" />.</exception>
-        public static explicit operator long(JsonRpcId value)
+        public static explicit operator long(in JsonRpcId value)
         {
             if (value.Type != JsonRpcIdType.Integer)
             {
@@ -327,7 +327,7 @@ namespace System.Data.JsonRpc
         /// <summary>Performs an implicit conversion from <see cref="JsonRpcId" /> to <see cref="double" />.</summary>
         /// <param name="value">The identifier to get a <see cref="double" /> value from.</param>
         /// <exception cref="InvalidCastException">The underlying value is not of type <see cref="double" />.</exception>
-        public static explicit operator double(JsonRpcId value)
+        public static explicit operator double(in JsonRpcId value)
         {
             if (value.Type != JsonRpcIdType.Float)
             {
