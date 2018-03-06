@@ -3,15 +3,17 @@
     /// <summary>Represents an RPC message.</summary>
     public abstract class JsonRpcMessage
     {
+        private readonly JsonRpcId _id;
+
         internal JsonRpcMessage(in JsonRpcId id)
         {
-            Id = id;
+            _id = id;
         }
 
         /// <summary>Gets an identifier.</summary>
-        public JsonRpcId Id
+        public ref readonly JsonRpcId Id
         {
-            get;
+            get => ref _id;
         }
     }
 }
