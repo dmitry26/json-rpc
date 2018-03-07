@@ -7,14 +7,17 @@ namespace System.Data.JsonRpc
     public sealed class JsonRpcData<T>
         where T : JsonRpcMessage
     {
+        private readonly JsonRpcItem<T> _item;
+        private readonly IReadOnlyList<JsonRpcItem<T>> _items;
+
         internal JsonRpcData(in JsonRpcItem<T> item)
         {
-            Item = item;
+            _item = item;
         }
 
         internal JsonRpcData(IReadOnlyList<JsonRpcItem<T>> items)
         {
-            Items = items;
+            _items = items;
         }
 
         /// <summary>Gets a value indicating whether the data is a batch.</summary>
@@ -24,15 +27,15 @@ namespace System.Data.JsonRpc
         }
 
         /// <summary>Gets an item for non-batch data.</summary>
-        public JsonRpcItem<T> Item
+        public ref readonly JsonRpcItem<T> Item
         {
-            get;
+            get => ref _item;
         }
 
         /// <summary>Gets a collection of items for batch data.</summary>
         public IReadOnlyList<JsonRpcItem<T>> Items
         {
-            get;
+            get => _items;
         }
     }
 }
