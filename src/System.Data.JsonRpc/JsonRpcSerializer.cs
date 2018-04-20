@@ -701,7 +701,6 @@ namespace System.Data.JsonRpc
 
             var responseResultToken = responseObject.GetValue("result");
             var responseErrorToken = responseObject.GetValue("error");
-
             var responseSuccess = false;
 
             if (CompatibilityLevel == JsonRpcCompatibilityLevel.Level2)
@@ -752,7 +751,6 @@ namespace System.Data.JsonRpc
                 if (responseErrorToken.Type == JTokenType.Object)
                 {
                     var responseErrorObjectToken = (JObject)responseErrorToken;
-
                     var responseErrorCode = default(long);
 
                     if (responseErrorObjectToken.TryGetValue("code", out var responseErrorCodeToken) && (responseErrorCodeToken.Type == JTokenType.Integer))
