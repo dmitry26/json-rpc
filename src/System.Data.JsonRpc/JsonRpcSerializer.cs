@@ -12,7 +12,10 @@ namespace System.Data.JsonRpc
     /// <summary>Serializes and deserializes JSON-RPC messages into and from the JSON format.</summary>
     public sealed class JsonRpcSerializer : IDisposable
     {
-        private const int _messageBufferSize = 32;
+        // The minimum length of JSON string with a JSON-RPC 2.0 message is about 32 bytes, this is used during deserialization
+        // to get the more proper initial buffer size.
+
+        private const int _minimumMessageSize = 32;
 
         private static readonly JValue _nullToken = JValue.CreateNull();
 
@@ -255,7 +258,7 @@ namespace System.Data.JsonRpc
 
             try
             {
-                using (var stringWriter = new StringWriter(new StringBuilder(_messageBufferSize), CultureInfo.InvariantCulture))
+                using (var stringWriter = new StringWriter(new StringBuilder(_minimumMessageSize), CultureInfo.InvariantCulture))
                 {
                     using (var jsonWriter = new JsonTextWriter(stringWriter))
                     {
@@ -302,7 +305,7 @@ namespace System.Data.JsonRpc
 
             try
             {
-                using (var stringWriter = new StringWriter(new StringBuilder(_messageBufferSize * requests.Count), CultureInfo.InvariantCulture))
+                using (var stringWriter = new StringWriter(new StringBuilder(_minimumMessageSize * requests.Count), CultureInfo.InvariantCulture))
                 {
                     using (var jsonWriter = new JsonTextWriter(stringWriter))
                     {
@@ -335,7 +338,7 @@ namespace System.Data.JsonRpc
 
             try
             {
-                using (var stringWriter = new StringWriter(new StringBuilder(_messageBufferSize), CultureInfo.InvariantCulture))
+                using (var stringWriter = new StringWriter(new StringBuilder(_minimumMessageSize), CultureInfo.InvariantCulture))
                 {
                     using (var jsonWriter = new JsonTextWriter(stringWriter))
                     {
@@ -382,7 +385,7 @@ namespace System.Data.JsonRpc
 
             try
             {
-                using (var stringWriter = new StringWriter(new StringBuilder(_messageBufferSize * responses.Count), CultureInfo.InvariantCulture))
+                using (var stringWriter = new StringWriter(new StringBuilder(_minimumMessageSize * responses.Count), CultureInfo.InvariantCulture))
                 {
                     using (var jsonWriter = new JsonTextWriter(stringWriter))
                     {
