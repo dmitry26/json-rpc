@@ -478,6 +478,10 @@ namespace System.Data.JsonRpc
             {
                 case JsonRpcParametersType.ByPosition:
                     {
+                        if (contract.ParametersByPosition.Count == 0)
+                        {
+                            throw new JsonRpcException(JsonRpcErrorCodes.InvalidOperation, Strings.GetString("request.contract.params.invalid_count"), requestId);
+                        }
                         if (!requestToken.TryGetValue("params", out var requestParametersToken) || ((requestParametersToken.Type != JTokenType.Array) && (requestParametersToken.Type != JTokenType.Object)))
                         {
                             throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.deserialize.request.params.invalid_property"), requestId);
@@ -512,6 +516,10 @@ namespace System.Data.JsonRpc
                     }
                 case JsonRpcParametersType.ByName:
                     {
+                        if (contract.ParametersByName.Count == 0)
+                        {
+                            throw new JsonRpcException(JsonRpcErrorCodes.InvalidOperation, Strings.GetString("request.contract.params.invalid_count"), requestId);
+                        }
                         if (!requestToken.TryGetValue("params", out var requestParametersToken) || ((requestParametersToken.Type != JTokenType.Array) && (requestParametersToken.Type != JTokenType.Object)))
                         {
                             throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.deserialize.request.params.invalid_property"), requestId);
@@ -565,6 +573,11 @@ namespace System.Data.JsonRpc
             {
                 case JsonRpcParametersType.ByPosition:
                     {
+                        if (request.ParametersByPosition.Count == 0)
+                        {
+                            throw new JsonRpcException(JsonRpcErrorCodes.InvalidOperation, Strings.GetString("request.params.invalid_count"), request.Id);
+                        }
+
                         var requestParametersArrayToken = new JArray();
 
                         try

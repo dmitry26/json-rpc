@@ -44,23 +44,5 @@ namespace System.Data.JsonRpc.Tests
 
             Assert.Equal(JsonRpcParametersType.ByName, contract.ParametersType);
         }
-
-        [Fact]
-        public void ParametersTypeIsByPositionWhenCountIsZero()
-        {
-            var parameters = new Type[] { };
-
-            Assert.Throws<ArgumentException>(() =>
-                new JsonRpcRequestContract(parameters));
-        }
-
-        [Fact]
-        public void ParametersTypeIsByNameWhenCountIsZero()
-        {
-            var parameters = new Dictionary<string, Type> { };
-
-            Assert.Throws<ArgumentException>(() =>
-                new JsonRpcRequestContract(parameters));
-        }
     }
 }

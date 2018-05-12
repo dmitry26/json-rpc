@@ -59,15 +59,6 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
-        public void ParametersTypeIsByPositionWhenCountIsZero()
-        {
-            var parameters = new object[] { };
-
-            Assert.Throws<ArgumentException>(() =>
-                new JsonRpcRequest("m", parameters));
-        }
-
-        [Fact]
         public void IsSystemIsFalse()
         {
             var message = new JsonRpcRequest("m");

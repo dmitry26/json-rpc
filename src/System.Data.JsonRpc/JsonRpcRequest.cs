@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Data.JsonRpc.Resources;
 using System.Diagnostics;
 
 namespace System.Data.JsonRpc
@@ -27,7 +26,6 @@ namespace System.Data.JsonRpc
         /// <param name="method">The string containing the name of the method to be invoked.</param>
         /// <param name="id">The identifier established by the client.</param>
         /// <param name="parameters">The parameters to be used during the invocation of the method, provided by position.</param>
-        /// <exception cref="ArgumentException"><paramref name="parameters" /> is empty.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="method" /> or <paramref name="parameters" /> is <see langword="null" />.</exception>
         public JsonRpcRequest(string method, in JsonRpcId id, IReadOnlyList<object> parameters)
             : this(method, id)
@@ -35,10 +33,6 @@ namespace System.Data.JsonRpc
             if (parameters == null)
             {
                 throw new ArgumentNullException(nameof(parameters));
-            }
-            if (parameters.Count == 0)
-            {
-                throw new ArgumentException(Strings.GetString("request.params.invalid_count"), nameof(parameters));
             }
 
             ParametersByPosition = parameters;
@@ -48,7 +42,6 @@ namespace System.Data.JsonRpc
         /// <summary>Initializes a new instance of the <see cref="JsonRpcRequest" /> class.</summary>
         /// <param name="method">The string containing the name of the method to be invoked.</param>
         /// <param name="parameters">The parameters to be used during the invocation of the method, provided by position.</param>
-        /// <exception cref="ArgumentException"><paramref name="parameters" /> is empty.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="method" /> or <paramref name="parameters" /> is <see langword="null" />.</exception>
         public JsonRpcRequest(string method, IReadOnlyList<object> parameters)
             : this(method, default, parameters)

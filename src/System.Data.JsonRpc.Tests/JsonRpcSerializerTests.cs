@@ -34,6 +34,18 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
+        public void CoreSerializeRequestWhenParametersAreByPositionAndIsEmptyCollection()
+        {
+            var jsonRpcSerializer = new JsonRpcSerializer();
+            var jsonRpcMessage = new JsonRpcRequest("m", 1L, new object[] { });
+
+            var exception = Assert.Throws<JsonRpcException>(() =>
+                 jsonRpcSerializer.SerializeRequest(jsonRpcMessage));
+
+            Assert.Equal(JsonRpcErrorCodes.InvalidOperation, exception.ErrorCode);
+        }
+
+        [Fact]
         public void CoreSerializeRequestsWhenCollectionIsNull()
         {
             var jsonRpcSerializer = new JsonRpcSerializer();

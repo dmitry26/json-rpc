@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Data.JsonRpc.Resources;
 
 namespace System.Data.JsonRpc
 {
@@ -13,17 +12,12 @@ namespace System.Data.JsonRpc
 
         /// <summary>Initializes a new instance of the <see cref="JsonRpcRequestContract" /> class.</summary>
         /// <param name="parameters">The contract for parameters, provided by position.</param>
-        /// <exception cref="ArgumentException"><paramref name="parameters" /> is empty.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="parameters" /> is <see langword="null" />.</exception>
         public JsonRpcRequestContract(IReadOnlyList<Type> parameters)
         {
             if (parameters == null)
             {
                 throw new ArgumentNullException(nameof(parameters));
-            }
-            if (parameters.Count == 0)
-            {
-                throw new ArgumentException(Strings.GetString("request.params.invalid_count"), nameof(parameters));
             }
 
             ParametersByPosition = parameters;
@@ -32,17 +26,12 @@ namespace System.Data.JsonRpc
 
         /// <summary>Initializes a new instance of the <see cref="JsonRpcRequestContract" /> class.</summary>
         /// <param name="parameters">The contract for parameters, provided by name.</param>
-        /// <exception cref="ArgumentException"><paramref name="parameters" /> is empty.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="parameters" /> is <see langword="null" />.</exception>
         public JsonRpcRequestContract(IReadOnlyDictionary<string, Type> parameters)
         {
             if (parameters == null)
             {
                 throw new ArgumentNullException(nameof(parameters));
-            }
-            if (parameters.Count == 0)
-            {
-                throw new ArgumentException(Strings.GetString("request.params.invalid_count"), nameof(parameters));
             }
 
             ParametersByName = parameters;
