@@ -49,6 +49,29 @@ namespace System.Data.JsonRpc
             Type = JsonRpcIdType.Float;
         }
 
+        private bool Equals(in JsonRpcId other)
+        {
+            switch (other.Type)
+            {
+                case JsonRpcIdType.String:
+                    {
+                        return (Type == JsonRpcIdType.String) && _valueString.Equals(other._valueString);
+                    }
+                case JsonRpcIdType.Integer:
+                    {
+                        return (Type == JsonRpcIdType.Integer) && _valueInteger.Equals(other._valueInteger);
+                    }
+                case JsonRpcIdType.Float:
+                    {
+                        return (Type == JsonRpcIdType.Float) && _valueFloat.Equals(other._valueFloat);
+                    }
+                default:
+                    {
+                        return (Type == JsonRpcIdType.None);
+                    }
+            }
+        }
+
         /// <summary>Gets the identifier type.</summary>
         public JsonRpcIdType Type
         {
@@ -150,25 +173,7 @@ namespace System.Data.JsonRpc
         /// <returns><see langword="true" /> if the current <see cref="JsonRpcId" /> is equal to the other <see cref="JsonRpcId" />; otherwise, <see langword="false" />.</returns>
         public bool Equals(JsonRpcId other)
         {
-            switch (other.Type)
-            {
-                case JsonRpcIdType.String:
-                    {
-                        return (Type == JsonRpcIdType.String) && _valueString.Equals(other._valueString);
-                    }
-                case JsonRpcIdType.Integer:
-                    {
-                        return (Type == JsonRpcIdType.Integer) && _valueInteger.Equals(other._valueInteger);
-                    }
-                case JsonRpcIdType.Float:
-                    {
-                        return (Type == JsonRpcIdType.Float) && _valueFloat.Equals(other._valueFloat);
-                    }
-                default:
-                    {
-                        return (Type == JsonRpcIdType.None);
-                    }
-            }
+            return Equals(in other);
         }
 
         /// <summary>Indicates whether the current <see cref="JsonRpcId" /> is equal to the specified object.</summary>
@@ -180,7 +185,7 @@ namespace System.Data.JsonRpc
             {
                 case JsonRpcId other:
                     {
-                        return Equals(other);
+                        return Equals(in other);
                     }
                 case string other:
                     {
@@ -265,7 +270,7 @@ namespace System.Data.JsonRpc
         /// <returns><see langword="true" /> if the left <see cref="JsonRpcId" /> is equal to the right <see cref="JsonRpcId" />; otherwise, <see langword="false" />.</returns>
         public static bool operator ==(in JsonRpcId obj1, in JsonRpcId obj2)
         {
-            return obj1.Equals(obj2);
+            return obj1.Equals(in obj2);
         }
 
         /// <summary>Indicates whether the left <see cref="JsonRpcId" /> is not equal to the right <see cref="JsonRpcId" />.</summary>
@@ -274,7 +279,7 @@ namespace System.Data.JsonRpc
         /// <returns><see langword="true" /> if the left <see cref="JsonRpcId" /> is not equal to the right <see cref="JsonRpcId" />; otherwise, <see langword="false" />.</returns>
         public static bool operator !=(in JsonRpcId obj1, in JsonRpcId obj2)
         {
-            return !obj1.Equals(obj2);
+            return !obj1.Equals(in obj2);
         }
 
         /// <summary>Performs an implicit conversion from <see cref="string" /> to <see cref="JsonRpcId" />.</summary>
