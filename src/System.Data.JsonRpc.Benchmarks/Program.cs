@@ -1,13 +1,12 @@
 ﻿using System.Data.JsonRpc.Benchmarks.Framework;
+using System.Data.JsonRpc.Benchmarks.Suites;
 using System.Linq;
 using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Diagnosers;
-using BenchmarkDotNet.Engines;
-using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Loggers;
 using BenchmarkDotNet.Reports;
-using BenchmarkDotNet.Validators;
+using BenchmarkDotNet.Running;
 
 namespace System.Data.JsonRpc.Benchmarks
 {
@@ -17,15 +16,14 @@ namespace System.Data.JsonRpc.Benchmarks
         {
             var configuration = ManualConfig.CreateEmpty();
 
-            configuration.Add(JitOptimizationsValidator.DontFailOnError);
-            configuration.Add(Job.Dry.With(RunStrategy.Throughput).WithTargetCount(2));
+            configuration.Add(new SimpleBenchmarkExporter());
             configuration.Add(MemoryDiagnoser.Default);
             configuration.Add(ConsoleLogger.Default);
-            configuration.Add(new SimpleBenchmarkExporter());
             configuration.Add(DefaultConfig.Instance.GetColumnProviders().ToArray());
             configuration.Set(SummaryStyle.Default.WithSizeUnit(SizeUnit.B));
 
-            BenchmarkSuiteRunner.Run(typeof(Program).Assembly, configuration);
+            BenchmarkRunner.Run(typeof(JsonRpcIdBenchmarks), configuration);
+            BenchmarkRunner.Run(typeof(JsonRpcSerializerBenchmarks), configuration);
         }
     }
 }
