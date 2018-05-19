@@ -5,7 +5,7 @@
     {
         private readonly JsonRpcId _id;
 
-        internal JsonRpcMessage(in JsonRpcId id)
+        private protected JsonRpcMessage(in JsonRpcId id)
         {
             _id = id;
         }
