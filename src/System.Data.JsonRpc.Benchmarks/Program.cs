@@ -4,6 +4,7 @@ using System.Linq;
 using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Diagnosers;
+using BenchmarkDotNet.Horology;
 using BenchmarkDotNet.Loggers;
 using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
@@ -20,10 +21,10 @@ namespace System.Data.JsonRpc.Benchmarks
             configuration.Add(MemoryDiagnoser.Default);
             configuration.Add(ConsoleLogger.Default);
             configuration.Add(DefaultConfig.Instance.GetColumnProviders().ToArray());
-            configuration.Set(SummaryStyle.Default.WithSizeUnit(SizeUnit.B));
+            configuration.Set(SummaryStyle.Default.WithTimeUnit(TimeUnit.Nanosecond).WithSizeUnit(SizeUnit.B));
 
-            BenchmarkRunner.Run(typeof(JsonRpcIdBenchmarks), configuration);
-            BenchmarkRunner.Run(typeof(JsonRpcSerializerBenchmarks), configuration);
+            BenchmarkRunner.Run<JsonRpcIdBenchmarks>(configuration);
+            BenchmarkRunner.Run<JsonRpcSerializerBenchmarks>(configuration);
         }
     }
 }
