@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Data.JsonRpc.Internal;
 using System.Data.JsonRpc.Resources;
 using System.Globalization;
 using System.IO;
@@ -10,14 +9,18 @@ using Newtonsoft.Json.Linq;
 namespace System.Data.JsonRpc
 {
     /// <summary>Serializes and deserializes JSON-RPC messages into and from the JSON format.</summary>
-    public sealed class JsonRpcSerializer : IDisposable
+    public sealed partial class JsonRpcSerializer : IDisposable
     {
         // The minimum length of JSON string with a JSON-RPC 2.0 message is about 32 bytes, this is used during deserialization
         // to get the more proper initial buffer size.
 
         private const int _minimumMessageSize = 32;
 
-        private static readonly JValue _nullToken = JValue.CreateNull();
+        // The stream reading and writing buffer size is the same as in the BCL.
+
+        private const int _streamBufferSize = 1024;
+
+        private static readonly Encoding _streamEncoding = new UTF8Encoding(false);
 
         private readonly IArrayPool<char> _jsonBufferPool = new JsonBufferPool();
         private readonly IDictionary<string, JsonRpcRequestContract> _requestContracts;
@@ -44,7 +47,7 @@ namespace System.Data.JsonRpc
             CompatibilityLevel = JsonRpcCompatibilityLevel.Level2;
         }
 
-        /// <summary>Deserializes the JSON string to the request data.</summary>
+        /// <summary>Deserializes the specified JSON string to request data.</summary>
         /// <param name="json">The JSON string to deserialize.</param>
         /// <returns>RPC information about requests.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="json" /> is <see langword="null" />.</exception>
@@ -56,17 +59,40 @@ namespace System.Data.JsonRpc
                 throw new ArgumentNullException(nameof(json));
             }
 
+            using (var stringReader = new StringReader(json))
+            {
+                return DeserializeRequestData(stringReader);
+            }
+        }
+
+        /// <summary>Deserializes the specified stream with a JSON string to request data.</summary>
+        /// <param name="stream">The stream with a JSON string to deserialize.</param>
+        /// <returns>RPC information about requests.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="stream" /> is <see langword="null" />.</exception>
+        /// <exception cref="JsonRpcException">An error occurred during request(s) deserialization.</exception>
+        public JsonRpcData<JsonRpcRequest> DeserializeRequestData(Stream stream)
+        {
+            if (stream == null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
+            using (var streamReader = new StreamReader(stream, _streamEncoding, false, _streamBufferSize, true))
+            {
+                return DeserializeRequestData(streamReader);
+            }
+        }
+
+        private JsonRpcData<JsonRpcRequest> DeserializeRequestData(TextReader textReader)
+        {
             var requestDataToken = default(JToken);
 
             try
             {
-                using (var stringReader = new StringReader(json))
+                using (var jsonReader = new JsonTextReader(textReader))
                 {
-                    using (var jsonReader = new JsonTextReader(stringReader))
-                    {
-                        jsonReader.ArrayPool = _jsonBufferPool;
-                        requestDataToken = JToken.ReadFrom(jsonReader);
-                    }
+                    jsonReader.ArrayPool = _jsonBufferPool;
+                    requestDataToken = JToken.ReadFrom(jsonReader);
                 }
             }
             catch (JsonException e)
@@ -143,7 +169,7 @@ namespace System.Data.JsonRpc
             }
         }
 
-        /// <summary>Deserializes the JSON string to the response data.</summary>
+        /// <summary>Deserializes the specified JSON string to response data.</summary>
         /// <param name="json">The JSON string to deserialize.</param>
         /// <returns>RPC information about responses.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="json" /> is <see langword="null" />.</exception>
@@ -155,17 +181,40 @@ namespace System.Data.JsonRpc
                 throw new ArgumentNullException(nameof(json));
             }
 
+            using (var stringReader = new StringReader(json))
+            {
+                return DeserializeResponseData(stringReader);
+            }
+        }
+
+        /// <summary>Deserializes the specified stream with a JSON string to response data.</summary>
+        /// <param name="stream">The stream with a JSON string to deserialize.</param>
+        /// <returns>RPC information about responses.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="stream" /> is <see langword="null" />.</exception>
+        /// <exception cref="JsonRpcException">An error occurred during response(s) deserialization.</exception>
+        public JsonRpcData<JsonRpcResponse> DeserializeResponseData(Stream stream)
+        {
+            if (stream == null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
+            using (var streamReader = new StreamReader(stream, _streamEncoding, false, _streamBufferSize, true))
+            {
+                return DeserializeResponseData(streamReader);
+            }
+        }
+
+        private JsonRpcData<JsonRpcResponse> DeserializeResponseData(TextReader textReader)
+        {
             var responseDataToken = default(JToken);
 
             try
             {
-                using (var stringReader = new StringReader(json))
+                using (var jsonReader = new JsonTextReader(textReader))
                 {
-                    using (var jsonReader = new JsonTextReader(stringReader))
-                    {
-                        jsonReader.ArrayPool = _jsonBufferPool;
-                        responseDataToken = JToken.ReadFrom(jsonReader);
-                    }
+                    jsonReader.ArrayPool = _jsonBufferPool;
+                    responseDataToken = JToken.ReadFrom(jsonReader);
                 }
             }
             catch (JsonException e)
@@ -243,7 +292,7 @@ namespace System.Data.JsonRpc
         }
 
         /// <summary>Serializes the specified request to a JSON string.</summary>
-        /// <param name="request">The specified request to serialize.</param>
+        /// <param name="request">The request to serialize.</param>
         /// <returns>A JSON string representation of the specified request.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="request" /> is <see langword="null" />.</exception>
         /// <exception cref="JsonRpcException">An error occurred during request serialization.</exception>
@@ -254,19 +303,47 @@ namespace System.Data.JsonRpc
                 throw new ArgumentNullException(nameof(request));
             }
 
+            using (var stringWriter = new StringWriter(new StringBuilder(_minimumMessageSize), CultureInfo.InvariantCulture))
+            {
+                SerializeRequest(request, stringWriter);
+
+                return stringWriter.ToString();
+            }
+        }
+
+        /// <summary>Serializes the specified request to the specified stream.</summary>
+        /// <param name="request">The request to serialize.</param>
+        /// <param name="stream">The stream for a JSON string.</param>
+        /// <returns>A JSON string representation of the specified request.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="request" /> or <paramref name="stream" /> is <see langword="null" />.</exception>
+        /// <exception cref="JsonRpcException">An error occurred during request serialization.</exception>
+        public void SerializeRequest(JsonRpcRequest request, Stream stream)
+        {
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+            if (stream == null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
+            using (var streamWriter = new StreamWriter(stream, _streamEncoding, _streamBufferSize, true))
+            {
+                SerializeRequest(request, streamWriter);
+            }
+        }
+
+        private void SerializeRequest(JsonRpcRequest request, TextWriter textWriter)
+        {
             var requestToken = ConvertRequestToToken(request);
 
             try
             {
-                using (var stringWriter = new StringWriter(new StringBuilder(_minimumMessageSize), CultureInfo.InvariantCulture))
+                using (var jsonWriter = new JsonTextWriter(textWriter))
                 {
-                    using (var jsonWriter = new JsonTextWriter(stringWriter))
-                    {
-                        jsonWriter.ArrayPool = _jsonBufferPool;
-                        requestToken.WriteTo(jsonWriter);
-                    }
-
-                    return stringWriter.ToString();
+                    jsonWriter.ArrayPool = _jsonBufferPool;
+                    requestToken.WriteTo(jsonWriter);
                 }
             }
             catch (JsonException e)
@@ -276,7 +353,7 @@ namespace System.Data.JsonRpc
         }
 
         /// <summary>Serializes the specified collection of requests to a JSON string.</summary>
-        /// <param name="requests">The specified collection of requests to serialize.</param>
+        /// <param name="requests">The collection of requests to serialize.</param>
         /// <returns>A JSON string representation of the specified collection of requests.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="requests" /> is <see langword="null" />.</exception>
         /// <exception cref="JsonRpcException">An error occurred during requests serialization.</exception>
@@ -286,6 +363,40 @@ namespace System.Data.JsonRpc
             {
                 throw new ArgumentNullException(nameof(requests));
             }
+
+            using (var stringWriter = new StringWriter(new StringBuilder(_minimumMessageSize * requests.Count), CultureInfo.InvariantCulture))
+            {
+                SerializeRequests(requests, stringWriter);
+
+                return stringWriter.ToString();
+            }
+        }
+
+        /// <summary>Serializes the specified collection of requests to the specified stream.</summary>
+        /// <param name="requests">The collection of requests to serialize.</param>
+        /// <param name="stream">The stream for a JSON string.</param>
+        /// <returns>A JSON string representation of the specified collection of requests.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="requests" /> or <paramref name="stream" /> is <see langword="null" />.</exception>
+        /// <exception cref="JsonRpcException">An error occurred during requests serialization.</exception>
+        public void SerializeRequests(IReadOnlyList<JsonRpcRequest> requests, Stream stream)
+        {
+            if (requests == null)
+            {
+                throw new ArgumentNullException(nameof(requests));
+            }
+            if (stream == null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
+            using (var streamWriter = new StreamWriter(stream, _streamEncoding, _streamBufferSize, true))
+            {
+                SerializeRequests(requests, streamWriter);
+            }
+        }
+
+        private void SerializeRequests(IReadOnlyList<JsonRpcRequest> requests, TextWriter textWriter)
+        {
             if (requests.Count == 0)
             {
                 throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.batch.empty"));
@@ -305,15 +416,10 @@ namespace System.Data.JsonRpc
 
             try
             {
-                using (var stringWriter = new StringWriter(new StringBuilder(_minimumMessageSize * requests.Count), CultureInfo.InvariantCulture))
+                using (var jsonWriter = new JsonTextWriter(textWriter))
                 {
-                    using (var jsonWriter = new JsonTextWriter(stringWriter))
-                    {
-                        jsonWriter.ArrayPool = _jsonBufferPool;
-                        requestArrayToken.WriteTo(jsonWriter);
-                    }
-
-                    return stringWriter.ToString();
+                    jsonWriter.ArrayPool = _jsonBufferPool;
+                    requestArrayToken.WriteTo(jsonWriter);
                 }
             }
             catch (JsonException e)
@@ -323,7 +429,7 @@ namespace System.Data.JsonRpc
         }
 
         /// <summary>Serializes the specified response to a JSON string.</summary>
-        /// <param name="response">The specified response to serialize.</param>
+        /// <param name="response">The response to serialize.</param>
         /// <returns>A JSON string representation of the specified response.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="response" /> is <see langword="null" />.</exception>
         /// <exception cref="JsonRpcException">An error occurred during response serialization.</exception>
@@ -334,19 +440,47 @@ namespace System.Data.JsonRpc
                 throw new ArgumentNullException(nameof(response));
             }
 
+            using (var stringWriter = new StringWriter(new StringBuilder(_minimumMessageSize), CultureInfo.InvariantCulture))
+            {
+                SerializeResponse(response, stringWriter);
+
+                return stringWriter.ToString();
+            }
+        }
+
+        /// <summary>Serializes the specified response to the specified stream.</summary>
+        /// <param name="response">The response to serialize.</param>
+        /// <param name="stream">The stream for a JSON string.</param>
+        /// <returns>A JSON string representation of the specified response.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="response" /> or <paramref name="stream" /> is <see langword="null" />.</exception>
+        /// <exception cref="JsonRpcException">An error occurred during response serialization.</exception>
+        public void SerializeResponse(JsonRpcResponse response, Stream stream)
+        {
+            if (response == null)
+            {
+                throw new ArgumentNullException(nameof(response));
+            }
+            if (stream == null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
+            using (var streamWriter = new StreamWriter(stream, _streamEncoding, _streamBufferSize, true))
+            {
+                SerializeResponse(response, streamWriter);
+            }
+        }
+
+        private void SerializeResponse(JsonRpcResponse response, TextWriter textWriter)
+        {
             var responseToken = ConvertResponseToToken(response);
 
             try
             {
-                using (var stringWriter = new StringWriter(new StringBuilder(_minimumMessageSize), CultureInfo.InvariantCulture))
+                using (var jsonWriter = new JsonTextWriter(textWriter))
                 {
-                    using (var jsonWriter = new JsonTextWriter(stringWriter))
-                    {
-                        jsonWriter.ArrayPool = _jsonBufferPool;
-                        responseToken.WriteTo(jsonWriter);
-                    }
-
-                    return stringWriter.ToString();
+                    jsonWriter.ArrayPool = _jsonBufferPool;
+                    responseToken.WriteTo(jsonWriter);
                 }
             }
             catch (JsonException e)
@@ -356,7 +490,7 @@ namespace System.Data.JsonRpc
         }
 
         /// <summary>Serializes the specified collection of responses to a JSON string.</summary>
-        /// <param name="responses">The specified collection of responses to serialize.</param>
+        /// <param name="responses">The collection of responses to serialize.</param>
         /// <returns>A JSON string representation of the specified collection of responses.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="responses" /> is <see langword="null" />.</exception>
         /// <exception cref="JsonRpcException">An error occurred during responses serialization.</exception>
@@ -366,6 +500,40 @@ namespace System.Data.JsonRpc
             {
                 throw new ArgumentNullException(nameof(responses));
             }
+
+            using (var stringWriter = new StringWriter(new StringBuilder(_minimumMessageSize * responses.Count), CultureInfo.InvariantCulture))
+            {
+                SerializeResponses(responses, stringWriter);
+
+                return stringWriter.ToString();
+            }
+        }
+
+        /// <summary>Serializes the specified collection of responses to the specified stream.</summary>
+        /// <param name="responses">The collection of responses to serialize.</param>
+        /// <param name="stream">The stream for a JSON string.</param>
+        /// <returns>A JSON string representation of the specified collection of responses.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="responses" /> or <paramref name="stream" /> is <see langword="null" />.</exception>
+        /// <exception cref="JsonRpcException">An error occurred during responses serialization.</exception>
+        public void SerializeResponses(IReadOnlyList<JsonRpcResponse> responses, Stream stream)
+        {
+            if (responses == null)
+            {
+                throw new ArgumentNullException(nameof(responses));
+            }
+            if (stream == null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
+            using (var streamWriter = new StreamWriter(stream, _streamEncoding, _streamBufferSize, true))
+            {
+                SerializeResponses(responses, streamWriter);
+            }
+        }
+
+        private void SerializeResponses(IReadOnlyList<JsonRpcResponse> responses, TextWriter textWriter)
+        {
             if (responses.Count == 0)
             {
                 throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.batch.empty"));
@@ -385,492 +553,15 @@ namespace System.Data.JsonRpc
 
             try
             {
-                using (var stringWriter = new StringWriter(new StringBuilder(_minimumMessageSize * responses.Count), CultureInfo.InvariantCulture))
+                using (var jsonWriter = new JsonTextWriter(textWriter))
                 {
-                    using (var jsonWriter = new JsonTextWriter(stringWriter))
-                    {
-                        jsonWriter.ArrayPool = _jsonBufferPool;
-                        responseArrayToken.WriteTo(jsonWriter);
-                    }
-
-                    return stringWriter.ToString();
+                    jsonWriter.ArrayPool = _jsonBufferPool;
+                    responseArrayToken.WriteTo(jsonWriter);
                 }
             }
             catch (JsonException e)
             {
                 throw new JsonRpcException(JsonRpcErrorCodes.InvalidOperation, Strings.GetString("core.serialize.json_issue"), default, e);
-            }
-        }
-
-        private JsonRpcRequest ConvertTokenToRequest(JObject requestToken)
-        {
-            if (CompatibilityLevel == JsonRpcCompatibilityLevel.Level2)
-            {
-                if (!requestToken.TryGetValue("jsonrpc", out var protocolToken) || (protocolToken.Type != JTokenType.String) || ((string)protocolToken != "2.0"))
-                {
-                    throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.deserialize.request.protocol.invalid_property"));
-                }
-            }
-
-            var requestId = default(JsonRpcId);
-
-            if (requestToken.TryGetValue("id", out var requestIdToken))
-            {
-                switch (requestIdToken.Type)
-                {
-                    case JTokenType.Null:
-                        {
-                        }
-                        break;
-                    case JTokenType.String:
-                        {
-                            requestId = (string)requestIdToken;
-                        }
-                        break;
-                    case JTokenType.Integer:
-                        {
-                            try
-                            {
-                                requestId = (long)requestIdToken;
-                            }
-                            catch (OverflowException e)
-                            {
-                                throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.deserialize.message.id.large_number"), default, e);
-                            }
-                        }
-                        break;
-                    case JTokenType.Float:
-                        {
-                            try
-                            {
-                                requestId = (double)requestIdToken;
-                            }
-                            catch (OverflowException e)
-                            {
-                                throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.deserialize.message.id.large_number"), default, e);
-                            }
-                        }
-                        break;
-                    default:
-                        {
-                            throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.deserialize.request.id.invalid_property"));
-                        }
-                }
-            }
-
-            if (!requestToken.TryGetValue("method", out var requestMethodToken) || (requestMethodToken.Type != JTokenType.String))
-            {
-                throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.deserialize.request.method.invalid_property"), requestId);
-            }
-
-            var requestMethod = (string)requestMethodToken;
-
-            if (!_requestContracts.TryGetValue(requestMethod, out var contract))
-            {
-                throw new JsonRpcException(JsonRpcErrorCodes.InvalidMethod, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.deserialize.request.method.unsupported"), requestMethod), requestId);
-            }
-            if (contract == null)
-            {
-                throw new JsonRpcException(JsonRpcErrorCodes.InvalidOperation, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.deserialize.request.method.contract.undefined"), requestMethod), requestId);
-            }
-
-            switch (contract.ParametersType)
-            {
-                case JsonRpcParametersType.ByPosition:
-                    {
-                        if (contract.ParametersByPosition.Count == 0)
-                        {
-                            throw new JsonRpcException(JsonRpcErrorCodes.InvalidOperation, Strings.GetString("request.contract.params.invalid_count"), requestId);
-                        }
-                        if (!requestToken.TryGetValue("params", out var requestParametersToken) || ((requestParametersToken.Type != JTokenType.Array) && (requestParametersToken.Type != JTokenType.Object)))
-                        {
-                            throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.deserialize.request.params.invalid_property"), requestId);
-                        }
-                        if (requestParametersToken.Type != JTokenType.Array)
-                        {
-                            throw new JsonRpcException(JsonRpcErrorCodes.InvalidParameters, Strings.GetString("core.deserialize.request.params.invalid_structure"), requestId);
-                        }
-
-                        var requestParametersArrayToken = (JArray)requestParametersToken;
-
-                        if (requestParametersArrayToken.Count < contract.ParametersByPosition.Count)
-                        {
-                            throw new JsonRpcException(JsonRpcErrorCodes.InvalidParameters, string.Format(CultureInfo.InvariantCulture, Strings.GetString("core.deserialize.request.params.invalid_count"), requestParametersArrayToken.Count), requestId);
-                        }
-
-                        var requestParameters = new object[contract.ParametersByPosition.Count];
-
-                        try
-                        {
-                            for (var i = 0; i < requestParameters.Length; i++)
-                            {
-                                requestParameters[i] = requestParametersArrayToken[i].ToObject(contract.ParametersByPosition[i]);
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            throw new JsonRpcException(JsonRpcErrorCodes.InvalidOperation, Strings.GetString("core.deserialize.json_issue"), requestId, e);
-                        }
-
-                        return new JsonRpcRequest(requestMethod, requestId, requestParameters);
-                    }
-                case JsonRpcParametersType.ByName:
-                    {
-                        if (contract.ParametersByName.Count == 0)
-                        {
-                            throw new JsonRpcException(JsonRpcErrorCodes.InvalidOperation, Strings.GetString("request.contract.params.invalid_count"), requestId);
-                        }
-                        if (!requestToken.TryGetValue("params", out var requestParametersToken) || ((requestParametersToken.Type != JTokenType.Array) && (requestParametersToken.Type != JTokenType.Object)))
-                        {
-                            throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.deserialize.request.params.invalid_property"), requestId);
-                        }
-                        if (requestParametersToken.Type != JTokenType.Object)
-                        {
-                            throw new JsonRpcException(JsonRpcErrorCodes.InvalidParameters, Strings.GetString("core.deserialize.request.params.invalid_structure"), requestId);
-                        }
-
-                        var requestParametersObjectToken = (JObject)requestParametersToken;
-                        var requestParameters = new Dictionary<string, object>(contract.ParametersByName.Count, StringComparer.Ordinal);
-
-                        try
-                        {
-                            foreach (var kvp in contract.ParametersByName)
-                            {
-                                if (!requestParametersObjectToken.TryGetValue(kvp.Key, StringComparison.Ordinal, out var requestParameterToken))
-                                {
-                                    continue;
-                                }
-
-                                requestParameters[kvp.Key] = requestParameterToken.ToObject(kvp.Value);
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            throw new JsonRpcException(JsonRpcErrorCodes.InvalidOperation, Strings.GetString("core.deserialize.json_issue"), requestId, e);
-                        }
-
-                        return new JsonRpcRequest(requestMethod, requestId, requestParameters);
-                    }
-                default:
-                    {
-                        return new JsonRpcRequest(requestMethod, requestId);
-                    }
-            }
-        }
-
-        private JObject ConvertRequestToToken(JsonRpcRequest request)
-        {
-            var requestToken = new JObject();
-
-            if (CompatibilityLevel == JsonRpcCompatibilityLevel.Level2)
-            {
-                requestToken["jsonrpc"] = "2.0";
-            }
-
-            requestToken["method"] = request.Method;
-
-            switch (request.ParametersType)
-            {
-                case JsonRpcParametersType.ByPosition:
-                    {
-                        if (request.ParametersByPosition.Count == 0)
-                        {
-                            throw new JsonRpcException(JsonRpcErrorCodes.InvalidOperation, Strings.GetString("request.params.invalid_count"), request.Id);
-                        }
-
-                        var requestParametersArrayToken = new JArray();
-
-                        try
-                        {
-                            for (var i = 0; i < request.ParametersByPosition.Count; i++)
-                            {
-                                requestParametersArrayToken.Add(request.ParametersByPosition[i] != null ? JToken.FromObject(request.ParametersByPosition[i]) : _nullToken);
-                            }
-                        }
-                        catch (JsonException e)
-                        {
-                            throw new JsonRpcException(JsonRpcErrorCodes.InvalidOperation, Strings.GetString("core.serialize.json_issue"), request.Id, e);
-                        }
-
-                        requestToken["params"] = requestParametersArrayToken;
-                    }
-                    break;
-                case JsonRpcParametersType.ByName:
-                    {
-                        if (CompatibilityLevel != JsonRpcCompatibilityLevel.Level2)
-                        {
-                            throw new JsonRpcException(JsonRpcErrorCodes.InvalidOperation, Strings.GetString("core.serialize.request.params.unsupported_structure"), request.Id);
-                        }
-
-                        var requestParametersObjectToken = new JObject();
-
-                        try
-                        {
-                            foreach (var kvp in request.ParametersByName)
-                            {
-                                requestParametersObjectToken.Add(kvp.Key, kvp.Value != null ? JToken.FromObject(kvp.Value) : _nullToken);
-                            }
-                        }
-                        catch (JsonException e)
-                        {
-                            throw new JsonRpcException(JsonRpcErrorCodes.InvalidOperation, Strings.GetString("core.serialize.json_issue"), request.Id, e);
-                        }
-
-                        requestToken["params"] = requestParametersObjectToken;
-                    }
-                    break;
-                case JsonRpcParametersType.None:
-                    {
-                        if (CompatibilityLevel != JsonRpcCompatibilityLevel.Level2)
-                        {
-                            requestToken["params"] = new JArray();
-                        }
-                    }
-                    break;
-            }
-
-            switch (request.Id.Type)
-            {
-                case JsonRpcIdType.None:
-                    {
-                        if (CompatibilityLevel != JsonRpcCompatibilityLevel.Level2)
-                        {
-                            requestToken["id"] = _nullToken;
-                        }
-                    }
-                    break;
-                case JsonRpcIdType.String:
-                    {
-                        requestToken["id"] = new JValue((string)request.Id);
-                    }
-                    break;
-                case JsonRpcIdType.Integer:
-                    {
-                        requestToken["id"] = new JValue((long)request.Id);
-                    }
-                    break;
-                case JsonRpcIdType.Float:
-                    {
-                        requestToken["id"] = new JValue((double)request.Id);
-                    }
-                    break;
-            }
-
-            return requestToken;
-        }
-
-        private JsonRpcResponse ConvertTokenToResponse(JObject responseObject)
-        {
-            if (CompatibilityLevel == JsonRpcCompatibilityLevel.Level2)
-            {
-                if (!responseObject.TryGetValue("jsonrpc", out var protocolToken) || (protocolToken.Type != JTokenType.String) || ((string)protocolToken != "2.0"))
-                {
-                    throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.deserialize.request.protocol.invalid_property"));
-                }
-            }
-
-            var responseId = default(JsonRpcId);
-
-            if (responseObject.TryGetValue("id", out var responseIdToken))
-            {
-                switch (responseIdToken.Type)
-                {
-                    case JTokenType.Null:
-                        {
-                        }
-                        break;
-                    case JTokenType.String:
-                        {
-                            responseId = (string)responseIdToken;
-                        }
-                        break;
-                    case JTokenType.Integer:
-                        {
-                            try
-                            {
-                                responseId = (long)responseIdToken;
-                            }
-                            catch (OverflowException e)
-                            {
-                                throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.deserialize.message.id.large_number"), default, e);
-                            }
-                        }
-                        break;
-                    case JTokenType.Float:
-                        {
-                            try
-                            {
-                                responseId = (double)responseIdToken;
-                            }
-                            catch (OverflowException e)
-                            {
-                                throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.deserialize.message.id.large_number"), default, e);
-                            }
-                        }
-                        break;
-                    default:
-                        {
-                            throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.deserialize.response.id.invalid_property"));
-                        }
-                }
-            }
-
-            var responseResultToken = responseObject.GetValue("result");
-            var responseErrorToken = responseObject.GetValue("error");
-            var responseSuccess = false;
-
-            if (CompatibilityLevel == JsonRpcCompatibilityLevel.Level2)
-            {
-                if (((responseResultToken == null) && (responseErrorToken == null)) || ((responseResultToken != null) && (responseErrorToken != null)))
-                {
-                    throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.deserialize.response.invalid_properties"), responseId);
-                }
-
-                responseSuccess = responseErrorToken == null;
-            }
-            else
-            {
-                if ((responseResultToken == null) || (responseErrorToken == null))
-                {
-                    throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.deserialize.response.invalid_properties"), responseId);
-                }
-
-                responseSuccess = responseErrorToken.Type == JTokenType.Null;
-            }
-
-            if (responseSuccess)
-            {
-                if (responseId.Type == JsonRpcIdType.None)
-                {
-                    throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.deserialize.response.invalid_properties"), responseId);
-                }
-
-                var contract = GetResponseContract(responseId);
-                var responseResult = default(object);
-
-                if (contract.ResultType != null)
-                {
-                    try
-                    {
-                        responseResult = responseResultToken.ToObject(contract.ResultType);
-                    }
-                    catch (Exception e)
-                    {
-                        throw new JsonRpcException(JsonRpcErrorCodes.InvalidOperation, Strings.GetString("core.deserialize.json_issue"), responseId, e);
-                    }
-                }
-
-                return new JsonRpcResponse(responseResult, responseId);
-            }
-            else
-            {
-                if (responseErrorToken.Type == JTokenType.Object)
-                {
-                    var responseErrorObjectToken = (JObject)responseErrorToken;
-                    var responseErrorCode = default(long);
-
-                    if (responseErrorObjectToken.TryGetValue("code", out var responseErrorCodeToken) && (responseErrorCodeToken.Type == JTokenType.Integer))
-                    {
-                        try
-                        {
-                            responseErrorCode = (long)responseErrorCodeToken;
-                        }
-                        catch (OverflowException e)
-                        {
-                            throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.deserialize.response.error.code.large_number"), responseId, e);
-                        }
-                    }
-                    else
-                    {
-                        if (CompatibilityLevel == JsonRpcCompatibilityLevel.Level2)
-                        {
-                            throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.deserialize.response.error.code.invalid_property"), responseId);
-                        }
-                    }
-
-                    var responseErrorMessage = default(string);
-
-                    if (responseErrorObjectToken.TryGetValue("message", out var responseErrorMessageToken) && (responseErrorMessageToken.Type == JTokenType.String))
-                    {
-                        responseErrorMessage = (string)responseErrorMessageToken;
-                    }
-                    else
-                    {
-                        if (CompatibilityLevel == JsonRpcCompatibilityLevel.Level2)
-                        {
-                            throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.deserialize.response.error.message.invalid_property"), responseId);
-                        }
-                        else
-                        {
-                            responseErrorMessage = string.Empty;
-                        }
-                    }
-
-                    var responseError = default(JsonRpcError);
-
-                    if (responseErrorObjectToken.TryGetValue("data", out var responseErrorDataToken))
-                    {
-                        var responseErrorDataType = default(Type);
-
-                        if (responseId.Type == JsonRpcIdType.None)
-                        {
-                            responseErrorDataType = DefaultErrorDataType;
-                        }
-                        else
-                        {
-                            var contract = GetResponseContract(responseId);
-
-                            responseErrorDataType = contract.ErrorDataType;
-                        }
-
-                        var responseErrorData = default(object);
-
-                        if (responseErrorDataType != null)
-                        {
-                            try
-                            {
-                                responseErrorData = responseErrorDataToken.ToObject(responseErrorDataType);
-                            }
-                            catch (Exception e)
-                            {
-                                throw new JsonRpcException(JsonRpcErrorCodes.InvalidOperation, Strings.GetString("core.deserialize.json_issue"), responseId, e);
-                            }
-                        }
-
-                        try
-                        {
-                            responseError = new JsonRpcError(responseErrorCode, responseErrorMessage, responseErrorData);
-                        }
-                        catch (ArgumentOutOfRangeException e)
-                        {
-                            throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.deserialize.response.error.code.invalid_range"), responseId, e);
-                        }
-                    }
-                    else
-                    {
-                        try
-                        {
-                            responseError = new JsonRpcError(responseErrorCode, responseErrorMessage);
-                        }
-                        catch (ArgumentOutOfRangeException e)
-                        {
-                            throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.deserialize.response.error.code.invalid_range"), responseId, e);
-                        }
-                    }
-
-                    return new JsonRpcResponse(responseError, responseId);
-                }
-                else
-                {
-                    if (CompatibilityLevel == JsonRpcCompatibilityLevel.Level2)
-                    {
-                        throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.deserialize.response.error.invalid_type"), responseId);
-                    }
-                    else
-                    {
-                        return new JsonRpcResponse(new JsonRpcError(default, string.Empty), responseId);
-                    }
-                }
             }
         }
 
@@ -890,94 +581,6 @@ namespace System.Data.JsonRpc
             }
 
             return contract;
-        }
-
-        private JObject ConvertResponseToToken(JsonRpcResponse response)
-        {
-            var responseToken = new JObject();
-
-            if (CompatibilityLevel == JsonRpcCompatibilityLevel.Level2)
-            {
-                responseToken["jsonrpc"] = "2.0";
-            }
-
-            if (response.Success)
-            {
-                var resultToken = default(JToken);
-
-                try
-                {
-                    resultToken = JToken.FromObject(response.Result);
-                }
-                catch (JsonException e)
-                {
-                    throw new JsonRpcException(JsonRpcErrorCodes.InvalidOperation, Strings.GetString("core.serialize.json_issue"), response.Id, e);
-                }
-
-                responseToken["result"] = resultToken;
-
-                if (CompatibilityLevel != JsonRpcCompatibilityLevel.Level2)
-                {
-                    responseToken["error"] = _nullToken;
-                }
-            }
-            else
-            {
-                var responseErrorToken = new JObject
-                {
-                    ["code"] = response.Error.Code,
-                    ["message"] = response.Error.Message
-                };
-
-                if (response.Error.HasData)
-                {
-                    var responseErrorDataToken = default(JToken);
-
-                    try
-                    {
-                        responseErrorDataToken = response.Error.Data != null ? JToken.FromObject(response.Error.Data) : _nullToken;
-                    }
-                    catch (JsonException e)
-                    {
-                        throw new JsonRpcException(JsonRpcErrorCodes.InvalidOperation, Strings.GetString("core.serialize.json_issue"), response.Id, e);
-                    }
-
-                    responseErrorToken["data"] = responseErrorDataToken;
-                }
-
-                if (CompatibilityLevel != JsonRpcCompatibilityLevel.Level2)
-                {
-                    responseToken["result"] = _nullToken;
-                }
-
-                responseToken["error"] = responseErrorToken;
-            }
-
-            switch (response.Id.Type)
-            {
-                case JsonRpcIdType.None:
-                    {
-                        responseToken["id"] = _nullToken;
-                    }
-                    break;
-                case JsonRpcIdType.String:
-                    {
-                        responseToken["id"] = new JValue((string)response.Id);
-                    }
-                    break;
-                case JsonRpcIdType.Integer:
-                    {
-                        responseToken["id"] = new JValue((long)response.Id);
-                    }
-                    break;
-                case JsonRpcIdType.Float:
-                    {
-                        responseToken["id"] = new JValue((double)response.Id);
-                    }
-                    break;
-            }
-
-            return responseToken;
         }
 
         /// <summary>Clears response bindings of the current instance.</summary>

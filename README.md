@@ -8,6 +8,7 @@ Provides support for serializing and deserializing [JSON-RPC 2.0](http://www.jso
 
 - The serializer supports transparent usage of number and string message identifiers.
 - The serializer supports dynamic response type contracts when result data type depends on method parameters.
+- The serializer supports serializing to and deserializing from streams.
 
 ### Specifics
 

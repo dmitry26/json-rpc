@@ -1,12 +1,12 @@
 [
     {
         "jsonrpc": "2.0",
-        "result": 0,
-        "id": 1
+        "method": "m",
+        "id": 0
     },
     {
         "jsonrpc": "2.0",
-        "result": 0,
-        "id": 2
+        "method": "m",
+        "id": 1
     }
 ]

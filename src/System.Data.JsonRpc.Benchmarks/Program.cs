@@ -24,7 +24,8 @@ namespace System.Data.JsonRpc.Benchmarks
             configuration.Set(SummaryStyle.Default.WithTimeUnit(TimeUnit.Nanosecond).WithSizeUnit(SizeUnit.B));
 
             BenchmarkRunner.Run<JsonRpcIdBenchmarks>(configuration);
-            BenchmarkRunner.Run<JsonRpcSerializerBenchmarks>(configuration);
+            BenchmarkRunner.Run<JsonRpcSerializerSerializeBenchmarks>(configuration);
+            BenchmarkRunner.Run<JsonRpcSerializerDeserializeBenchmarks>(configuration);
         }
     }
 }

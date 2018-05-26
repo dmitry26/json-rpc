@@ -1,7 +1,7 @@
 ﻿using System.Buffers;
 using Newtonsoft.Json;
 
-namespace System.Data.JsonRpc.Internal
+namespace System.Data.JsonRpc
 {
     internal sealed class JsonBufferPool : IArrayPool<char>
     {
