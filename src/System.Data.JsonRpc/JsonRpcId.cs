@@ -49,39 +49,20 @@ namespace System.Data.JsonRpc
             Type = JsonRpcIdType.Float;
         }
 
-        private bool Equals(in JsonRpcId other)
+        bool IEquatable<JsonRpcId>.Equals(JsonRpcId other)
         {
-            switch (other.Type)
-            {
-                case JsonRpcIdType.String:
-                    {
-                        return (Type == JsonRpcIdType.String) && _valueString.Equals(other._valueString);
-                    }
-                case JsonRpcIdType.Integer:
-                    {
-                        return (Type == JsonRpcIdType.Integer) && _valueInteger.Equals(other._valueInteger);
-                    }
-                case JsonRpcIdType.Float:
-                    {
-                        return (Type == JsonRpcIdType.Float) && _valueFloat.Equals(other._valueFloat);
-                    }
-                default:
-                    {
-                        return (Type == JsonRpcIdType.None);
-                    }
-            }
+            return Equals(in other);
         }
 
-        /// <summary>Gets the identifier type.</summary>
-        public JsonRpcIdType Type
+        int IComparable<JsonRpcId>.CompareTo(JsonRpcId other)
         {
-            get;
+            return CompareTo(in other);
         }
 
         /// <summary>Compares the current <see cref="JsonRpcId" /> with another <see cref="JsonRpcId" /> and returns an integer that indicates whether the current <see cref="JsonRpcId" /> precedes, follows, or occurs in the same position in the sort order as the other <see cref="JsonRpcId" />.</summary>
         /// <param name="other">A <see cref="JsonRpcId" /> to compare with the current <see cref="JsonRpcId" />.</param>
         /// <returns>A value that indicates the relative order of the objects being compared.</returns>
-        public int CompareTo(JsonRpcId other)
+        public int CompareTo(in JsonRpcId other)
         {
             switch (other.Type)
             {
@@ -171,9 +152,27 @@ namespace System.Data.JsonRpc
         /// <summary>Indicates whether the current <see cref="JsonRpcId" /> is equal to another <see cref="JsonRpcId" />.</summary>
         /// <param name="other">A <see cref="JsonRpcId" /> to compare with the current <see cref="JsonRpcId" />.</param>
         /// <returns><see langword="true" /> if the current <see cref="JsonRpcId" /> is equal to the other <see cref="JsonRpcId" />; otherwise, <see langword="false" />.</returns>
-        public bool Equals(JsonRpcId other)
+        public bool Equals(in JsonRpcId other)
         {
-            return Equals(in other);
+            switch (other.Type)
+            {
+                case JsonRpcIdType.String:
+                    {
+                        return (Type == JsonRpcIdType.String) && _valueString.Equals(other._valueString);
+                    }
+                case JsonRpcIdType.Integer:
+                    {
+                        return (Type == JsonRpcIdType.Integer) && _valueInteger.Equals(other._valueInteger);
+                    }
+                case JsonRpcIdType.Float:
+                    {
+                        return (Type == JsonRpcIdType.Float) && _valueFloat.Equals(other._valueFloat);
+                    }
+                default:
+                    {
+                        return (Type == JsonRpcIdType.None);
+                    }
+            }
         }
 
         /// <summary>Indicates whether the current <see cref="JsonRpcId" /> is equal to the specified object.</summary>
@@ -340,6 +339,12 @@ namespace System.Data.JsonRpc
             }
 
             return value._valueFloat;
+        }
+
+        /// <summary>Gets the identifier type.</summary>
+        public JsonRpcIdType Type
+        {
+            get;
         }
     }
 }
