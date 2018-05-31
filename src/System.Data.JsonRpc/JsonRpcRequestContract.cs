@@ -5,6 +5,10 @@ namespace System.Data.JsonRpc
     /// <summary>Specifies a type contract for request deserialization.</summary>
     public sealed class JsonRpcRequestContract
     {
+        private readonly JsonRpcParametersType _parametersType;
+        private readonly IReadOnlyDictionary<string, Type> _parametersByName;
+        private readonly IReadOnlyList<Type> _parametersByPosition;
+
         /// <summary>Initializes a new instance of the <see cref="JsonRpcRequestContract" /> class.</summary>
         public JsonRpcRequestContract()
         {
@@ -20,8 +24,8 @@ namespace System.Data.JsonRpc
                 throw new ArgumentNullException(nameof(parameters));
             }
 
-            ParametersByPosition = parameters;
-            ParametersType = JsonRpcParametersType.ByPosition;
+            _parametersType = JsonRpcParametersType.ByPosition;
+            _parametersByPosition = parameters;
         }
 
         /// <summary>Initializes a new instance of the <see cref="JsonRpcRequestContract" /> class.</summary>
@@ -34,26 +38,26 @@ namespace System.Data.JsonRpc
                 throw new ArgumentNullException(nameof(parameters));
             }
 
-            ParametersByName = parameters;
-            ParametersType = JsonRpcParametersType.ByName;
-        }
-
-        /// <summary>Gets a contract for parameters, provided by position.</summary>
-        public IReadOnlyList<Type> ParametersByPosition
-        {
-            get;
-        }
-
-        /// <summary>Gets a contract for parameters, provided by name.</summary>
-        public IReadOnlyDictionary<string, Type> ParametersByName
-        {
-            get;
+            _parametersType = JsonRpcParametersType.ByName;
+            _parametersByName = parameters;
         }
 
         /// <summary>Gets parameters type.</summary>
         public JsonRpcParametersType ParametersType
         {
-            get;
+            get => _parametersType;
+        }
+
+        /// <summary>Gets a contract for parameters, provided by name.</summary>
+        public IReadOnlyDictionary<string, Type> ParametersByName
+        {
+            get => _parametersByName;
+        }
+
+        /// <summary>Gets a contract for parameters, provided by position.</summary>
+        public IReadOnlyList<Type> ParametersByPosition
+        {
+            get => _parametersByPosition;
         }
     }
 }

@@ -7,6 +7,11 @@ namespace System.Data.JsonRpc
     [DebuggerDisplay("Method = {Method}, Id = {Id}")]
     public sealed class JsonRpcRequest : JsonRpcMessage
     {
+        private readonly string _method;
+        private readonly JsonRpcParametersType _parametersType;
+        private readonly IReadOnlyDictionary<string, object> _parametersByName;
+        private readonly IReadOnlyList<object> _parametersByPosition;
+
         /// <summary>Initializes a new instance of the <see cref="JsonRpcRequest" /> class.</summary>
         /// <param name="method">The string containing the name of the method to be invoked.</param>
         /// <param name="id">The identifier established by the client.</param>
@@ -19,7 +24,7 @@ namespace System.Data.JsonRpc
                 throw new ArgumentNullException(nameof(method));
             }
 
-            Method = method;
+            _method = method;
         }
 
         /// <summary>Initializes a new instance of the <see cref="JsonRpcRequest" /> class.</summary>
@@ -35,8 +40,8 @@ namespace System.Data.JsonRpc
                 throw new ArgumentNullException(nameof(parameters));
             }
 
-            ParametersByPosition = parameters;
-            ParametersType = JsonRpcParametersType.ByPosition;
+            _parametersType = JsonRpcParametersType.ByPosition;
+            _parametersByPosition = parameters;
         }
 
         /// <summary>Initializes a new instance of the <see cref="JsonRpcRequest" /> class.</summary>
@@ -61,8 +66,8 @@ namespace System.Data.JsonRpc
                 throw new ArgumentNullException(nameof(parameters));
             }
 
-            ParametersByName = parameters;
-            ParametersType = JsonRpcParametersType.ByName;
+            _parametersType = JsonRpcParametersType.ByName;
+            _parametersByName = parameters;
         }
 
         /// <summary>Initializes a new instance of the <see cref="JsonRpcRequest" /> class.</summary>
@@ -93,25 +98,25 @@ namespace System.Data.JsonRpc
         /// <summary>Gets a string containing the name of the method to be invoked.</summary>
         public string Method
         {
-            get;
+            get => _method;
         }
 
         /// <summary>Gets parameters type.</summary>
         public JsonRpcParametersType ParametersType
         {
-            get;
-        }
-
-        /// <summary>Gets parameters, provided by position.</summary>
-        public IReadOnlyList<object> ParametersByPosition
-        {
-            get;
+            get => _parametersType;
         }
 
         /// <summary>Gets parameters, provided by name.</summary>
         public IReadOnlyDictionary<string, object> ParametersByName
         {
-            get;
+            get => _parametersByName;
+        }
+
+        /// <summary>Gets parameters, provided by position.</summary>
+        public IReadOnlyList<object> ParametersByPosition
+        {
+            get => _parametersByPosition;
         }
 
         /// <summary>Gets a value indicating whether the message is a notification.</summary>
@@ -123,7 +128,7 @@ namespace System.Data.JsonRpc
         /// <summary>Gets a value indicating whether the message is a system extension.</summary>
         public bool IsSystem
         {
-            get => IsSystemMethod(Method);
+            get => IsSystemMethod(_method);
         }
     }
 }

@@ -8,34 +8,37 @@ namespace System.Data.JsonRpc
     public readonly struct JsonRpcItem<T>
         where T : JsonRpcMessage
     {
+        private readonly T _message;
+        private readonly JsonRpcException _exception;
+
         internal JsonRpcItem(T message)
         {
-            Message = message;
-            Exception = null;
+            _message = message;
+            _exception = null;
         }
 
         internal JsonRpcItem(JsonRpcException exception)
         {
-            Message = null;
-            Exception = exception;
+            _message = null;
+            _exception = exception;
         }
 
         /// <summary>Gets a message for the valid item.</summary>
         public T Message
         {
-            get;
+            get => _message;
         }
 
         /// <summary>Gets an exception for the invalid item.</summary>
         public JsonRpcException Exception
         {
-            get;
+            get => _exception;
         }
 
         /// <summary>Gets a value indicating whether the item represents a valid message.</summary>
         public bool IsValid
         {
-            get => Message != null;
+            get => _message != null;
         }
     }
 }

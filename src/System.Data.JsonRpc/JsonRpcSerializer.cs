@@ -27,6 +27,8 @@ namespace System.Data.JsonRpc
         private readonly IDictionary<string, JsonRpcResponseContract> _responseContracts;
         private readonly IDictionary<JsonRpcId, string> _staticResponseBindings;
         private readonly IDictionary<JsonRpcId, JsonRpcResponseContract> _dynamicResponseBindings;
+        private Type _defaultErrorDataType;
+        private JsonRpcCompatibilityLevel _compatibilityLevel;
 
         /// <summary>Initializes a new instance of the <see cref="JsonRpcSerializer" /> class.</summary>
         /// <param name="requestContracts">The request contracts.</param>
@@ -43,8 +45,7 @@ namespace System.Data.JsonRpc
             _responseContracts = responseContracts ?? new Dictionary<string, JsonRpcResponseContract>(StringComparer.Ordinal);
             _staticResponseBindings = staticResponseBindings ?? new Dictionary<JsonRpcId, string>();
             _dynamicResponseBindings = dynamicResponseBindings ?? new Dictionary<JsonRpcId, JsonRpcResponseContract>();
-
-            CompatibilityLevel = JsonRpcCompatibilityLevel.Level2;
+            _compatibilityLevel = JsonRpcCompatibilityLevel.Level2;
         }
 
         /// <summary>Deserializes the specified JSON string to request data.</summary>
@@ -617,15 +618,15 @@ namespace System.Data.JsonRpc
         /// <summary>Gets or sets a type of error data for deserializing an unsuccessful response with empty identifier.</summary>
         public Type DefaultErrorDataType
         {
-            get;
-            set;
+            get => _defaultErrorDataType;
+            set => _defaultErrorDataType = value;
         }
 
         /// <summary>Gets or sets the protocol compatibility level.</summary>
         public JsonRpcCompatibilityLevel CompatibilityLevel
         {
-            get;
-            set;
+            get => _compatibilityLevel;
+            set => _compatibilityLevel = value;
         }
     }
 }

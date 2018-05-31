@@ -7,6 +7,9 @@ namespace System.Data.JsonRpc
     [DebuggerDisplay("Success = {Success}, Id = {Id}")]
     public sealed class JsonRpcResponse : JsonRpcMessage
     {
+        private readonly object _result;
+        private readonly JsonRpcError _error;
+
         /// <summary>Initializes a new instance of the <see cref="JsonRpcResponse" /> class.</summary>
         /// <param name="result">The value, which is determined by the method invoked on the server.</param>
         /// <param name="id">The identifier, which must be the same as the value in the request object.</param>
@@ -19,7 +22,7 @@ namespace System.Data.JsonRpc
                 throw new ArgumentException(Strings.GetString("response.empty_id"), nameof(id));
             }
 
-            Result = result;
+            _result = result;
         }
 
         /// <summary>Initializes a new instance of the <see cref="JsonRpcResponse" /> class.</summary>
@@ -34,25 +37,25 @@ namespace System.Data.JsonRpc
                 throw new ArgumentNullException(nameof(error));
             }
 
-            Error = error;
+            _error = error;
         }
 
         /// <summary>Gets a value, which is determined by the method invoked.</summary>
         public object Result
         {
-            get;
+            get => _result;
         }
 
         /// <summary>Gets an object, which represents error information.</summary>
         public JsonRpcError Error
         {
-            get;
+            get => _error;
         }
 
         /// <summary>Gets a value indicating whether the request was successful.</summary>
         public bool Success
         {
-            get => Error == null;
+            get => _error == null;
         }
     }
 }
