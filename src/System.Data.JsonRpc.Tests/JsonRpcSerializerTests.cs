@@ -120,6 +120,46 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
+        public async void CoreSerializeRequestAsyncToStreamWhenRequestIsNull()
+        {
+            var jsonRpcSerializer = new JsonRpcSerializer();
+            var jsonRpcMessage = new JsonRpcRequest("m", 0L);
+
+            using (var jsonStream = new MemoryStream())
+            {
+                await Assert.ThrowsAsync<ArgumentNullException>(() =>
+                    jsonRpcSerializer.SerializeRequestAsync(null, jsonStream));
+            }
+        }
+
+        [Fact]
+        public async void CoreSerializeRequestAsyncToStreamWhenStreamIsNull()
+        {
+            var jsonRpcSerializer = new JsonRpcSerializer();
+            var jsonRpcMessage = new JsonRpcRequest("m", 0L);
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() =>
+                jsonRpcSerializer.SerializeRequestAsync(jsonRpcMessage, null));
+        }
+
+        [Fact]
+        public async void CoreSerializeRequestAsyncToStream()
+        {
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_req.json");
+            var jsonRpcSerializer = new JsonRpcSerializer();
+            var jsonRpcMessage = new JsonRpcRequest("m", 0L);
+
+            using (var jsonStream = new MemoryStream())
+            {
+                await jsonRpcSerializer.SerializeRequestAsync(jsonRpcMessage, jsonStream);
+
+                var jsonResult = Encoding.UTF8.GetString(jsonStream.ToArray());
+
+                CompareJsonStrings(jsonSample, jsonResult);
+            }
+        }
+
+        [Fact]
         public void CoreSerializeRequestsToStreamWhenRequestsIsNull()
         {
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -156,6 +196,50 @@ namespace System.Data.JsonRpc.Tests
             using (var jsonStream = new MemoryStream())
             {
                 jsonRpcSerializer.SerializeRequests(jsonRpcMessages, jsonStream);
+
+                var jsonResult = Encoding.UTF8.GetString(jsonStream.ToArray());
+
+                CompareJsonStrings(jsonSample, jsonResult);
+            }
+        }
+
+        [Fact]
+        public async void CoreSerializeRequestsAsyncToStreamWhenRequestIsNull()
+        {
+            var jsonRpcSerializer = new JsonRpcSerializer();
+            var jsonRpcMessage = new JsonRpcRequest("m", 0L);
+
+            using (var jsonStream = new MemoryStream())
+            {
+                await Assert.ThrowsAsync<ArgumentNullException>(() =>
+                    jsonRpcSerializer.SerializeRequestsAsync(null, jsonStream));
+            }
+        }
+
+        [Fact]
+        public async void CoreSerializeRequestsAsyncToStreamWhenStreamIsNull()
+        {
+            var jsonRpcSerializer = new JsonRpcSerializer();
+            var jsonRpcMessage1 = new JsonRpcRequest("m", 0L);
+            var jsonRpcMessage2 = new JsonRpcRequest("m", 1L);
+            var jsonRpcMessages = new[] { jsonRpcMessage1, jsonRpcMessage2 };
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() =>
+                jsonRpcSerializer.SerializeRequestsAsync(jsonRpcMessages, null));
+        }
+
+        [Fact]
+        public async void CoreSerializeRequestsAsyncToStream()
+        {
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_batch_req.json");
+            var jsonRpcSerializer = new JsonRpcSerializer();
+            var jsonRpcMessage1 = new JsonRpcRequest("m", 0L);
+            var jsonRpcMessage2 = new JsonRpcRequest("m", 1L);
+            var jsonRpcMessages = new[] { jsonRpcMessage1, jsonRpcMessage2 };
+
+            using (var jsonStream = new MemoryStream())
+            {
+                await jsonRpcSerializer.SerializeRequestsAsync(jsonRpcMessages, jsonStream);
 
                 var jsonResult = Encoding.UTF8.GetString(jsonStream.ToArray());
 
@@ -245,6 +329,47 @@ namespace System.Data.JsonRpc.Tests
         }
 
         [Fact]
+        public async void CoreSerializeResponseAsyncToStreamWhenResponseIsNull()
+        {
+            var jsonRpcSerializer = new JsonRpcSerializer();
+            var jsonRpcMessage = new JsonRpcRequest("m", 0L);
+
+            using (var jsonStream = new MemoryStream())
+            {
+                await Assert.ThrowsAsync<ArgumentNullException>(() =>
+                    jsonRpcSerializer.SerializeResponseAsync(null, jsonStream));
+            }
+        }
+
+        [Fact]
+        public async void CoreSerializeResponseAsyncToStreamWhenStreamIsNull()
+        {
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_res.json");
+            var jsonRpcSerializer = new JsonRpcSerializer();
+            var jsonRpcMessage = new JsonRpcResponse(0L, 0L);
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() =>
+                jsonRpcSerializer.SerializeResponseAsync(jsonRpcMessage, null));
+        }
+
+        [Fact]
+        public async void CoreSerializeResponseAsyncToStream()
+        {
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_res.json");
+            var jsonRpcSerializer = new JsonRpcSerializer();
+            var jsonRpcMessage = new JsonRpcResponse(0L, 0L);
+
+            using (var jsonStream = new MemoryStream())
+            {
+                await jsonRpcSerializer.SerializeResponseAsync(jsonRpcMessage, jsonStream);
+
+                var jsonResult = Encoding.UTF8.GetString(jsonStream.ToArray());
+
+                CompareJsonStrings(jsonSample, jsonResult);
+            }
+        }
+
+        [Fact]
         public void CoreSerializeResponsesToStreamWhenResponsesIsNull()
         {
             var jsonRpcSerializer = new JsonRpcSerializer();
@@ -281,6 +406,50 @@ namespace System.Data.JsonRpc.Tests
             using (var jsonStream = new MemoryStream())
             {
                 jsonRpcSerializer.SerializeResponses(jsonRpcMessages, jsonStream);
+
+                var jsonResult = Encoding.UTF8.GetString(jsonStream.ToArray());
+
+                CompareJsonStrings(jsonSample, jsonResult);
+            }
+        }
+
+        [Fact]
+        public async void CoreSerializeResponsesAsyncToStreamWhenResponsesIsNull()
+        {
+            var jsonRpcSerializer = new JsonRpcSerializer();
+            var jsonRpcMessage = new JsonRpcRequest("m", 0L);
+
+            using (var jsonStream = new MemoryStream())
+            {
+                await Assert.ThrowsAsync<ArgumentNullException>(() =>
+                    jsonRpcSerializer.SerializeResponsesAsync(null, jsonStream));
+            }
+        }
+
+        [Fact]
+        public async void CoreSerializeResponsesAsyncToStreamWhenStreamIsNull()
+        {
+            var jsonRpcSerializer = new JsonRpcSerializer();
+            var jsonRpcMessage1 = new JsonRpcResponse(0L, 0L);
+            var jsonRpcMessage2 = new JsonRpcResponse(0L, 1L);
+            var jsonRpcMessages = new[] { jsonRpcMessage1, jsonRpcMessage2 };
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() =>
+                jsonRpcSerializer.SerializeResponsesAsync(jsonRpcMessages, null));
+        }
+
+        [Fact]
+        public async void CoreSerializeResponsesAsyncToStream()
+        {
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_batch_res.json");
+            var jsonRpcSerializer = new JsonRpcSerializer();
+            var jsonRpcMessage1 = new JsonRpcResponse(0L, 0L);
+            var jsonRpcMessage2 = new JsonRpcResponse(0L, 1L);
+            var jsonRpcMessages = new[] { jsonRpcMessage1, jsonRpcMessage2 };
+
+            using (var jsonStream = new MemoryStream())
+            {
+                await jsonRpcSerializer.SerializeResponsesAsync(jsonRpcMessages, jsonStream);
 
                 var jsonResult = Encoding.UTF8.GetString(jsonStream.ToArray());
 
@@ -338,7 +507,53 @@ namespace System.Data.JsonRpc.Tests
 
             using (var jsonStream = new MemoryStream(Encoding.UTF8.GetBytes(jsonSample)))
             {
-                var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonSample);
+                var jsonRpcData = jsonRpcSerializer.DeserializeRequestData(jsonStream);
+
+                Assert.False(jsonRpcData.IsBatch);
+
+                var jsonRpcItem = jsonRpcData.Item;
+
+                Assert.True(jsonRpcItem.IsValid);
+
+                var jsonRpcMessage = jsonRpcItem.Message;
+
+                Assert.Equal(0L, jsonRpcMessage.Id);
+                Assert.Equal("m", jsonRpcMessage.Method);
+                Assert.Equal(JsonRpcParametersType.None, jsonRpcMessage.ParametersType);
+            }
+        }
+
+        [Fact]
+        public async void CoreDeserializeRequestDataAsyncFromStreamWhenJsonStreamIsNull()
+        {
+            var jsonRpcSerializer = new JsonRpcSerializer();
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() =>
+                jsonRpcSerializer.DeserializeRequestDataAsync((Stream)null));
+        }
+
+        [Fact]
+        public async void CoreDeserializeRequestDataAsyncFromStreamWhenJsonStreamIsEmpty()
+        {
+            var jsonRpcSerializer = new JsonRpcSerializer();
+
+            var exception = await Assert.ThrowsAsync<JsonRpcException>(() =>
+                jsonRpcSerializer.DeserializeRequestDataAsync(Stream.Null));
+
+            Assert.Equal(JsonRpcErrorCodes.InvalidJson, exception.ErrorCode);
+        }
+
+        [Fact]
+        public async void CoreDeserializeRequestDatatAsyncFromStream()
+        {
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_req.json");
+            var jsonRpcSerializer = new JsonRpcSerializer();
+
+            jsonRpcSerializer.RequestContracts["m"] = new JsonRpcRequestContract();
+
+            using (var jsonStream = new MemoryStream(Encoding.UTF8.GetBytes(jsonSample)))
+            {
+                var jsonRpcData = await jsonRpcSerializer.DeserializeRequestDataAsync(jsonStream);
 
                 Assert.False(jsonRpcData.IsBatch);
 
@@ -404,7 +619,53 @@ namespace System.Data.JsonRpc.Tests
 
             using (var jsonStream = new MemoryStream(Encoding.UTF8.GetBytes(jsonSample)))
             {
-                var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonSample);
+                var jsonRpcData = jsonRpcSerializer.DeserializeResponseData(jsonStream);
+
+                Assert.False(jsonRpcData.IsBatch);
+
+                var jsonRpcItem = jsonRpcData.Item;
+
+                Assert.True(jsonRpcItem.IsValid);
+
+                var jsonRpcMessage = jsonRpcItem.Message;
+
+                Assert.Equal(0L, jsonRpcMessage.Id);
+                Assert.True(jsonRpcMessage.Success);
+                Assert.Equal(0L, jsonRpcMessage.Result);
+            }
+        }
+
+        [Fact]
+        public async void CoreDeserializeResponseDataAsyncFromStreamWhenJsonStreamIsNull()
+        {
+            var jsonRpcSerializer = new JsonRpcSerializer();
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() =>
+                jsonRpcSerializer.DeserializeResponseDataAsync((Stream)null));
+        }
+
+        [Fact]
+        public async void CoreDeserializeResponseDataAsyncFromStreamWhenJsonStreamIsEmpty()
+        {
+            var jsonRpcSerializer = new JsonRpcSerializer();
+
+            var exception = await Assert.ThrowsAsync<JsonRpcException>(() =>
+                jsonRpcSerializer.DeserializeResponseDataAsync(Stream.Null));
+
+            Assert.Equal(JsonRpcErrorCodes.InvalidJson, exception.ErrorCode);
+        }
+
+        [Fact]
+        public async void CoreDeserializeResponseDatatAsyncFromStream()
+        {
+            var jsonSample = EmbeddedResourceManager.GetString("Assets.v2_core_res.json");
+            var jsonRpcSerializer = new JsonRpcSerializer();
+
+            jsonRpcSerializer.DynamicResponseBindings[0L] = new JsonRpcResponseContract(typeof(long));
+
+            using (var jsonStream = new MemoryStream(Encoding.UTF8.GetBytes(jsonSample)))
+            {
+                var jsonRpcData = await jsonRpcSerializer.DeserializeResponseDataAsync(jsonStream);
 
                 Assert.False(jsonRpcData.IsBatch);
 
