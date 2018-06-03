@@ -1,4 +1,5 @@
-﻿using BenchmarkDotNet.Exporters;
+﻿using System.Globalization;
+using BenchmarkDotNet.Exporters;
 using BenchmarkDotNet.Loggers;
 using BenchmarkDotNet.Reports;
 
@@ -37,7 +38,7 @@ namespace System.Data.JsonRpc.Benchmarks.Framework
 
         protected override string FileNameSuffix
         {
-            get => DateTime.Now.ToString("yyyy.MM.dd-HH.mm.ss");
+            get => DateTime.Now.ToString("yyyy.MM.dd-HH.mm.ss", CultureInfo.InvariantCulture);
         }
     }
 }
