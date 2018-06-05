@@ -8,13 +8,14 @@ namespace System.Data.JsonRpc
 {
     public partial class JsonRpcSerializer
     {
-        private static readonly JValue _nullJsonToken = JValue.CreateNull();
+        private static readonly JValue _nullToken = JValue.CreateNull();
+        private static readonly JValue _protocolToken = new JValue("2.0");
 
         private JsonRpcRequest ConvertJsonTokenToRequest(JObject jsonToken)
         {
             if (_compatibilityLevel == JsonRpcCompatibilityLevel.Level2)
             {
-                if (!jsonToken.TryGetValue("jsonrpc", out var protocolToken) || (protocolToken.Type != JTokenType.String) || ((string)protocolToken != "2.0"))
+                if (!jsonToken.TryGetValue("jsonrpc", out var protocolToken) || (protocolToken.Type != JTokenType.String) || !_protocolToken.Equals(protocolToken))
                 {
                     throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.deserialize.request.protocol.invalid_property"));
                 }
@@ -172,7 +173,7 @@ namespace System.Data.JsonRpc
 
             if (_compatibilityLevel == JsonRpcCompatibilityLevel.Level2)
             {
-                jsonToken["jsonrpc"] = "2.0";
+                jsonToken["jsonrpc"] = _protocolToken;
             }
 
             jsonToken["method"] = request.Method;
@@ -192,7 +193,7 @@ namespace System.Data.JsonRpc
                         {
                             for (var i = 0; i < request.ParametersByPosition.Count; i++)
                             {
-                                requestParametersArrayToken.Add(request.ParametersByPosition[i] != null ? JToken.FromObject(request.ParametersByPosition[i]) : _nullJsonToken);
+                                requestParametersArrayToken.Add(request.ParametersByPosition[i] != null ? JToken.FromObject(request.ParametersByPosition[i]) : _nullToken);
                             }
                         }
                         catch (JsonException e)
@@ -216,7 +217,7 @@ namespace System.Data.JsonRpc
                         {
                             foreach (var kvp in request.ParametersByName)
                             {
-                                jsonParametersObjectToken.Add(kvp.Key, kvp.Value != null ? JToken.FromObject(kvp.Value) : _nullJsonToken);
+                                jsonParametersObjectToken.Add(kvp.Key, kvp.Value != null ? JToken.FromObject(kvp.Value) : _nullToken);
                             }
                         }
                         catch (JsonException e)
@@ -243,7 +244,7 @@ namespace System.Data.JsonRpc
                     {
                         if (_compatibilityLevel != JsonRpcCompatibilityLevel.Level2)
                         {
-                            jsonToken["id"] = _nullJsonToken;
+                            jsonToken["id"] = _nullToken;
                         }
                     }
                     break;
@@ -364,7 +365,7 @@ namespace System.Data.JsonRpc
         {
             if (_compatibilityLevel == JsonRpcCompatibilityLevel.Level2)
             {
-                if (!jsonToken.TryGetValue("jsonrpc", out var protocolToken) || (protocolToken.Type != JTokenType.String) || ((string)protocolToken != "2.0"))
+                if (!jsonToken.TryGetValue("jsonrpc", out var protocolToken) || (protocolToken.Type != JTokenType.String) || !_protocolToken.Equals(protocolToken))
                 {
                     throw new JsonRpcException(JsonRpcErrorCodes.InvalidMessage, Strings.GetString("core.deserialize.request.protocol.invalid_property"));
                 }
@@ -581,7 +582,7 @@ namespace System.Data.JsonRpc
 
             if (_compatibilityLevel == JsonRpcCompatibilityLevel.Level2)
             {
-                jsonToken["jsonrpc"] = "2.0";
+                jsonToken["jsonrpc"] = _protocolToken;
             }
 
             if (response.Success)
@@ -601,7 +602,7 @@ namespace System.Data.JsonRpc
 
                 if (_compatibilityLevel != JsonRpcCompatibilityLevel.Level2)
                 {
-                    jsonToken["error"] = _nullJsonToken;
+                    jsonToken["error"] = _nullToken;
                 }
             }
             else
@@ -618,7 +619,7 @@ namespace System.Data.JsonRpc
 
                     try
                     {
-                        jsonErrorDataToken = response.Error.Data != null ? JToken.FromObject(response.Error.Data) : _nullJsonToken;
+                        jsonErrorDataToken = response.Error.Data != null ? JToken.FromObject(response.Error.Data) : _nullToken;
                     }
                     catch (JsonException e)
                     {
@@ -630,7 +631,7 @@ namespace System.Data.JsonRpc
 
                 if (_compatibilityLevel != JsonRpcCompatibilityLevel.Level2)
                 {
-                    jsonToken["result"] = _nullJsonToken;
+                    jsonToken["result"] = _nullToken;
                 }
 
                 jsonToken["error"] = jsonErrorToken;
@@ -640,7 +641,7 @@ namespace System.Data.JsonRpc
             {
                 case JsonRpcIdType.None:
                     {
-                        jsonToken["id"] = _nullJsonToken;
+                        jsonToken["id"] = _nullToken;
                     }
                     break;
                 case JsonRpcIdType.String:
