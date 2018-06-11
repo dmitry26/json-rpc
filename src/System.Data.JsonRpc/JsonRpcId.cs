@@ -60,6 +60,7 @@ namespace System.Data.JsonRpc
         /// <summary>Compares the current <see cref="JsonRpcId" /> with another <see cref="JsonRpcId" /> and returns an integer that indicates whether the current <see cref="JsonRpcId" /> precedes, follows, or occurs in the same position in the sort order as the other <see cref="JsonRpcId" />.</summary>
         /// <param name="other">A <see cref="JsonRpcId" /> to compare with the current <see cref="JsonRpcId" />.</param>
         /// <returns>A value that indicates the relative order of the objects being compared.</returns>
+        [CLSCompliant(false)]
         public int CompareTo(in JsonRpcId other)
         {
             var result = ((int)_type).CompareTo((int)other._type);
@@ -94,6 +95,7 @@ namespace System.Data.JsonRpc
         /// <summary>Indicates whether the current <see cref="JsonRpcId" /> is equal to another <see cref="JsonRpcId" />.</summary>
         /// <param name="other">A <see cref="JsonRpcId" /> to compare with the current <see cref="JsonRpcId" />.</param>
         /// <returns><see langword="true" /> if the current <see cref="JsonRpcId" /> is equal to the other <see cref="JsonRpcId" />; otherwise, <see langword="false" />.</returns>
+        [CLSCompliant(false)]
         public bool Equals(in JsonRpcId other)
         {
             switch (other._type)
