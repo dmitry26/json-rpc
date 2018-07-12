@@ -165,26 +165,22 @@ namespace System.Data.JsonRpc
                     case JsonRpcIdType.String:
                         {
                             hashCode ^= _valueString.GetHashCode();
+                            hashCode *= 16777619;
                         }
                         break;
                     case JsonRpcIdType.Integer:
                         {
                             hashCode ^= _valueInteger.GetHashCode();
+                            hashCode *= 16777619;
                         }
                         break;
                     case JsonRpcIdType.Float:
                         {
                             hashCode ^= _valueFloat.GetHashCode();
-                        }
-                        break;
-                    default:
-                        {
-                            hashCode ^= _type.GetHashCode();
+                            hashCode *= 16777619;
                         }
                         break;
                 }
-
-                hashCode *= 16777619;
 
                 return hashCode;
             }

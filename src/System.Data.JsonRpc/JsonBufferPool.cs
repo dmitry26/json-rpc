@@ -5,7 +5,7 @@ namespace System.Data.JsonRpc
 {
     internal sealed class JsonBufferPool : IArrayPool<char>
     {
-        private readonly ArrayPool<char> _arrayPool = ArrayPool<char>.Create();
+        private static readonly ArrayPool<char> _arrayPool = ArrayPool<char>.Shared;
 
         public char[] Rent(int minimumLength)
         {
