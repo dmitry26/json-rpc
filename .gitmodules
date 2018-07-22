@@ -1,0 +1,3 @@
+[submodule "Utf8Json"]
+	path = Utf8Json
+	url = https://github.com/dmitry26/Utf8Json.git

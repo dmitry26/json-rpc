@@ -25,7 +25,9 @@ namespace System.Data.JsonRpc.Benchmarks
 
             BenchmarkRunner.Run<JsonRpcIdBenchmarks>(configuration);
             BenchmarkRunner.Run<JsonRpcSerializerSerializeBenchmarks>(configuration);
+            BenchmarkRunner.Run<Utf8JsonRpcSerializerSerializeBenchmarks>(configuration);
             BenchmarkRunner.Run<JsonRpcSerializerDeserializeBenchmarks>(configuration);
+            BenchmarkRunner.Run<Utf8JsonRpcSerializerDeserializeBenchmarks>(configuration);
         }
     }
 }
